@@ -1,4 +1,4 @@
 package com.smatik.sms.academic_management.model.dto.request;
 
-public class ClassRoomRequestDTO {
+public class de {
 }
