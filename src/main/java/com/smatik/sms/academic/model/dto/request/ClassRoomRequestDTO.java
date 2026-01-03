@@ -1,4 +1,4 @@
-package com.smatik.sms.academic_management.model.dto.response;
+package com.smatik.sms.academic.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SectionResponseDTO {
+public class ClassRoomRequestDTO {
 
-    private Long id;
     private String name;
+
 }

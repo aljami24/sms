@@ -1,4 +1,4 @@
-package com.smatik.sms.academic_management.model.repository;
+package com.smatik.sms.academic.model.repository;
 
 import com.smatik.sms.academic_management.model.entity.ClassRoom;
 import com.smatik.sms.academic_management.model.entity.Version;

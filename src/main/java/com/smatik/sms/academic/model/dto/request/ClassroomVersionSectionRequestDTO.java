@@ -1,4 +1,4 @@
-package com.smatik.sms.academic_management.model.dto.request;
+package com.smatik.sms.academic.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
