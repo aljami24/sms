@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{layout/main}">
+      layout:decorate="~{layout/main}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
     <style>
@@ -11,10 +10,10 @@
         }
 
         .form-card {
-            background:lightslategrey;
+            background: lightslategrey;
             border-radius: 10px;
             padding: 28px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
         }
 
         .section-title {
@@ -81,7 +80,7 @@
         <p class="text-muted mb-0">Fill all required information carefully</p>
     </div>
 
-    <form action="@{/student/save}" method="post" object="${studentRequestDto}" enctype="multipart/form-data">
+    <form action="@{/student/save}" enctype="multipart/form-data" method="post" object="${studentRequestDto}">
         <div class="form-card">
 
             <!-- ================= Student Information ================= -->
@@ -94,28 +93,28 @@
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label">Student Name</label>
-                        <input type="text" class="form-control"  field="*{name}" placeholder="student name">
+                        <input class="form-control" field="*{name}" placeholder="student name" type="text">
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Father Name</label>
-                        <input type="text" class="form-control" field="*{father}" placeholder="father name">
+                        <input class="form-control" field="*{father}" placeholder="father name" type="text">
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Mother Name</label>
-                        <input type="text" class="form-control" field="*{mother}" placeholder="mother name">
+                        <input class="form-control" field="*{mother}" placeholder="mother name" type="text">
                     </div>
 
                     <div class="col-md-4">
-                        <label class="form-label" >Date of Birth</label>
-                        <input type="date" class="form-control" field="*{dob}">
+                        <label class="form-label">Date of Birth</label>
+                        <input class="form-control" field="*{dob}" type="date">
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label" for="gender">Gender</label>
-                        <select class="form-select" id="gender" field="*{gender}">
-                            <option value="" selected disabled>--Select--</option>
+                        <select class="form-select" field="*{gender}" id="gender">
+                            <option disabled selected value="">--Select--</option>
                             <option each="gender : ${gender}" text="${gender}" value="${gender}">
                         </select>
                     </div>
@@ -123,7 +122,7 @@
                     <div class="col-md-4">
                         <label class="form-label">Identity Type</label>
                         <select class="form-select" field="*{identityType}">
-                            <option value="" disabled selected>-- Select --</option>
+                            <option disabled selected value="">-- Select --</option>
                             <option value="NID">NID</option>
                             <option value="BIRTH_CERTIFICATE">Birth Certificate</option>
                             <option value="PASSPORT">Passport</option>
@@ -133,85 +132,150 @@
                     <!-- ===== Identity Number ===== -->
                     <div class="col-md-4">
                         <label class="form-label">Identity Number</label>
-                        <input type="number"
-                               class="form-control"
+                        <input class="form-control"
                                field="*{identityNumber}"
-                               placeholder="Enter identity number">
+                               placeholder="Enter identity number"
+                               type="number">
                     </div>
 
                 </div>
             </div>
 
             <!-- ================= Address Information ================= -->
-            <div class="mb-5">
+            <!--            <div class="mb-5">-->
 
-                <div class="section-title mb-3">
-                    <i class="bi bi-geo-alt-fill me-1"></i>
-                    Address Information
-                </div>
+            <!--                <div class="section-title mb-3">-->
+            <!--                    <i class="bi bi-geo-alt-fill me-1"></i>-->
+            <!--                    Address Information-->
+            <!--                </div>-->
 
-                <div class="row g-4">
+            <!--                <div class="row g-4">-->
 
-                    <!-- ===== Present Address ===== -->
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm rounded-4 h-100">
-                            <div class="card-body">
+            <!--                    &lt;!&ndash; ===== Present Address ===== &ndash;&gt;-->
+            <!--                    <div class="col-md-6">-->
+            <!--                        <div class="card border-0 shadow-sm rounded-4 h-100">-->
+            <!--                            <div class="card-body">-->
 
-                                <h6 class="fw-bold mb-3 text-primary">
-                                    <input field="*{addresses[0].addressType}" type="hidden"/>
-                                    <i class="bi bi-house-door-fill me-1"></i>
-                                    Present Address
-                                </h6>
+            <!--                                <h6 class="fw-bold mb-3 text-primary">-->
+            <!--                                    <input field="*{addresses[0].addressType}" type="hidden"/>-->
+            <!--                                    <i class="bi bi-house-door-fill me-1"></i>-->
+            <!--                                    Present Address-->
+            <!--                                </h6>-->
 
-                                <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <label class="form-label">Village</label>
-                                        <input type="text" field="*{addresses[0].village}" class="form-control" placeholder="village">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Thana</label>
-                                        <input type="text" field="*{addresses[0].thana}" class="form-control" placeholder="thana">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">District</label>
-                                        <input type="text" field="*{addresses[0].district}" class="form-control" placeholder="district">
-                                    </div>
-                                </div>
+            <!--                                <div class="row g-3">-->
+            <!--                                    <div class="col-md-4">-->
+            <!--                                        <label class="form-label">Village</label>-->
+            <!--                                        <input type="text" field="*{addresses[0].village}" class="form-control" placeholder="village">-->
+            <!--                                    </div>-->
+            <!--                                    <div class="col-md-4">-->
+            <!--                                        <label class="form-label">Thana</label>-->
+            <!--                                        <input type="text" field="*{addresses[0].thana}" class="form-control" placeholder="thana">-->
+            <!--                                    </div>-->
+            <!--                                    <div class="col-md-4">-->
+            <!--                                        <label class="form-label">District</label>-->
+            <!--                                        <input type="text" field="*{addresses[0].district}" class="form-control" placeholder="district">-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
 
-                            </div>
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+
+            <!--                    &lt;!&ndash; ===== Permanent Address ===== &ndash;&gt;-->
+            <!--                    <div class="col-md-6">-->
+            <!--                        <div class="card border-0 shadow-sm rounded-4 h-100">-->
+            <!--                            <div class="card-body">-->
+
+            <!--                                <h6 class="fw-bold mb-3 text-success">-->
+            <!--                                    <input field="*{addresses[1].addressType}" type="hidden"/>-->
+            <!--                                    <i class="bi bi-building-fill me-1"></i>-->
+            <!--                                    Permanent Address-->
+            <!--                                </h6>-->
+
+            <!--                                <div class="row g-3">-->
+            <!--                                    <div class="col-md-4">-->
+            <!--                                        <label class="form-label">Village</label>-->
+            <!--                                        <input type="text" field="*{addresses[1].village}" class="form-control" placeholder="village">-->
+            <!--                                    </div>-->
+            <!--                                    <div class="col-md-4">-->
+            <!--                                        <label class="form-label">Thana</label>-->
+            <!--                                        <input type="text" field="*{addresses[1].thana}" class="form-control" placeholder="thana">-->
+            <!--                                    </div>-->
+            <!--                                    <div class="col-md-4">-->
+            <!--                                        <label class="form-label">District</label>-->
+            <!--                                        <input type="text" field="*{addresses[1].district}" class="form-control" placeholder="district">-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+
+            <!--                </div>-->
+            <!--            </div>-->
+
+            <div id="addressContainer">
+
+                <div class="address-block border rounded p-3 mb-3"
+                     each="addr, iterStat : *{addresses}">
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6>Address</h6>
+
+                        <div>
+                            <button class="btn btn-sm btn-success" onclick="addAddress()"
+                                    type="button">+
+                            </button>
+
+                            <button class="btn btn-sm btn-danger" onclick="removeAddress(this)"
+                                    type="button">−
+                            </button>
                         </div>
                     </div>
 
-                    <!-- ===== Permanent Address ===== -->
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm rounded-4 h-100">
-                            <div class="card-body">
-
-                                <h6 class="fw-bold mb-3 text-success">
-                                    <input field="*{addresses[1].addressType}" type="hidden"/>
-                                    <i class="bi bi-building-fill me-1"></i>
-                                    Permanent Address
-                                </h6>
-
-                                <div class="row g-3">
-                                    <div class="col-md-4">
-                                        <label class="form-label">Village</label>
-                                        <input type="text" field="*{addresses[1].village}" class="form-control" placeholder="village">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">Thana</label>
-                                        <input type="text" field="*{addresses[1].thana}" class="form-control" placeholder="thana">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label">District</label>
-                                        <input type="text" field="*{addresses[1].district}" class="form-control" placeholder="district">
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+                    <!-- Address Type -->
+                    <div class="mb-3">
+                        <label class="form-label">Address Type</label>
+                        <select class="form-select"
+                                field="*{addresses[__${iterStat.index}__].addressType}">
+                            <option value="">Select Address Type</option>
+                            <option each="type : ${addressType}"
+                                    text="${type}"
+                                    value="${type}"></option>
+                        </select>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">City</label>
+                            <input class="form-control"
+                                   field="*{addresses[__${iterStat.index}__].city}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Zip Code</label>
+                            <input class="form-control"
+                                   field="*{addresses[__${iterStat.index}__].zipCode}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Police Station</label>
+                            <input class="form-control"
+                                   field="*{addresses[__${iterStat.index}__].policeStation}">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">District</label>
+                            <input class="form-control"
+                                   field="*{addresses[__${iterStat.index}__].district}">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Country</label>
+                            <input class="form-control"
+                                   field="*{addresses[__${iterStat.index}__].country}">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -228,7 +292,7 @@
                         <div class="upload-box">
                             <i class="bi bi-image"></i>
                             <p class="mb-1 fw-semibold">Student Photo</p>
-                            <input  field="*{photo}" class="form-control mt-2" type="file">
+                            <input class="form-control mt-2" field="*{photo}" type="file">
                         </div>
                     </div>
 
@@ -236,7 +300,7 @@
                         <div class="upload-box">
                             <i class="bi bi-file-earmark-pdf"></i>
                             <p class="mb-1 fw-semibold">Birth Certificate</p>
-                            <input field="*{document}" class="form-control mt-2" type="file">
+                            <input class="form-control mt-2" field="*{document}" type="file">
                         </div>
                     </div>
 
@@ -245,11 +309,11 @@
 
             <!-- ===== Footer Buttons ===== -->
             <div class=" d-flex justify-content-between align-items-center">
-                <a type="reset" class="btn btn-secondary">
+                <a class="btn btn-secondary" type="reset">
                     Reset
                 </a>
 
-                <button type="submit" class="btn btn-primary px-4">
+                <button class="btn btn-primary px-4" type="submit">
                     <i class="bi bi-save me-1"></i> Save Admission
                 </button>
             </div>
@@ -258,5 +322,69 @@
     </form>
 
 </div>
+<script>
+    function addAddress() {
+        const container = document.getElementById("addressContainer");
+        const index = container.children.length;
+
+        const template = `
+        <div class="address-block border rounded p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6>Address ${index + 1}</h6>
+                <div>
+                    <button type="button" class="btn btn-sm btn-success" onclick="addAddress()">+</button>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removeAddress(this)">−</button>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Address Type</label>
+                <select class="form-select" name="addresses[${index}].addressType">
+                    <option value="">Select Address Type</option>
+                    <option value="PRESENT_ADDRESS">PRESENT_ADDRESS</option>
+                    <option value="PERMANENT_ADDRESS">PERMANENT_ADDRESS</option>
+                </select>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">City</label>
+                    <input class="form-control" name="addresses[${index}].city">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Zip Code</label>
+                    <input class="form-control" name="addresses[${index}].zipCode">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Police Station</label>
+                    <input class="form-control" name="addresses[${index}].policeStation">
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">District</label>
+                    <input class="form-control" name="addresses[${index}].district">
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Country</label>
+                    <input class="form-control" name="addresses[${index}].country">
+                </div>
+            </div>
+        </div>`;
+
+        container.insertAdjacentHTML("beforeend", template);
+    }
+
+    function removeAddress(btn) {
+        const container = document.getElementById("addressContainer");
+        if (container.children.length > 1) {
+            btn.closest(".address-block").remove();
+        } else {
+            alert("At least one address is required");
+        }
+    }
+</script>
 </body>
 </html>
