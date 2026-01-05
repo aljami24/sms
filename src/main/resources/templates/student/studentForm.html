@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <style>
+        body {
+            background-color: lightsteelblue;
+        }
+
+        .form-card {
+            background:lightslategrey;
+            border-radius: 10px;
+            padding: 28px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #2563eb;
+            font-size: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        .upload-box {
+            border: 2px dashed #c7d2fe;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .upload-box:hover {
+            background: #f8fafc;
+            border-color: #2563eb;
+        }
+
+        .upload-box i {
+            font-size: 30px;
+            color: #2563eb;
+        }
+
+        .sticky-footer {
+            position: sticky;
+            bottom: 0;
+            background: #fff;
+            padding: 14px;
+            border-top: 1px solid #e5e7eb;
+            text-align: right;
+            border-radius: 0 0 18px 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- ===== Page Header ===== -->
+    <div class="mb-4">
+        <h4 class="fw-bold">Student Admission</h4>
+        <p class="text-muted mb-0">Fill all required information carefully</p>
+    </div>
+
+    <form action="@{/student/save}" method="post" object="${studentRequestDto}" enctype="multipart/form-data">
+        <div class="form-card">
+
+            <!-- ================= Student Information ================= -->
+            <div class="mb-5">
+                <div class="section-title">
+                    <i class="bi bi-person-fill"></i>
+                    Student Information
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Student Name</label>
+                        <input type="text" class="form-control"  field="*{name}" placeholder="student name">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Father Name</label>
+                        <input type="text" class="form-control" field="*{father}" placeholder="father name">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Mother Name</label>
+                        <input type="text" class="form-control" field="*{mother}" placeholder="mother name">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label" >Date of Birth</label>
+                        <input type="date" class="form-control" field="*{dob}">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label" for="gender">Gender</label>
+                        <select class="form-select" id="gender" field="*{gender}">
+                            <option value="" selected disabled>--Select--</option>
+                            <option each="gender : ${gender}" text="${gender}" value="${gender}">
+                        </select>
+                    </div>
+                    <!-- ===== Identity Type ===== -->
+                    <div class="col-md-4">
+                        <label class="form-label">Identity Type</label>
+                        <select class="form-select" field="*{identityType}">
+                            <option value="" disabled selected>-- Select --</option>
+                            <option value="NID">NID</option>
+                            <option value="BIRTH_CERTIFICATE">Birth Certificate</option>
+                            <option value="PASSPORT">Passport</option>
+                        </select>
+                    </div>
+
+                    <!-- ===== Identity Number ===== -->
+                    <div class="col-md-4">
+                        <label class="form-label">Identity Number</label>
+                        <input type="number"
+                               class="form-control"
+                               field="*{identityNumber}"
+                               placeholder="Enter identity number">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ================= Address Information ================= -->
+            <div class="mb-5">
+
+                <div class="section-title mb-3">
+                    <i class="bi bi-geo-alt-fill me-1"></i>
+                    Address Information
+                </div>
+
+                <div class="row g-4">
+
+                    <!-- ===== Present Address ===== -->
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold mb-3 text-primary">
+                                    <input field="*{addresses[0].addressType}" type="hidden"/>
+                                    <i class="bi bi-house-door-fill me-1"></i>
+                                    Present Address
+                                </h6>
+
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Village</label>
+                                        <input type="text" field="*{addresses[0].village}" class="form-control" placeholder="village">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Thana</label>
+                                        <input type="text" field="*{addresses[0].thana}" class="form-control" placeholder="thana">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">District</label>
+                                        <input type="text" field="*{addresses[0].district}" class="form-control" placeholder="district">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== Permanent Address ===== -->
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold mb-3 text-success">
+                                    <input field="*{addresses[1].addressType}" type="hidden"/>
+                                    <i class="bi bi-building-fill me-1"></i>
+                                    Permanent Address
+                                </h6>
+
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Village</label>
+                                        <input type="text" field="*{addresses[1].village}" class="form-control" placeholder="village">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Thana</label>
+                                        <input type="text" field="*{addresses[1].thana}" class="form-control" placeholder="thana">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">District</label>
+                                        <input type="text" field="*{addresses[1].district}" class="form-control" placeholder="district">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- ================= Document Upload ================= -->
+            <div class="mb-4">
+                <div class="section-title">
+                    <i class="bi bi-upload"></i>
+                    Document Upload
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="upload-box">
+                            <i class="bi bi-image"></i>
+                            <p class="mb-1 fw-semibold">Student Photo</p>
+                            <input  field="*{photo}" class="form-control mt-2" type="file">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="upload-box">
+                            <i class="bi bi-file-earmark-pdf"></i>
+                            <p class="mb-1 fw-semibold">Birth Certificate</p>
+                            <input field="*{document}" class="form-control mt-2" type="file">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== Footer Buttons ===== -->
+            <div class=" d-flex justify-content-between align-items-center">
+                <a type="reset" class="btn btn-secondary">
+                    Reset
+                </a>
+
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="bi bi-save me-1"></i> Save Admission
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+</body>
+</html>
