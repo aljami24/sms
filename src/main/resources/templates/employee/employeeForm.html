@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <style>
+        body {
+            background-color: lightsteelblue;
+        }
+
+        .form-card {
+            background: darkgrey;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+
+        .page-badge {
+            background: #1e40af;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #2563eb;
+            font-size: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        .upload-box {
+            border: 2px dashed #c7d2fe;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .upload-box:hover {
+            background: #f1f5f9;
+            border-color: #2563eb;
+        }
+
+        .upload-box i {
+            font-size: 28px;
+            color: #2563eb;
+        }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <!-- ===== Page Header ===== -->
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h4 class="fw-bold mb-1">Employee Registration</h4>
+            <p class="text-muted mb-0">Add & manage school employees</p>
+        </div>
+        <span class="page-badge">
+            <i class="bi bi-person-badge-fill me-1"></i> EMPLOYEE
+        </span>
+    </div>
+
+    <form action="@{/employee/save}"
+          object="${employeeRequestDto}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <div class="form-card">
+
+            <!-- ================= Employee Basic Info ================= -->
+            <div class="mb-5">
+                <div class="section-title">
+                    <i class="bi bi-person-fill"></i>
+                    Employee Information
+                </div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-3">
+                        <label class="form-label">Employee ID</label>
+                        <input class="form-control" field="*{employeeId}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Employee Type</label>
+                        <select class="form-select" field="*{employeeType}">
+                            <option value="">-- Select --</option>
+                            <option value="TEACHER">Teacher</option>
+                            <option value="STAFF">Staff</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Join Date</label>
+                        <input type="date" class="form-control" field="*{joinDate}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Salary</label>
+                        <input type="number" class="form-control" field="*{salary}">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Full Name</label>
+                        <input class="form-control" field="*{name}">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Gender</label>
+                        <select class="form-select" field="*{gender}">
+                            <option value="">-- Select --</option>
+                            <option each="g : ${genderEnum}"
+                                    value="${g}"
+                                    text="${g}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" field="*{dob}">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Phone Number</label>
+                        <input class="form-control" field="*{phone}">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Identity Type</label>
+                        <select class="form-select" field="*{identityType}">
+                            <option value="NID">NID</option>
+                            <option value="BIRTH">Birth Certificate</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">ID Number</label>
+                        <input class="form-control" field="*{idNumber}">
+                    </div>
+
+
+                </div>
+            </div>
+
+            <!-- ================= Address Section ================= -->
+            <div class="mb-5">
+                <div class="section-title">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    Address Information
+                </div>
+
+                <div class="row g-4">
+
+                    <!-- Present -->
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4">
+                            <div class="card-body">
+                                <h6 class="fw-bold text-primary mb-3">
+                                    Present Address
+                                    <input type="hidden" field="*{addresses[0].addressType}" value="PRESENT"/>
+                                </h6>
+
+                                <input class="form-control mb-2" placeholder="Village"
+                                       field="*{addresses[0].village}">
+                                <input class="form-control mb-2" placeholder="Thana"
+                                       field="*{addresses[0].thana}">
+                                <input class="form-control" placeholder="District"
+                                       field="*{addresses[0].district}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Permanent -->
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm rounded-4">
+                            <div class="card-body">
+                                <h6 class="fw-bold text-success mb-3">
+                                    Permanent Address
+                                    <input type="hidden" field="*{addresses[1].addressType}" value="PERMANENT"/>
+                                </h6>
+
+                                <input class="form-control mb-2" placeholder="Village"
+                                       field="*{addresses[1].village}">
+                                <input class="form-control mb-2" placeholder="Thana"
+                                       field="*{addresses[1].thana}">
+                                <input class="form-control" placeholder="District"
+                                       field="*{addresses[1].district}">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ================= Document Upload ================= -->
+            <div class="mb-4">
+                <div class="section-title">
+                    <i class="bi bi-upload"></i>
+                    Documents
+                </div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <div class="upload-box">
+                            <i class="bi bi-person-circle"></i>
+                            <p class="fw-semibold mb-1">Employee Photo</p>
+                            <input type="file"  class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="upload-box">
+                            <i class="bi bi-card-heading"></i>
+                            <p class="fw-semibold mb-1">NID Copy</p>
+                            <input type="file"  class="form-control">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ===== Footer ===== -->
+            <div class="d-flex justify-content-between">
+                <button type="reset" class="btn btn-outline-secondary">Reset</button>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="bi bi-save me-1"></i> Save Employee
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+</body>
+</html>
