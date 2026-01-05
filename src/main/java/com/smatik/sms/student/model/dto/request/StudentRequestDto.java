@@ -1,33 +1,26 @@
-package com.smatik.sms.student.model.entity;
+package com.smatik.sms.student.model.dto.request;
 
 import com.smatik.sms.academic.model.entity.ClassroomVersionSection;
-import com.smatik.sms.common.address.entity.Address;
+import com.smatik.sms.common.address.dto.AddressRequestDto;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Student Entity
+ * StudentRequestDto
  * Author: jami
- * Created On: 2026-01-04
+ * Created On: 2026-01-05
  * Module: Student Management
  */
 
-@Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class StudentRequestDto {
     private Long id;
     private String name;
     private String fatherName;
@@ -36,14 +29,8 @@ public class Student {
     private LocalDate dob;
     private IdentityType identityType;
     private Long identityNumber;
-
-    @ManyToOne
-    private ClassroomVersionSection classroomVersionSectionsId;
     private String photoDir;
     private String nidDir;
-
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addresses;
-
-
+    private ClassroomVersionSection classroomVersionSectionsId;
+    private List<AddressRequestDto> addresses = new ArrayList<>();
 }
