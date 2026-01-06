@@ -1,9 +1,9 @@
 package com.smatik.sms.teacher.model.entity;
 
+import com.smatik.sms.common.address.entity.Address;
 import com.smatik.sms.common.enums.EmployType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
-import com.smatik.sms.student.model.entity.Address;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
