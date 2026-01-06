@@ -1,7 +1,7 @@
 package com.smatik.sms.common.enums;
 
 public enum IdentityType {
-    NIDCARD,
+    NID,
     PASSPORT,
-    BIRTHCERTIFICATE
+    BIRTH_CERTIFICATE
 }
