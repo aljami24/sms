@@ -4,9 +4,7 @@ import com.smatik.sms.common.enums.EmployType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
 import com.smatik.sms.student.model.entity.Address;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +21,10 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Employ {
+public class Employee {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long EmployId;
     private String Name;
@@ -69,7 +69,7 @@ public class Employ {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Employ employ = (Employ) o;
+        Employee employ = (Employee) o;
         return Objects.equals(id, employ.id) && Objects.equals(EmployId, employ.EmployId) && Objects.equals(Name, employ.Name) && gender == employ.gender && Objects.equals(dob, employ.dob) && Objects.equals(joiningDate, employ.joiningDate) && Objects.equals(salary, employ.salary) && employType == employ.employType && identityType == employ.identityType && Objects.equals(identityNumber, employ.identityNumber) && Objects.equals(phoneNumber, employ.phoneNumber) && Objects.equals(photo, employ.photo) && Objects.equals(photoDir, employ.photoDir) && Objects.equals(nid, employ.nid) && Objects.equals(nidDir, employ.nidDir) && Objects.equals(address, employ.address);
     }
 
