@@ -1,9 +1,9 @@
 package com.smatik.sms.teacher.model.dto.response;
 
+import com.smatik.sms.common.address.dto.AddressResponseDto;
 import com.smatik.sms.common.enums.EmployType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
-import com.smatik.sms.student.model.entity.Address;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,5 +26,5 @@ public class EmployResponseDto {
     private String photoDir;
     private String nid;
     private String nidDir;
-    private List<Address> address = new ArrayList<>();
+    private List<AddressResponseDto> addressResponseDto = new ArrayList<>();
 }
