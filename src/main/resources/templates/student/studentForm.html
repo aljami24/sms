@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
       layout:decorate="~{layout/main}"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <style>
@@ -40,33 +41,6 @@
             padding: 10px 12px;
         }
 
-        .upload-box {
-            border: 2px dashed #c7d2fe;
-            border-radius: 14px;
-            padding: 20px;
-            text-align: center;
-            transition: 0.3s;
-        }
-
-        .upload-box:hover {
-            background: #f8fafc;
-            border-color: #2563eb;
-        }
-
-        .upload-box i {
-            font-size: 30px;
-            color: #2563eb;
-        }
-
-        .sticky-footer {
-            position: sticky;
-            bottom: 0;
-            background: #fff;
-            padding: 14px;
-            border-top: 1px solid #e5e7eb;
-            text-align: right;
-            border-radius: 0 0 18px 18px;
-        }
     </style>
 </head>
 
@@ -80,12 +54,12 @@
         <p class="text-muted mb-0">Fill all required information carefully</p>
     </div>
 
-    <form action="@{/student/save}" enctype="multipart/form-data" method="post" object="${studentRequestDto}">
+    <form enctype="multipart/form-data" method="post" th:action="@{/student/save}" th:object="${studentForm}">
         <div class="form-card">
 
             <!-- ================= Student Information ================= -->
             <div class="mb-5">
-                <div class="section-title">
+                <div class="section-title text-light">
                     <i class="bi bi-person-fill"></i>
                     Student Information
                 </div>
@@ -93,51 +67,45 @@
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label">Student Name</label>
-                        <input class="form-control" field="*{name}" placeholder="student name" type="text">
+                        <input class="form-control" placeholder="student name" th:field="*{name}" type="text">
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Father Name</label>
-                        <input class="form-control" field="*{father}" placeholder="father name" type="text">
+                        <input class="form-control" placeholder="father name" th:field="*{fatherName}" type="text">
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Mother Name</label>
-                        <input class="form-control" field="*{mother}" placeholder="mother name" type="text">
+                        <input class="form-control" placeholder="mother name" th:field="*{motherName}" type="text">
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Date of Birth</label>
-                        <input class="form-control" field="*{dob}" type="date">
+                        <input class="form-control" th:field="*{dob}" type="date">
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label" for="gender">Gender</label>
-                        <select class="form-select" field="*{gender}" id="gender">
-                            <option disabled selected value="">--Select--</option>
-                            <option each="gender : ${gender}" text="${gender}" value="${gender}">
+                        <select class="form-select" id="gender" th:field="*{gender}">
+                            <option value="">--Select Gender--</option>
+                            <option th:each="g : ${genders}" th:text="${g}" th:value="${g}"></option>
                         </select>
                     </div>
-                    <!-- ===== Identity Type ===== -->
+
                     <div class="col-md-4">
                         <label class="form-label">Identity Type</label>
-                        <select class="form-select" field="*{identityType}">
-                            <option disabled selected value="">-- Select --</option>
-                            <option value="NID">NID</option>
-                            <option value="BIRTH_CERTIFICATE">Birth Certificate</option>
-                            <option value="PASSPORT">Passport</option>
+                        <select class="form-select" th:field="*{identityType}">
+                            <option value="">-- Select Identity --</option>
+                            <option th:each="type : ${identityTypes}" th:text="${type}" th:value="${type}"></option>
                         </select>
                     </div>
 
-                    <!-- ===== Identity Number ===== -->
                     <div class="col-md-4">
                         <label class="form-label">Identity Number</label>
-                        <input class="form-control"
-                               field="*{identityNumber}"
-                               placeholder="Enter identity number"
-                               type="number">
+                        <input class="form-control" placeholder="Enter identity number" th:field="*{identityNumber}"
+                               type="text">
                     </div>
-
                 </div>
             </div>
 
@@ -233,86 +201,98 @@
                         </div>
                     </div>
 
-                    <!-- Address Type -->
-                    <div class="mb-3">
-                        <label class="form-label">Address Type</label>
-                        <select class="form-select"
-                                field="*{addresses[__${iterStat.index}__].addressType}">
-                            <option value="">Select Address Type</option>
-                            <option each="type : ${addressType}"
-                                    text="${type}"
-                                    value="${type}"></option>
-                        </select>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="section-title text-light mb-0">
+                        <i class="bi bi-geo-alt-fill me-1"></i>
+                        Address Information
                     </div>
+                    <button class="btn btn-sm btn-success" onclick="addAddress()" type="button">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">City</label>
-                            <input class="form-control"
-                                   field="*{addresses[__${iterStat.index}__].city}">
+                <div id="addressContainer">
+
+                    <div class="address-block p-3 mb-3" th:each="addr, iterStat : *{addresses}">
+
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6>Address [[${iterStat.index + 1}]]</h6>
+                            <button class="btn btn-sm btn-danger" onclick="removeAddress(this)"
+                                    th:if="${iterStat.index > 0}" type="button">
+                                <i class="bi bi-trash"></i> Remove
+                            </button>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Zip Code</label>
-                            <input class="form-control"
-                                   field="*{addresses[__${iterStat.index}__].zipCode}">
+                        <div class="mb-3">
+                            <label class="form-label">Address Type</label>
+                            <select class="form-select" th:field="*{addresses[__${iterStat.index}__].addressType}">
+                                <option value="">Select Address Type</option>
+                                <option th:each="type : ${addressTypes}" th:text="${type}" th:value="${type}"></option>
+                            </select>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Police Station</label>
-                            <input class="form-control"
-                                   field="*{addresses[__${iterStat.index}__].policeStation}">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Division</label>
+                                <select class="form-select division"
+                                        onchange="loadDistricts(this)"
+                                        th:field="*{addresses[__${iterStat.index}__].division}">
+                                    <option value="">Select Division</option>
+                                    <option th:each="dive : ${divisions}" th:text="${dive.name}"
+                                            th:value="${dive.id}"></option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">District</label>
+                                <select class="form-select district"
+                                        onchange="loadPoliceStations(this)"
+                                        th:field="*{addresses[__${iterStat.index}__].district}">
+                                    <option value="">Select District</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Police Station</label>
+                                <select class="form-select policeStation"
+                                        th:field="*{addresses[__${iterStat.index}__].policeStation}">
+                                    <option value="">Select Police Station</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Village</label>
+                                <input class="form-control" th:field="*{addresses[__${iterStat.index}__].village}">
+                            </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">District</label>
-                            <input class="form-control"
-                                   field="*{addresses[__${iterStat.index}__].district}">
-                        </div>
-
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label">Country</label>
-                            <input class="form-control"
-                                   field="*{addresses[__${iterStat.index}__].country}">
-                        </div>
                     </div>
                 </div>
             </div>
 
-
             <!-- ================= Document Upload ================= -->
             <div class="mb-4">
-                <div class="section-title">
+                <div class="section-title text-light">
                     <i class="bi bi-upload"></i>
                     Document Upload
                 </div>
 
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <div class="upload-box">
-                            <i class="bi bi-image"></i>
-                            <p class="mb-1 fw-semibold">Student Photo</p>
-                            <input class="form-control mt-2" field="*{photo}" type="file">
-                        </div>
+                        <label>Photo</label>
+                        <input class="form-control mt-2" field="*{photo}" type="file">
                     </div>
 
                     <div class="col-md-4">
-                        <div class="upload-box">
-                            <i class="bi bi-file-earmark-pdf"></i>
-                            <p class="mb-1 fw-semibold">Birth Certificate</p>
-                            <input class="form-control mt-2" field="*{document}" type="file">
-                        </div>
+                        <label>NID/DOB</label>
+                        <input class="form-control mt-2" field="*{nid}" type="file">
                     </div>
 
                 </div>
             </div>
 
-            <!-- ===== Footer Buttons ===== -->
             <div class=" d-flex justify-content-between align-items-center">
-                <a class="btn btn-secondary" type="reset">
-                    Reset
-                </a>
-
+                <a class="btn btn-secondary" type="reset">Reset</a>
                 <button class="btn btn-primary px-4" type="submit">
                     <i class="bi bi-save me-1"></i> Save Admission
                 </button>
@@ -320,6 +300,140 @@
 
         </div>
     </form>
+
+    <script>
+        // Add new address dynamically
+        function addAddress() {
+            const container = document.getElementById("addressContainer");
+            const index = container.children.length;
+            const template = `
+            <div class="address-block p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6>Address ${index + 1}</h6>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removeAddress(this)">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Address Type</label>
+                    <select class="form-select" name="addresses[${index}].addressType">
+                        <option value="">Select Address Type</option>
+                        <option value="PRESENT_ADDRESS">PRESENT_ADDRESS</option>
+                        <option value="PERMANENT_ADDRESS">PERMANENT_ADDRESS</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Division</label>
+                        <select class="form-select division" name="addresses[${index}].division" onchange="loadDistricts(this)">
+                            <option value="">Select Division</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">District</label>
+                        <select class="form-select district" name="addresses[${index}].district" onchange="loadPoliceStations(this)">
+                            <option value="">Select District</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Police Station</label>
+                        <select class="form-select policeStation" name="addresses[${index}].policeStation">
+                            <option value="">Select Police Station</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Village</label>
+                        <input class="form-control" name="addresses[${index}].village">
+                    </div>
+                </div>
+            </div>`;
+            container.insertAdjacentHTML("beforeend", template);
+
+            // Load divisions dynamically for new address
+            loadDivisionsForAll();
+        }
+
+        function removeAddress(btn) {
+            const container = document.getElementById("addressContainer");
+            if (container.children.length > 1) {
+                btn.closest(".address-block").remove();
+            } else {
+                alert("At least one address is required");
+            }
+        }
+
+        // Load districts when division changes
+        function loadDistricts(divSelect) {
+            const divisionId = divSelect.value;
+            const districtSelect = divSelect.closest(".address-block").querySelector(".district");
+            const policeSelect = divSelect.closest(".address-block").querySelector(".policeStation");
+
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+            policeSelect.innerHTML = '<option value="">Select Police Station</option>';
+
+            if (divisionId) {
+                fetch(`/student/districts?divisionId=${divisionId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        data.forEach(d => {
+                            const option = document.createElement("option");
+                            option.value = d.id;
+                            option.text = d.name;
+                            districtSelect.add(option);
+                        });
+                    });
+            }
+        }
+
+        // Load police stations when district changes
+        function loadPoliceStations(distSelect) {
+            const districtId = distSelect.value;
+            const psSelect = distSelect.closest(".address-block").querySelector(".policeStation");
+
+            psSelect.innerHTML = '<option value="">Select Police Station</option>';
+
+            if (districtId) {
+                fetch(`/student/police-stations?districtId=${districtId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        data.forEach(p => {
+                            const option = document.createElement("option");
+                            option.value = p.id;
+                            option.text = p.name;
+                            psSelect.add(option);
+                        });
+                    });
+            }
+        }
+
+        // Load divisions for dynamically added addresses
+        async function loadDivisionsForAll() {
+            // Fetch divisions from server
+            try {
+                const response = await fetch('/student/divisions');
+                const divisions = await response.json();
+
+                document.querySelectorAll(".division").forEach(sel => {
+                    if (sel.options.length <= 1) { // prevent re-adding
+                        divisions.forEach(d => {
+                            const option = document.createElement("option");
+                            option.value = d.id;
+                            option.text = d.name;
+                            sel.add(option);
+                        });
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading divisions:', error);
+            }
+        }
+
+        // On page load, populate divisions for all address dropdowns
+        window.onload = async function () {
+            await loadDivisionsForAll();
+        }
+    </script>
 
 </div>
 <script>

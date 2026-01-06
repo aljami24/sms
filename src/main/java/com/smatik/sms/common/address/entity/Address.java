@@ -29,18 +29,19 @@ public class Address {
     private Long id;
 
     private String village;
+    @Enumerated(EnumType.STRING)
     private AddressType addressType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "division_id", nullable = false)
+    @JoinColumn(name = "division_id", nullable = true)
     private Division division;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "district_id", nullable = false)
+    @JoinColumn(name = "district_id", nullable = true)
     private District district;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "police_station_id", nullable = false)
+    @JoinColumn(name = "police_station_id", nullable = true)
     private PoliceStation policeStation;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -32,8 +32,10 @@ public class Student {
     private String name;
     private String fatherName;
     private String motherName;
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private LocalDate dob;
+    @Enumerated(EnumType.STRING)
     private IdentityType identityType;
     private Long identityNumber;
 
