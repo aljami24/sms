@@ -1,19 +1,15 @@
 package com.smatik.sms.teacher.model.dto.request;
 
+import com.smatik.sms.common.address.dto.AddressRequestDto;
 import com.smatik.sms.common.enums.EmployType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
-import com.smatik.sms.student.model.entity.Address;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-public class EmployeeFormDto {
+public class EmployFormDto {
 
     private Long id;
     private Long EmployId;
@@ -26,5 +22,5 @@ public class EmployeeFormDto {
     private IdentityType identityType;
     private Long identityNumber;
     private String phoneNumber;
-    private List<Address> address = new ArrayList<>();
+    private List<AddressRequestDto> addressRequestDto = new ArrayList<>();
 }

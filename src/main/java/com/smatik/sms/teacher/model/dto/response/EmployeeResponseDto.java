@@ -1,19 +1,15 @@
 package com.smatik.sms.teacher.model.dto.response;
 
+import com.smatik.sms.common.address.dto.AddressResponseDto;
 import com.smatik.sms.common.enums.EmployType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
-import com.smatik.sms.student.model.entity.Address;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-public class EmployeeResponseDto {
+public class EmployResponseDto {
 
     private Long id;
     private Long EmployId;
@@ -30,8 +26,5 @@ public class EmployeeResponseDto {
     private String photoDir;
     private String nid;
     private String nidDir;
-
-    private int serialNo;
-
-    private List<Address> address = new ArrayList<>();
+    private List<AddressResponseDto> addressResponseDto = new ArrayList<>();
 }
