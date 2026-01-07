@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 /**
  * Division Entity
  * Author: jami
@@ -25,4 +27,25 @@ public class Division {
     private String name;
 
     private Boolean active = true;
+
+    @Override
+    public String toString() {
+        return "Division{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", active=" + active +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Division division = (Division) o;
+        return Objects.equals(id, division.id) && Objects.equals(name, division.name) && Objects.equals(active, division.active);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, active);
+    }
 }

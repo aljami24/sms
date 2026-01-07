@@ -20,7 +20,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class StudentRequestDto {
+public class StudentRequestDto extends FileUpload {
     private Long id;
     private String name;
     private String fatherName;
