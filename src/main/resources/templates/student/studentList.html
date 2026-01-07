@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+
+<div layout:fragment="content" class="page-bg">
+
+    <!-- ===== Page Header ===== -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold mb-0">
+            <i class="bi bi-people-fill me-2"></i> Students List
+        </h4>
+    </div>
+
+    <!-- ===== Filter Section ===== -->
+    <div class="card filter-card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form method="get" action="">
+                <div class="row g-3">
+
+                    <div class="col-md-2">
+                        <input type="text" name="name" class="form-control"
+                               placeholder="Student Roll"
+                               value="">
+                    </div>
+
+                    <div class="col-md-2">
+                        <select name="className" class="form-select">
+                            <option value="">Class</option>
+                            <option
+                                    value="">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select name="section" class="form-select">
+                            <option value="">Section</option>
+                            <option>A</option>
+                            <option>B</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select name="version" class="form-select">
+                            <option value="">Version</option>
+                            <option>Bangla</option>
+                            <option>English</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <input type="text" name="rollOrReg"
+                               class="form-control"
+                               placeholder="Roll / Reg"
+                               value="">
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+                        <button class="btn btn-success">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== Table Section ===== -->
+    <div class="card table-card shadow-sm border-0">
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-secondary">
+                    <tr>
+                        <th class="text-center">sl</th>
+                        <th class="text-center">Roll</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Father</th>
+                        <th class="text-center">Mother</th>
+                        <th class="text-center">Dob</th>
+                        <th class="text-center">Gender</th>
+                        <th class="text-center">Address</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="student : ${studentResponseDtos}">
+                        <!-- Serial Number with pagination -->
+                        <td class="text-center"></td>
+
+                        <td class="text-center">5555</td>
+                        <td th:text="${student.name}">mahmud</td>
+                        <td th:text="${student.father}">faysal</td>
+                        <td th:text="${student.mother}">amatullah</td>
+                        <td class="text-center" th:text="${student.dob}">10-10-2002</td>
+                        <td class="text-center" th:text="${student.gender}">Male</td>
+                        <td>
+                            <ul>
+                                <li th:each="addr : ${student.addresses}">
+                                    <span class="fw-bold" th:text="${addr.addressType} + ' :  ' "></span>
+                                    <span th:text="${addr.village} + ', ' + ${addr.thana} + ', ' + ${addr.district}"></span>
+                                </li>
+                            </ul>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-center">
+
+                            <!-- View -->
+                            <a class="action-btn view" th:href="@{'/student/detail/'+${student.id}}" title="View">
+                                <i class="bi bi-eye-fill"></i>
+                            </a>
+
+                            <!-- Edit -->
+                            <a class="action-btn edit" th:href="@{'/student/edit/'+${student.id}}" title="Edit">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+
+                            <!-- Delete Button -->
+                            <button type="button"
+                                    class="action-btn delete"
+                                    data-bs-toggle="modal"
+                                    th:data-bs-target="'#deleteModal_' + ${student.id}">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+
+                            <!-- Delete Modal -->
+                            <div class="modal fade"
+                                 th:id="'deleteModal_' + ${student.id}"
+                                 tabindex="-1">
+
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-danger">
+                                                Confirm Delete
+                                            </h5>
+                                            <button type="button"
+                                                    class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            Are you sure you want to delete
+                                            <strong th:text="${student.name}"></strong> ?
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button"
+                                                    class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">
+                                                Cancel
+                                            </button>
+
+                                            <form th:action="@{/student/delete/{id}(id=${student.id})}"
+                                                  method="post">
+                                                <button class="btn btn-danger">
+                                                    <i class="bi bi-trash me-1"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== Pagination ===== -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/student/all(page = ${currentPage - 1})}">Previous</a>
+            </li>
+            <li class="page-item" th:each=" i : ${#numbers.sequence(0,totalPages -1)}"
+                th:classappend="${i == currentPage} ? 'active' : ''">
+                <a class="page-link" th:text="${i + 1}" th:href="@{/student/all(page = ${i})}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/student/all(page = ${currentPage + 1})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+</body>
+</html>
