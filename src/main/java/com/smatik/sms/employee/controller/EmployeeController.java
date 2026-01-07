@@ -1,26 +1,19 @@
-package com.smatik.sms.teacher.controller;
+package com.smatik.sms.employee.controller;
 
 
 import com.smatik.sms.common.enums.Gender;
-import com.smatik.sms.teacher.model.dto.request.EmployeeFormDto;
-import com.smatik.sms.teacher.model.dto.response.EmployeeResponseDto;
-import com.smatik.sms.teacher.model.entity.Employee;
-import com.smatik.sms.teacher.model.repository.EmployeeRepository;
-import com.smatik.sms.teacher.service.EmployeeService;
+import com.smatik.sms.employee.model.dto.request.EmployeeFormDto;
+import com.smatik.sms.employee.model.entity.Employee;
+import com.smatik.sms.employee.model.repository.EmployeeRepository;
+import com.smatik.sms.employee.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/employee")
@@ -57,23 +50,23 @@ public class EmployeeController {
         return "redirect/employee/all";
     }
 
-    @GetMapping("/all")
-    public String getAllEmployee(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "5") int pageSize,
-                                Model model) {
-
-        Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Employee> employeePage = employeeRepository.findAll(pageable);
-
-        List<EmployeeResponseDto> employeeResponseDto = employeeService.getAllEmployee(
-                page, pageSize, "id", "DESC");
-
-        model.addAttribute("currentPage", page);
-        model.addAttribute("pageSize", pageSize); // The pageSize was added to the model
-        model.addAttribute("totalPages", employeePage.getTotalPages());
-
-        model.addAttribute("title", "Teacher List");
-        model.addAttribute("Teachers", employeeResponseDto);
-        return "teacher/list";
-    }
+//    @GetMapping("/all")
+//    public String getAllEmployee(@RequestParam(defaultValue = "0") int page,
+//                                @RequestParam(defaultValue = "5") int pageSize,
+//                                Model model) {
+//
+//        Pageable pageable = PageRequest.of(page, pageSize);
+//        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+//
+//        List<EmployeeResponseDto> employeeResponseDto = employeeService.getAllEmployee(
+//                page, pageSize, "id", "DESC");
+//
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("pageSize", pageSize); // The pageSize was added to the model
+//        model.addAttribute("totalPages", employeePage.getTotalPages());
+//
+//        model.addAttribute("title", "Teacher List");
+//        model.addAttribute("Teachers", employeeResponseDto);
+//        return "teacher/list";
+//    }
 }
