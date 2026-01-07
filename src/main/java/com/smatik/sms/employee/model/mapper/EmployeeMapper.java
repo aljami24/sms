@@ -13,8 +13,7 @@ import java.util.List;
 @Component
 public class EmployeeMapper {
 
-    public static Employee employeeFormToEntity(EmployeeFormDto employeeFormDto) {
-        Employee employee = new Employee();
+    public static Employee employeeFormToEntity(Employee employee, EmployeeFormDto employeeFormDto) {
         employee.setEmployeeId(employeeFormDto.getEmployeeId());
         employee.setName(employeeFormDto.getName());
         employee.setGender(employeeFormDto.getGender());
@@ -25,6 +24,8 @@ public class EmployeeMapper {
         employee.setIdentityType(employeeFormDto.getIdentityType());
         employee.setIdentityNumber(employeeFormDto.getIdentityNumber());
         employee.setPhoneNumber(employeeFormDto.getPhoneNumber());
+        employee.setPhotoDir(employeeFormDto.getPhotoDir());
+        employee.setNidDir(employeeFormDto.getNidDir());
 
         List<Address> addressList = new ArrayList<>();
 
