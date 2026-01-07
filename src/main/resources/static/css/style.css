@@ -1,0 +1,285 @@
+:root {
+    --primary: #d4f4d4;
+    --hover-bg: rgba(255, 255, 255, 0.4);
+}
+
+body { margin: 0;
+    background: var(--primary);
+}
+.page-bg {
+    padding: 24px;
+}
+
+/*  ===================== navbar =======================*/
+.navbar {
+    background: var(--primary);
+    opacity: 1 !important;
+    z-index: 1050;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+/* ========================= sidebar =======================*/
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    background: var(--primary);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.logo-circle {
+    width: 40px; height: 40px;
+    background: white; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.menu-link, .menu-toggle {
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.menu-link:hover, .menu-toggle:hover { background: var(--hover-bg); }
+
+/* Submenu Styling */
+.submenu {
+    display: none; /* ডিফল্টভাবে বন্ধ */
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.submenu.open {
+    display: block; /* ওপেন ক্লাস থাকলে দেখাবে */
+}
+
+.sub-link {
+    display: block;
+    padding: 10px 50px;
+    text-decoration: none;
+    color: #444;
+    font-size: 14px;
+}
+
+.sub-link:hover { background: var(--hover-bg); }
+
+/* Active State */
+.active-link {
+    background: white !important;
+    font-weight: bold;
+}
+
+.menu-toggle.active .arrow {
+    transform: rotate(90deg);
+}
+
+.main-wrapper { margin-left: 250px; }
+
+.submenu {
+    display: none;
+    background: rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out; /* স্মুথ ওপেনিং */
+}
+
+.submenu.open {
+    display: block !important;
+}
+
+/* ==============  card  ===========================*/
+
+.dashboard-card {
+    background: #ffffff;
+    transition: all 0.35s ease;
+    cursor: pointer;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-6px) scale(1.00);
+}
+
+/* ===== Counter ===== */
+.counter {
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+/*  ================== form page ==================== */
+.form-card {
+    background: azure;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 1px 10px;
+}
+
+
+.form-label {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.form-control, .form-select {
+    border-radius: 5px;
+    padding: 5px 10px;
+    border:solid 1px var(--primary);
+}
+.section-title i {
+    color: #2563eb;
+    font-size: 20px;
+}
+
+/* ======================== list page ===========================*/
+
+.filter-card {
+    background: #ffffff;
+    border-radius: 5px;
+}
+
+.table-card {
+    background: #ffffff;
+    border-radius: 5px;
+}
+
+table th {
+    font-size: 14px;
+    color: #475569;
+    white-space: nowrap;
+}
+
+table td {
+    vertical-align: middle;
+}
+
+.action-btn {
+    border: none;
+    background: transparent;
+    padding: 4px 6px;
+}
+
+.action-btn.view {
+    color: blue;
+    font-size: 22px;
+}
+.action-btn.edit {
+    color: green;
+    font-size: 22px;
+}
+.action-btn.delete {
+    color: red;
+    font-size: 22px;
+}
+
+.action-btn:hover {
+    transform: scale(1.15);
+}
+
+
+
+/* =================== Profile page ===== =====================*/
+.profile-header {
+    background: cadetblue;
+    height: 150px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.profile-avatar {
+    position: absolute;
+    bottom: -60px;
+    left: 40px;
+    background: #fff;
+    padding: 6px;
+    border-radius: 50%;
+}
+
+.profile-avatar img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-name {
+    margin-left: 200px;
+    padding-top: 70px;
+    color: #fff;
+}
+
+.info-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    height: 100%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.info-title {
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: #1e293b;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed #e5e7eb;
+    padding: 6px 0;
+    font-size: 14px;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.doc-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.doc-card i {
+    font-size: 22px;
+    color: #2563eb;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================
+   Responsive Sidebar Fix
+   ========================= */
+
+@media (max-width: 991.98px) {
+
+    .sidebar {
+        display: none;       /* sidebar পুরোপুরি হাইড */
+        position: static;    /* fixed থাকবে না */
+        width: 0;
+    }
+
+    .main-wrapper {
+        margin-left: 0;      /* sidebar-এর জায়গা নেবে না */
+    }
+}
