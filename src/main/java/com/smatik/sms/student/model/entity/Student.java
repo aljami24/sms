@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Student Entity
@@ -47,5 +48,33 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", fatherName='" + fatherName + '\'' +
+                ", motherName='" + motherName + '\'' +
+                ", gender=" + gender +
+                ", dob=" + dob +
+                ", identityType=" + identityType +
+                ", identityNumber=" + identityNumber +
+                ", classroomVersionSectionsId=" + classroomVersionSectionsId +
+                ", photoDir='" + photoDir + '\'' +
+                ", nidDir='" + nidDir + '\'' +
+                ", addresses=" + addresses +
+                '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return Objects.equals(id, student.id) && Objects.equals(name, student.name) && Objects.equals(fatherName, student.fatherName) && Objects.equals(motherName, student.motherName) && gender == student.gender && Objects.equals(dob, student.dob) && identityType == student.identityType && Objects.equals(identityNumber, student.identityNumber) && Objects.equals(classroomVersionSectionsId, student.classroomVersionSectionsId) && Objects.equals(photoDir, student.photoDir) && Objects.equals(nidDir, student.nidDir) && Objects.equals(addresses, student.addresses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, fatherName, motherName, gender, dob, identityType, identityNumber, classroomVersionSectionsId, photoDir, nidDir, addresses);
+    }
 }

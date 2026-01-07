@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 /**
  * District Entity
  * Author: jami
@@ -31,5 +33,27 @@ public class District {
     private Division division;
 
     private Boolean active = true;
+
+    @Override
+    public String toString() {
+        return "District{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", division=" + division +
+                ", active=" + active +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        District district = (District) o;
+        return Objects.equals(id, district.id) && Objects.equals(name, district.name) && Objects.equals(division, district.division) && Objects.equals(active, district.active);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, division, active);
+    }
 }
 

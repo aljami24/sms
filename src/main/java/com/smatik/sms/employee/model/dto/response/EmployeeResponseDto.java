@@ -1,7 +1,7 @@
 package com.smatik.sms.employee.model.dto.response;
 
 import com.smatik.sms.common.address.dto.AddressResponseDto;
-import com.smatik.sms.common.enums.EmployType;
+import com.smatik.sms.common.enums.EmployeeType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class EmployeeResponseDto {
     private LocalDate dob;
     private LocalDate joiningDate;
     private Double salary;
-    private EmployType employType;
+    private EmployeeType employeeType;
     private IdentityType identityType;
     private Long identityNumber;
     private String phoneNumber;

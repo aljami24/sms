@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 /**
  * Address Entity
  * Author: jami
@@ -51,5 +53,30 @@ public class Address {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employ_id")
     private Employee employ;
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", village='" + village + '\'' +
+                ", addressType=" + addressType +
+                ", division=" + division +
+                ", district=" + district +
+                ", policeStation=" + policeStation +
+                ", student=" + student +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(id, address.id) && Objects.equals(village, address.village) && addressType == address.addressType && Objects.equals(division, address.division) && Objects.equals(district, address.district) && Objects.equals(policeStation, address.policeStation) && Objects.equals(student, address.student);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, village, addressType, division, district, policeStation, student);
+    }
 }
 
