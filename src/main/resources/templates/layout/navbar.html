@@ -1,90 +1,111 @@
 <!doctype html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-
-    <!-- Bootstrap CSS -->
-    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" rel="stylesheet">
-
+    <th:block th:replace="layout/header :: head"></th:block>
 </head>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow-sm"
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light sticky-top"
      th:fragment="navbar">
 
     <div class="container-fluid">
 
-        <!-- Mobile Toggle -->
-        <button class="navbar-toggler"
+        <!-- Mobile Sidebar Toggle -->
+        <button class="navbar-toggler d-lg-none"
                 type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
+                data-bs-toggle="offcanvas"
+                data-bs-target="#mobileSidebar"
+                aria-label="Toggle sidebar">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- Right Side -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
+        <ul class="navbar-nav ms-auto align-items-center">
 
-                <!-- User Dropdown -->
-                <li class="nav-item dropdown">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center"
+                   href="javascript:void(0)"
+                   data-bs-toggle="dropdown">
 
-                    <a class="nav-link dropdown-toggle d-flex align-items-center"
-                       href="#"
-                       role="button"
-                       data-bs-toggle="dropdown"
-                       aria-expanded="false">
+                    <div class="bg-primary text-white rounded-circle d-flex
+                                align-items-center justify-content-center me-2"
+                         style="width:30px;height:30px;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
 
-                        <!-- Avatar -->
-                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2"
-                             style="width:40px; height:40px;">
-                            <i class="bi bi-person-fill"></i>
-                        </div>
+                    <div class="text-start lh-sm">
+                        <div class="fw-semibold text-dark">Abdullah Mahmud</div>
+                        <small class="text-muted">ADMIN</small>
+                    </div>
+                </a>
 
-                        <!-- Name + Role -->
-                        <div class="text-start lh-sm">
-                            <div class="fw-semibold text-dark">
-                                Abdullah Mahmud
-                            </div>
-                            <small class="text-muted">
-                                ADMIN
-                            </small>
-                        </div>
-                    </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+                    <li class="px-3 py-2">
+                        <div class="fw-bold">Abdullah Mahmud</div>
+                        <div class="small text-muted">ADMIN</div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item text-danger" href="/logout">
+                            <i class="bi bi-box-arrow-right me-2"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-                    <!-- Dropdown Menu -->
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
-
-                        <li class="px-3 py-2">
-                            <div class="fw-bold">
-                                Abdullah Mahmud
-                            </div>
-                            <div class="small text-muted">
-                                ADMIN
-                            </div>
-                        </li>
-
-                        <li><hr class="dropdown-divider"></li>
-
-                        <li>
-                            <a class="dropdown-item text-danger">
-                                <i class="bi bi-box-arrow-right me-2"></i> Logout
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-
-            </ul>
-        </div>
+        </ul>
     </div>
 </nav>
 
+
+<!-- ================= MOBILE SIDEBAR (50%) ================= -->
+<div class="offcanvas offcanvas-start d-lg-none"
+     tabindex="-1"
+     id="mobileSidebar"
+     style="width:50%;">
+
+    <div class="offcanvas-header">
+        <h5 class="mb-0">SM Atik SMS</h5>
+        <button type="button" class="btn-close"
+                data-bs-dismiss="offcanvas"></button>
+    </div>
+
+    <div class="offcanvas-body p-0">
+
+        <div class="sidebar-menu">
+
+            <a class="menu-link" href="/">
+                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+            </a>
+
+            <div class="menu-item">
+                <a class="menu-toggle" data-target="m-students">
+                    <span><i class="bi bi-people me-2"></i> Students</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </a>
+                <div class="submenu" id="m-students">
+                    <a class="sub-link" href="/student/all">Student List</a>
+                    <a class="sub-link" href="/student/studentForm">Add Student</a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <a class="menu-toggle" data-target="m-account">
+                    <span><i class="bi bi-wallet2 me-2"></i> Account</span>
+                    <i class="bi bi-chevron-right arrow"></i>
+                </a>
+                <div class="submenu" id="m-account">
+                    <a class="sub-link" href="/account/accountIncome">Pay Income</a>
+                    <a class="sub-link" href="/account/accountExpense">Pay Expense</a>
+                    <a class="sub-link" href="/account/accountSummary">Summary</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
 </html>
