@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 /**
  * PoliceStation Entity
  * Author: jami
@@ -31,5 +33,28 @@ public class PoliceStation {
     private District district;
 
     private Boolean active = true;
+
+
+    @Override
+    public String toString() {
+        return "PoliceStation{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", district=" + district +
+                ", active=" + active +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        PoliceStation that = (PoliceStation) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(district, that.district) && Objects.equals(active, that.active);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, district, active);
+    }
 }
 
