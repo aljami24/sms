@@ -26,30 +26,28 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long EmployId;
-    private String Name;
+    private Long employeeId;
+    private String name;
     private Gender gender;
     private LocalDate dob;
     private LocalDate joiningDate;
     private Double salary;
     private EmployeeType employeeType;
     private IdentityType identityType;
-    private Long identityNumber;
+    private String identityNumber;
     private String phoneNumber;
-    private String photo;
     private String photoDir;
-    private String nid;
     private String nidDir;
 
-    @OneToMany(mappedBy = "employ", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> address = new ArrayList<>();
 
     @Override
     public String toString() {
         return "EmployEntity{" +
                 "id=" + id +
-                ", EmployId=" + EmployId +
-                ", Name='" + Name + '\'' +
+                ", EmployId=" + employeeId +
+                ", Name='" + name + '\'' +
                 ", gender=" + gender +
                 ", dob=" + dob +
                 ", joiningDate=" + joiningDate +
@@ -59,9 +57,7 @@ public class Employee {
                 ", identityNumber=" + identityNumber +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", address='" + address + '\'' +
-                ", photo='" + photo + '\'' +
                 ", photoDir='" + photoDir + '\'' +
-                ", nid='" + nid + '\'' +
                 ", nidDir='" + nidDir + '\'' +
                 '}';
     }
@@ -69,12 +65,12 @@ public class Employee {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Employee employ = (Employee) o;
-        return Objects.equals(id, employ.id) && Objects.equals(EmployId, employ.EmployId) && Objects.equals(Name, employ.Name) && gender == employ.gender && Objects.equals(dob, employ.dob) && Objects.equals(joiningDate, employ.joiningDate) && Objects.equals(salary, employ.salary) && employeeType == employ.employeeType && identityType == employ.identityType && Objects.equals(identityNumber, employ.identityNumber) && Objects.equals(phoneNumber, employ.phoneNumber) && Objects.equals(photo, employ.photo) && Objects.equals(photoDir, employ.photoDir) && Objects.equals(nid, employ.nid) && Objects.equals(nidDir, employ.nidDir) && Objects.equals(address, employ.address);
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) && Objects.equals(employeeId, employee.employeeId) && Objects.equals(name, employee.name) && gender == employee.gender && Objects.equals(dob, employee.dob) && Objects.equals(joiningDate, employee.joiningDate) && Objects.equals(salary, employee.salary) && employeeType == employee.employeeType && identityType == employee.identityType && Objects.equals(identityNumber, employee.identityNumber) && Objects.equals(phoneNumber, employee.phoneNumber) && Objects.equals(photoDir, employee.photoDir) && Objects.equals(nidDir, employee.nidDir) && Objects.equals(address, employee.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, EmployId, Name, gender, dob, joiningDate, salary, employeeType, identityType, identityNumber, phoneNumber, photo, photoDir, nid, nidDir, address);
+        return Objects.hash(id, employeeId, name, gender, dob, joiningDate, salary, employeeType, identityType, identityNumber, phoneNumber, photoDir, nidDir, address);
     }
 }

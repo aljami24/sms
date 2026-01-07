@@ -36,6 +36,24 @@ public class Helper {
         }
     }
 
+    public static void employeeFilesUpload(String uploadDir, FileUpload fileUpload) {
+        try {
+            if (fileUpload.getPhoto() != null && !fileUpload.getPhoto().isEmpty()) {
+                String path = Constants.EMPLOYEE_PHOTO_PATH + fileUpload.getId();
+                docUpload(uploadDir + path, fileUpload.getPhoto());
+                fileUpload.setPhotoDir(path);
+            }
+            if (fileUpload.getNid() != null && !fileUpload.getNid().isEmpty()) {
+                String path = Constants.EMPLOYEE_NID_DOB_PATH + fileUpload.getId();
+                docUpload(uploadDir + path, fileUpload.getNid());
+                fileUpload.setNidDir(path);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static <T> void docUpload(String filePath, T document) {
         try {
@@ -49,6 +67,12 @@ public class Helper {
 
     public static void deleteStudentAllFiles(String uploadDir, Long id) {
         deliteFile(uploadDir + Constants.STUDENT_PHOTO_PATH + id);
+
+    }
+
+    public static void deleteEmployeeAllFiles(String uploadDir, Long id) {
+        deliteFile(uploadDir + Constants.EMPLOYEE_PHOTO_PATH + id);
+        deliteFile(uploadDir + Constants.EMPLOYEE_NID_DOB_PATH + id);
 
     }
 
