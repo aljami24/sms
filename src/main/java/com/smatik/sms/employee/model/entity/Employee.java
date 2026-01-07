@@ -1,7 +1,7 @@
 package com.smatik.sms.employee.model.entity;
 
 import com.smatik.sms.common.address.entity.Address;
-import com.smatik.sms.common.enums.EmployType;
+import com.smatik.sms.common.enums.EmployeeType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
 import jakarta.persistence.*;
@@ -32,7 +32,7 @@ public class Employee {
     private LocalDate dob;
     private LocalDate joiningDate;
     private Double salary;
-    private EmployType employType;
+    private EmployeeType employeeType;
     private IdentityType identityType;
     private Long identityNumber;
     private String phoneNumber;
@@ -54,7 +54,7 @@ public class Employee {
                 ", dob=" + dob +
                 ", joiningDate=" + joiningDate +
                 ", salary=" + salary +
-                ", employType=" + employType +
+                ", employType=" + employeeType +
                 ", identityType=" + identityType +
                 ", identityNumber=" + identityNumber +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -70,11 +70,11 @@ public class Employee {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Employee employ = (Employee) o;
-        return Objects.equals(id, employ.id) && Objects.equals(EmployId, employ.EmployId) && Objects.equals(Name, employ.Name) && gender == employ.gender && Objects.equals(dob, employ.dob) && Objects.equals(joiningDate, employ.joiningDate) && Objects.equals(salary, employ.salary) && employType == employ.employType && identityType == employ.identityType && Objects.equals(identityNumber, employ.identityNumber) && Objects.equals(phoneNumber, employ.phoneNumber) && Objects.equals(photo, employ.photo) && Objects.equals(photoDir, employ.photoDir) && Objects.equals(nid, employ.nid) && Objects.equals(nidDir, employ.nidDir) && Objects.equals(address, employ.address);
+        return Objects.equals(id, employ.id) && Objects.equals(EmployId, employ.EmployId) && Objects.equals(Name, employ.Name) && gender == employ.gender && Objects.equals(dob, employ.dob) && Objects.equals(joiningDate, employ.joiningDate) && Objects.equals(salary, employ.salary) && employeeType == employ.employeeType && identityType == employ.identityType && Objects.equals(identityNumber, employ.identityNumber) && Objects.equals(phoneNumber, employ.phoneNumber) && Objects.equals(photo, employ.photo) && Objects.equals(photoDir, employ.photoDir) && Objects.equals(nid, employ.nid) && Objects.equals(nidDir, employ.nidDir) && Objects.equals(address, employ.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, EmployId, Name, gender, dob, joiningDate, salary, employType, identityType, identityNumber, phoneNumber, photo, photoDir, nid, nidDir, address);
+        return Objects.hash(id, EmployId, Name, gender, dob, joiningDate, salary, employeeType, identityType, identityNumber, phoneNumber, photo, photoDir, nid, nidDir, address);
     }
 }
