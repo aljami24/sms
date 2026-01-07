@@ -16,7 +16,6 @@ import java.util.List;
 @Setter
 public class EmployeeFormDto extends FileUpload {
 
-    private Long id;
     private Long employeeId;
     private String name;
     private Gender gender;

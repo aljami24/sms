@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-section-table
+      author: afzal
+      changes:
+        - createTable:
+            tableName: section
+            remarks: "Class sections like A, B"
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: name
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false

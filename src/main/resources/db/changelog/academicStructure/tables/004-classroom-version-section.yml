@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-classroom-version-section-table
+      author: afzal
+      changes:
+        - createTable:
+            tableName: classroom_version_section
+            remarks: "Mapping of Class, Version and Section"
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              # Foreign key to class_room
+              - column:
+                  name: class_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              # Foreign key to version
+              - column:
+                  name: version_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              # Foreign key to section (nullable as per business rule)
+              - column:
+                  name: section_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+
+        # ===== Foreign Key Constraints =====
+        - addForeignKeyConstraint:
+            baseTableName: classroom_version_section
+            baseColumnNames: class_id
+            referencedTableName: class_room
+            referencedColumnNames: id
+            constraintName: fk_cvs_class
+
+        - addForeignKeyConstraint:
+            baseTableName: classroom_version_section
+            baseColumnNames: version_id
+            referencedTableName: version
+            referencedColumnNames: id
+            constraintName: fk_cvs_version
+
+        - addForeignKeyConstraint:
+            baseTableName: classroom_version_section
+            baseColumnNames: section_id
+            referencedTableName: section
+            referencedColumnNames: id
+            constraintName: fk_cvs_section
+

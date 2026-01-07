@@ -1,0 +1,74 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-create-address-table
+      author: afzal
+      comments: Address table with employee & location relations
+      changes:
+        - createTable:
+            tableName: address
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: village
+                  type: VARCHAR(150)
+
+              - column:
+                  name: address_type
+                  type: VARCHAR(50)
+
+              - column:
+                  name: division_id
+                  type: BIGINT
+
+              - column:
+                  name: district_id
+                  type: BIGINT
+
+              - column:
+                  name: police_station_id
+                  type: BIGINT
+
+              - column:
+                  name: student_id
+                  type: BIGINT
+
+              - column:
+                  name: employ_id
+                  type: BIGINT
+
+        # FK → division
+        - addForeignKeyConstraint:
+            baseTableName: address
+            baseColumnNames: division_id
+            referencedTableName: divisions
+            referencedColumnNames: id
+            constraintName: fk_address_division
+
+        # FK → district
+        - addForeignKeyConstraint:
+            baseTableName: address
+            baseColumnNames: district_id
+            referencedTableName: districts
+            referencedColumnNames: id
+            constraintName: fk_address_district
+
+        # FK → police station
+        - addForeignKeyConstraint:
+            baseTableName: address
+            baseColumnNames: police_station_id
+            referencedTableName: police_stations
+            referencedColumnNames: id
+            constraintName: fk_address_police_station
+
+        # FK → employee
+        - addForeignKeyConstraint:
+            baseTableName: address
+            baseColumnNames: employ_id
+            referencedTableName: employee
+            referencedColumnNames: id
+            constraintName: fk_address_employee
