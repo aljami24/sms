@@ -52,7 +52,7 @@ public class Address {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employ_id")
-    private Employee employ;
+    private Employee employee;
 
     @Override
     public String toString() {

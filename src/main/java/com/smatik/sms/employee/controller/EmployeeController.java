@@ -1,9 +1,12 @@
 package com.smatik.sms.employee.controller;
 
 
+import com.smatik.sms.common.address.dto.AddressRequestDto;
+import com.smatik.sms.common.enums.AddressType;
+import com.smatik.sms.common.enums.EmployeeType;
 import com.smatik.sms.common.enums.Gender;
+import com.smatik.sms.common.enums.IdentityType;
 import com.smatik.sms.employee.model.dto.request.EmployeeFormDto;
-import com.smatik.sms.employee.model.entity.Employee;
 import com.smatik.sms.employee.model.repository.EmployeeRepository;
 import com.smatik.sms.employee.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -13,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -26,23 +30,29 @@ public class EmployeeController {
 
     @GetMapping("/create")
     public String createForm(Model model) {
-        Employee employee = new Employee();
+        EmployeeFormDto employeeFormDto = new EmployeeFormDto();
+        employeeFormDto.getAddressRequestDto().add(new AddressRequestDto());
 
-        model.addAttribute("employee", employee);
+        model.addAttribute("employeeForm", employeeFormDto);
         model.addAttribute("genders", Gender.values());
+        model.addAttribute("employTypes", EmployeeType.values());
+        model.addAttribute("identityTypes", IdentityType.values());
+        model.addAttribute("addressTypes", AddressType.values());
         model.addAttribute("title", "Create Employee");
 
         return "employee/employeeForm";
     }
 
-    @GetMapping("/save")
-    public String saveEmployee (@Valid @ModelAttribute("EmployeeForm")
+    @PostMapping("/save")
+    public String saveEmployee (@Valid @ModelAttribute("employeeForm")
                                 EmployeeFormDto employeeFormDto,
                                 BindingResult bindingResult,
                                 Model model) {
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("genders", Gender.values());
+            model.addAttribute("employTypes", EmployeeType.values());
+            model.addAttribute("identityTypes", IdentityType.values());
             return "employee/employeeForm";
         }
 

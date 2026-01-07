@@ -1,23 +1,43 @@
 package com.smatik.sms.employee.service;
 
+import com.smatik.sms.common.constants.Constants;
+import com.smatik.sms.common.util.Helper;
 import com.smatik.sms.employee.model.dto.request.EmployeeFormDto;
 import com.smatik.sms.employee.model.entity.Employee;
 import com.smatik.sms.employee.model.mapper.EmployeeMapper;
 import com.smatik.sms.employee.model.repository.EmployeeRepository;
+import org.codehaus.groovy.runtime.metaclass.MetaMethodIndex;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+
+/**
+ * StudentService
+ * Author: afzal
+ * Created On: 2026-01-05
+ * Module: employee Management
+ */
 @Service
 public class EmployeeService {
 
     @Autowired
     EmployeeRepository empolyeeRepository;
 
+    @Value("${file.upload-directory}")
+    private String uploadDir;
+
 
     // Create-------------------------------------------------------------------------------
     public void saveEmployee (EmployeeFormDto employeeFormDto) {
         Employee employee = EmployeeMapper.employeeFormToEntity(employeeFormDto);
+        empolyeeRepository.save(employee);
 
+        employeeFormDto.setId(employee.getId());
+        Helper.employeeFilesUpload(uploadDir, employeeFormDto);
+
+        employee.setPhotoDir(Constants.EMPLOYEE_PHOTO_PATH + employee.getId());
+        employee.setNidDir(Constants.EMPLOYEE_NID_DOB_PATH + employee.getId());
         empolyeeRepository.save(employee);
 
     }
