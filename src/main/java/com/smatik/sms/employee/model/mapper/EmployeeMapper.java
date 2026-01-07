@@ -1,8 +1,13 @@
 package com.smatik.sms.employee.model.mapper;
 
+import com.smatik.sms.common.address.dto.AddressRequestDto;
+import com.smatik.sms.common.address.entity.Address;
 import com.smatik.sms.employee.model.dto.request.EmployeeFormDto;
 import com.smatik.sms.employee.model.entity.Employee;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
@@ -10,7 +15,7 @@ public class EmployeeMapper {
 
     public static Employee employeeFormToEntity(EmployeeFormDto employeeFormDto) {
         Employee employee = new Employee();
-        employee.setEmployId(employeeFormDto.getEmployId());
+        employee.setEmployeeId(employeeFormDto.getEmployeeId());
         employee.setName(employeeFormDto.getName());
         employee.setGender(employeeFormDto.getGender());
         employee.setDob(employeeFormDto.getDob());
@@ -20,9 +25,31 @@ public class EmployeeMapper {
         employee.setIdentityType(employeeFormDto.getIdentityType());
         employee.setIdentityNumber(employeeFormDto.getIdentityNumber());
         employee.setPhoneNumber(employeeFormDto.getPhoneNumber());
-//        employee.setAddress(employeeFormDto.getAddress());
+
+        List<Address> addressList = new ArrayList<>();
+
+        if (employeeFormDto.getAddressRequestDto() != null) {
+            for (AddressRequestDto addressRequestDto : employeeFormDto.getAddressRequestDto()) {
+
+                Address address = new Address();
+                address.setAddressType(addressRequestDto.getAddressType());
+                address.setDivision(addressRequestDto.getDivision());
+                address.setDistrict(addressRequestDto.getDistrict());
+                address.setPoliceStation(addressRequestDto.getPoliceStation());
+                address.setVillage(addressRequestDto.getVillage());
+
+                // 🔥 Important (relation set)
+                address.setEmployee(employee);
+                address.setStudent(null);
+
+                addressList.add(address);
+            }
+        }
+
+        employee.setAddress(addressList);
 
         return employee;
+
     }
 
 

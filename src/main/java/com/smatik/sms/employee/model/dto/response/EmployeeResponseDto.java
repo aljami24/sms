@@ -16,15 +16,15 @@ import java.util.List;
 public class EmployeeResponseDto {
 
     private Long id;
-    private Long EmployId;
-    private String Name;
+    private Long employeeId;
+    private String name;
     private Gender gender;
     private LocalDate dob;
     private LocalDate joiningDate;
     private Double salary;
     private EmployeeType employeeType;
     private IdentityType identityType;
-    private Long identityNumber;
+    private String identityNumber;
     private String phoneNumber;
     private String photo;
     private String photoDir;
