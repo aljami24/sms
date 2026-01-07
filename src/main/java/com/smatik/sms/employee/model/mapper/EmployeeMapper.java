@@ -24,8 +24,6 @@ public class EmployeeMapper {
         employee.setIdentityType(employeeFormDto.getIdentityType());
         employee.setIdentityNumber(employeeFormDto.getIdentityNumber());
         employee.setPhoneNumber(employeeFormDto.getPhoneNumber());
-        employee.setPhotoDir(employeeFormDto.getPhotoDir());
-        employee.setNidDir(employeeFormDto.getNidDir());
 
         List<Address> addressList = new ArrayList<>();
 

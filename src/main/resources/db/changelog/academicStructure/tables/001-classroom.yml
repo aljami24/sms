@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-classroom-table
+      author: afzal
+      changes:
+        - createTable:
+            tableName: class_room
+            remarks: "Class information like Class 1 to 8"
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+

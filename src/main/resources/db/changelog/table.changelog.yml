@@ -1,0 +1,53 @@
+databaseChangeLog:
+
+  - include:
+      file: academicStructure/tables/001-classroom.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: academicStructure/tables/002-version.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: academicStructure/tables/003-section.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: academicStructure/tables/004-classroom-version-section.yml
+      relativeToChangelogFile: true
+
+
+
+
+  - include:
+      file: address/tables/division.yml
+      relativeToChangelogFile: true
+  - include:
+      file: address/tables/district.yml
+      relativeToChangelogFile: true
+  - include:
+      file: address/tables/police-station.yml
+      relativeToChangelogFile: true
+
+
+  - include:
+      file: employee/tables/employee.yml
+      relativeToChangelogFile: true
+
+
+
+  - include:
+      file: student/tables/student.yml
+      relativeToChangelogFile: true
+
+
+
+
+  - include:
+      file: address/tables/address.yml
+      relativeToChangelogFile: true
+
+
+
+
+

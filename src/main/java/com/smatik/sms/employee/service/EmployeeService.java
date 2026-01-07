@@ -32,12 +32,13 @@ public class EmployeeService {
     public void saveEmployee (EmployeeFormDto employeeFormDto) {
         Employee employee = new Employee();
         EmployeeMapper.employeeFormToEntity(employee, employeeFormDto);
-        empolyeeRepository.save(employee);
 
+        empolyeeRepository.save(employee);
         employeeFormDto.setId(employee.getId());
         Helper.employeeFilesUpload(uploadDir, employeeFormDto);
 
-        EmployeeMapper.employeeFormToEntity(employee, employeeFormDto);
+        employee.setPhotoDir(employeeFormDto.getPhotoDir());
+        employee.setNidDir(employeeFormDto.getNidDir());
         empolyeeRepository.save(employee);
 
     }

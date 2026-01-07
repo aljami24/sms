@@ -1,0 +1,6 @@
+databaseChangeLog:
+
+  - include:
+      file: academicStructure/seeds/005-seed-academic-structure.yml
+      relativeToChangelogFile: true
+
