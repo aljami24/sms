@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-district-table
+      author: afzal
+      comments: District table with division relation
+      changes:
+        - createTable:
+            tableName: districts
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: division_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+
+        # Foreign key → division
+        - addForeignKeyConstraint:
+            baseTableName: districts
+            baseColumnNames: division_id
+            referencedTableName: divisions
+            referencedColumnNames: id
+            constraintName: fk_district_division

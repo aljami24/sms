@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-create-student-table
+      author: afzal
+      comments: Student table with classroomVersionSection relation
+      changes:
+
+        # -----------------------------
+        # Student main table
+        # -----------------------------
+        - createTable:
+            tableName: student
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: father_name
+                  type: VARCHAR(150)
+
+              - column:
+                  name: mother_name
+                  type: VARCHAR(150)
+
+              # Enum → Gender
+              - column:
+                  name: gender
+                  type: VARCHAR(20)
+
+              - column:
+                  name: dob
+                  type: DATE
+
+              # Enum → IdentityType
+              - column:
+                  name: identity_type
+                  type: VARCHAR(50)
+
+              - column:
+                  name: identity_number
+                  type: BIGINT
+
+              # FK → classroom_version_section
+              - column:
+                  name: classroom_version_sections_id
+                  type: BIGINT
+
+              - column:
+                  name: photo_dir
+                  type: VARCHAR(255)
+
+              - column:
+                  name: nid_dir
+                  type: VARCHAR(255)
+
+        # -----------------------------------
+        # Foreign Key → ClassroomVersionSection
+        # -----------------------------------
+        - addForeignKeyConstraint:
+            baseTableName: student
+            baseColumnNames: classroom_version_sections_id
+            referencedTableName: classroom_version_section
+            referencedColumnNames: id
+            constraintName: fk_student_classroom_version_section

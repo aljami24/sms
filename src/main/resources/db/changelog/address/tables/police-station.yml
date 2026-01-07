@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-police-station-table
+      author: afzal
+      comments: Police station table with district relation
+      changes:
+        - createTable:
+            tableName: police_stations
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: district_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+
+        # Foreign key → district
+        - addForeignKeyConstraint:
+            baseTableName: police_stations
+            baseColumnNames: district_id
+            referencedTableName: districts
+            referencedColumnNames: id
+            constraintName: fk_police_station_district

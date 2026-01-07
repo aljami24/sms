@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-create-employee-table
+      author: afzal
+      comments: Employee master table
+      changes:
+        - createTable:
+            tableName: employee
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: employee_id
+                  type: BIGINT
+
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+
+              - column:
+                  name: gender
+                  type: VARCHAR(20)
+
+              - column:
+                  name: dob
+                  type: DATE
+
+              - column:
+                  name: joining_date
+                  type: DATE
+
+              - column:
+                  name: salary
+                  type: NUMERIC(10,2)
+
+              - column:
+                  name: employee_type
+                  type: VARCHAR(50)
+
+              - column:
+                  name: identity_type
+                  type: VARCHAR(50)
+
+              - column:
+                  name: identity_number
+                  type: VARCHAR(100)
+
+              - column:
+                  name: phone_number
+                  type: VARCHAR(20)
+
+              - column:
+                  name: photo_dir
+                  type: VARCHAR(255)
+
+              - column:
+                  name: nid_dir
+                  type: VARCHAR(255)
+
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
