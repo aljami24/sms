@@ -2,6 +2,7 @@ package com.smatik.sms.common.address.entity;
 
 import com.smatik.sms.common.enums.AddressType;
 import com.smatik.sms.student.model.entity.Student;
+import com.smatik.sms.employee.model.entity.Employee;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -46,5 +47,9 @@ public class Address {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employ_id")
+    private Employee employ;
 }
 
