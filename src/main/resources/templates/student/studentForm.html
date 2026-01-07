@@ -106,6 +106,33 @@
                         <input class="form-control" placeholder="Enter identity number" th:field="*{identityNumber}"
                                type="text">
                     </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label" for="class">Class</label>
+                        <select class="form-select" id="class" th:field="*{classRoomId}">
+                            <option value="">--Select Class--</option>
+                            <option th:each="c : ${classRoom}" th:text="${c.name}" th:value="${c.id}"></option>
+                        </select>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <label class="form-label" for="version">Version</label>
+                        <select class="form-select" id="version" th:field="*{versionId}">
+                            <option value="">--Select Version--</option>
+                            <option th:each="v : ${version}" th:text="${v.name}" th:value="${v.id}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label" for="section">Section</label>
+                        <select class="form-select" id="section" th:field="*{sectionId}">
+                            <option value="">--Select Section--</option>
+                            <option th:each="s : ${section}" th:text="${s.name}" th:value="${s.id}"></option>
+                        </select>
+                    </div>
+
+
                 </div>
             </div>
 
