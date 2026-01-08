@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,5 +25,5 @@ public class StudentResponseDto {
     private String motherName;
     private Gender gender;
     private LocalDate dob;
-    private List<AddressResponseDto> addresses;
+    private List<AddressResponseDto> addresses = new ArrayList<>();
 }
