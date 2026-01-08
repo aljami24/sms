@@ -4,3 +4,25 @@ databaseChangeLog:
       file: academicStructure/seeds/005-seed-academic-structure.yml
       relativeToChangelogFile: true
 
+
+  - changeSet:
+      id: load-divisions-district-police-stations-data
+      author: afzal
+      changes:
+        - loadData:
+            file: address/seeds/seed-divisions.csv # আপনার স্ক্রিনশট অনুযায়ী ফাইলের নাম ঠিক করুন
+            relativeToChangelogFile: true
+            tableName: divisions
+            quotchar: '"'
+
+        - loadData:
+            file: address/seeds/seed-districts.csv
+            relativeToChangelogFile: true
+            tableName: districts
+            quotchar: '"'
+
+        - loadData:
+            file: address/seeds/seed-police-stations.csv
+            relativeToChangelogFile: true
+            tableName: police_stations
+            quotchar: '"'
