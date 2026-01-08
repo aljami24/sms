@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
+
+<head>
+  <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+
+<div layout:fragment="content" class="page-bg">
+
+  <!-- ===== Page Header ===== -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold mb-0">
+      <i class="bi bi-person-badge-fill me-2"></i> Employees List
+    </h5>
+  </div>
+
+  <!-- ===== Filter Section ===== -->
+  <div class="card filter-card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <form method="get" action="">
+        <div class="row g-3">
+
+          <div class="col-md-3">
+            <input type="text" name="employeeId"
+                   class="form-control"
+                   placeholder="Employee ID">
+          </div>
+
+          <div class="col-md-3">
+            <select name="employeeType" class="form-select">
+              <option value="">Employee Type</option>
+              <option>PERMANENT</option>
+              <option>CONTRACT</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <select name="status" class="form-select">
+              <option value="">Status</option>
+              <option>ACTIVE</option>
+              <option>DEACTIVATE</option>
+            </select>
+          </div>
+
+          <div class="col-md-2 d-grid">
+            <button class="btn btn-success">
+              <i class="bi bi-search me-1"></i> Search
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Table Section ===== -->
+  <div class="card table-card shadow-sm border-0">
+    <div class="card-body p-0">
+
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+          <tr>
+            <th class="text-center">Sl</th>
+            <th class="text-center">Employee</th>
+            <th class="text-end">Salary</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Address</th>
+            <th class="text-center">Action</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr each="employee,stat : ${employeeResponseDto}">
+            <td class="text-center" text="${stat.count}">1</td>
+            <td>
+              <span><strong>ID :</strong> <span text="${employee.employeeId}"></span></span><br>
+              <span><strong>Name :</strong> <span text="${employee.name}"></span></span><br>
+              <span><strong>Phone :</strong> <span text="${employee.phoneNumber}"></span></span>
+            </td>
+            <td class="text-end" text="${employee.salary}">25000</td>
+            <td class="text-center">
+                            <span if="${employee.status == 'ACTIVE'}"
+                                  class="status-active">Active</span>
+              <span if="${employee.status != 'ACTIVE'}"
+                    class="status-inactive">Inactive</span>
+            </td>
+            <td>
+              <ul>
+                <li each="addr : ${employee.address}">
+                  <span class="fw-bold" text="${addr.addressType} + ' :  ' "></span>
+                  <span text="${addr.village} + ', ' + ${addr.policeStation} + ', ' + ${addr.district}', ' + ${addr.division}"></span>
+                </li>
+              </ul>
+            </td>
+            <!-- Actions -->
+            <td class="text-center">
+              <a class="action-btn view"
+                 href="@{'/employee/detail/' + ${employee.id}}">
+                <i class="bi bi-eye-fill"></i>
+              </a>
+
+              <a class="action-btn edit"
+                 href="@{'/employee/edit/' + ${employee.id}}">
+                <i class="bi bi-pencil-square"></i>
+              </a>
+
+              <button type="button"
+                      class="action-btn delete"
+                      data-bs-toggle="modal"
+                      data-bs-target="'#deleteModal_' + ${employee.id}">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+
+              <!-- Delete Modal -->
+              <div class="modal fade"
+                   id="'deleteModal_' + ${employee.id}"
+                   tabindex="-1">
+
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h5 class="modal-title text-danger">
+                        Confirm Delete
+                      </h5>
+                      <button class="btn-close"
+                              data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                      Are you sure to delete
+                      <strong text="${employee.name}"></strong> ?
+                    </div>
+
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary"
+                              data-bs-dismiss="modal">
+                        Cancel
+                      </button>
+
+                      <form action="@{/employee/delete/{id}(id=${employee.id})}"
+                            method="post">
+                        <button class="btn btn-danger">
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" classappend="${currentPage == 0} ? 'disabled'">
+        <a class="page-link" href="@{/employee/all(page = ${currentPage - 1})}">Previous</a>
+      </li>
+      <li class="page-item" each=" i : ${#numbers.sequence(0,totalPages -1)}"
+          classappend="${i == currentPage} ? 'active' : ''">
+        <a class="page-link" text="${i + 1}" href="@{/employee/all(page = ${i})}">1</a>
+      </li>
+      <li class="page-item" classappend="${currentPage == totalPages - 1} ? 'disabled'">
+        <a class="page-link" href="@{/employee/all(page = ${currentPage + 1})}">Next</a>
+      </li>
+    </ul>
+  </nav>
+
+</div>
+
+</body>
+</html>
