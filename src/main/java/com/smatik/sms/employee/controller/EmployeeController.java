@@ -57,7 +57,7 @@ public class EmployeeController {
         }
 
         employeeService.saveEmployee(employeeFormDto);
-        return "redirect/employee/all";
+        return "redirect:/employee/employeeForm";
     }
 
 //    @GetMapping("/all")
