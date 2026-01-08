@@ -83,28 +83,28 @@
                     <thead class="table-secondary">
                     <tr>
                         <th class="text-center">sl</th>
-                        <th class="text-center">Roll</th>
-                        <th class="text-center">Name</th>
-                        <th class="text-center">Father</th>
-                        <th class="text-center">Mother</th>
-                        <th class="text-center">Dob</th>
-                        <th class="text-center">Gender</th>
+                        <th class="text-center">Student</th>
+                        <th class="text-center">Academic</th>
                         <th class="text-center">Address</th>
                         <th class="text-center">Action</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    <tr th:each="student : ${studentResponseDtos}">
+                    <tr th:each="student,stat : ${studentResponseDtos}">
                         <!-- Serial Number with pagination -->
-                        <td class="text-center"></td>
-
-                        <td class="text-center">5555</td>
-                        <td th:text="${student.name}">mahmud</td>
-                        <td th:text="${student.father}">faysal</td>
-                        <td th:text="${student.mother}">amatullah</td>
-                        <td class="text-center" th:text="${student.dob}">10-10-2002</td>
-                        <td class="text-center" th:text="${student.gender}">Male</td>
+                        <td class="text-center" th:text="${stat.count}"></td>
+                        <td>
+                            <span><strong>Roll :</strong> <span text="${student.roll}"></span></span><br>
+                            <span><strong>Name :</strong> <span th:text="${student.name}"></span></span><br>
+                            <span><strong>Father :</strong> <span th:text="${student.father}"></span></span><br>
+                            <span><strong>Mother :</strong> <span th:text="${student.mother}"></span></span><br>
+                        </td>
+                        <td>
+                            <span><strong>Class :</strong> <span text="${student.roll}">1</span></span><br>
+                            <span><strong>Version :</strong> <span text="${student.name}">Bangla</span></span><br>
+                            <span><strong>Section :</strong> <span text="${student.name}">A</span></span><br>
+                        </td>
                         <td>
                             <ul>
                                 <li th:each="addr : ${student.addresses}">
@@ -188,15 +188,15 @@
     <!-- ===== Pagination ===== -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{/student/all(page = ${currentPage - 1})}">Previous</a>
+            <li class="page-item" classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" href="@{/student/all(page = ${currentPage - 1})}">Previous</a>
             </li>
-            <li class="page-item" th:each=" i : ${#numbers.sequence(0,totalPages -1)}"
-                th:classappend="${i == currentPage} ? 'active' : ''">
-                <a class="page-link" th:text="${i + 1}" th:href="@{/student/all(page = ${i})}">1</a>
+            <li class="page-item" each=" i : ${#numbers.sequence(0,totalPages -1)}"
+                classappend="${i == currentPage} ? 'active' : ''">
+                <a class="page-link" text="${i + 1}" href="@{/student/all(page = ${i})}">1</a>
             </li>
-            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/student/all(page = ${currentPage + 1})}">Next</a>
+            <li class="page-item" classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" href="@{/student/all(page = ${currentPage + 1})}">Next</a>
             </li>
         </ul>
     </nav>
