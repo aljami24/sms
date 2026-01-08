@@ -28,7 +28,7 @@ public class StudentMapper {
         student.setGender(studentRequestDto.getGender());
         student.setFatherName(studentRequestDto.getFatherName());
         student.setMotherName(studentRequestDto.getMotherName());
-        student.setIdentityNumber(studentRequestDto.getIdentityNumber());
+        student.setIdentityNumber(student.getIdentityNumber());
         student.setIdentityType(studentRequestDto.getIdentityType());
         student.setPhotoDir(studentRequestDto.getPhotoDir());
         student.setNidDir(studentRequestDto.getNidDir());
