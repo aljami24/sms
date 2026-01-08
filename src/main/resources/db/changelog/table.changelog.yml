@@ -29,19 +29,13 @@ databaseChangeLog:
       file: address/tables/police-station.yml
       relativeToChangelogFile: true
 
-
   - include:
       file: employee/tables/employee.yml
       relativeToChangelogFile: true
 
-
-
   - include:
       file: student/tables/student.yml
       relativeToChangelogFile: true
-
-
-
 
   - include:
       file: address/tables/address.yml
