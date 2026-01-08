@@ -14,6 +14,7 @@ import com.smatik.sms.common.enums.AddressType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
 import com.smatik.sms.student.model.dto.request.StudentRequestDto;
+import com.smatik.sms.student.model.dto.response.StudentResponseDto;
 import com.smatik.sms.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -80,6 +81,14 @@ public class StudentController {
     @PostMapping("/save")
     public String saveStudent(StudentRequestDto studentRequestDto) {
         studentService.saveStudent(studentRequestDto);
-        return "redirect:/student/create";
+        return "redirect:/student/list";
+    }
+
+
+    @GetMapping("/list")
+    public String getAllStd(Model model) {
+        List<StudentResponseDto> getStudentAll = studentService.getAllStudent();
+        model.addAttribute("getStudentAll", getStudentAll);
+        return "student/studentList";
     }
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
+      layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{layout/main}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -10,7 +10,7 @@
 
 <body>
 
-<div layout:fragment="content" class="page-bg">
+<div class="page-bg" layout:fragment="content">
 
     <!-- ===== Page Header ===== -->
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -22,17 +22,17 @@
     <!-- ===== Filter Section ===== -->
     <div class="card filter-card shadow-sm border-0 mb-4">
         <div class="card-body">
-            <form method="get" action="">
+            <form action="" method="get">
                 <div class="row g-3">
 
                     <div class="col-md-2">
-                        <input type="text" name="name" class="form-control"
-                               placeholder="Student Roll"
+                        <input class="form-control" name="name" placeholder="Student Roll"
+                               type="text"
                                value="">
                     </div>
 
                     <div class="col-md-2">
-                        <select name="className" class="form-select">
+                        <select class="form-select" name="className">
                             <option value="">Class</option>
                             <option
                                     value="">
@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="col-md-2">
-                        <select name="section" class="form-select">
+                        <select class="form-select" name="section">
                             <option value="">Section</option>
                             <option>A</option>
                             <option>B</option>
@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="col-md-2">
-                        <select name="version" class="form-select">
+                        <select class="form-select" name="version">
                             <option value="">Version</option>
                             <option>Bangla</option>
                             <option>English</option>
@@ -57,9 +57,9 @@
                     </div>
 
                     <div class="col-md-2">
-                        <input type="text" name="rollOrReg"
-                               class="form-control"
+                        <input class="form-control" name="rollOrReg"
                                placeholder="Roll / Reg"
+                               type="text"
                                value="">
                     </div>
 
@@ -91,14 +91,14 @@
                     </thead>
 
                     <tbody>
-                    <tr th:each="student,stat : ${studentResponseDtos}">
+                    <tr th:each="student,stat : ${getStudentAll}">
                         <!-- Serial Number with pagination -->
                         <td class="text-center" th:text="${stat.count}"></td>
                         <td>
                             <span><strong>Roll :</strong> <span text="${student.roll}"></span></span><br>
                             <span><strong>Name :</strong> <span th:text="${student.name}"></span></span><br>
-                            <span><strong>Father :</strong> <span th:text="${student.father}"></span></span><br>
-                            <span><strong>Mother :</strong> <span th:text="${student.mother}"></span></span><br>
+                            <span><strong>Father :</strong> <span th:text="${student.fatherName}"></span></span><br>
+                            <span><strong>Mother :</strong> <span th:text="${student.motherName}"></span></span><br>
                         </td>
                         <td>
                             <span><strong>Class :</strong> <span text="${student.roll}">1</span></span><br>
@@ -109,7 +109,8 @@
                             <ul>
                                 <li th:each="addr : ${student.addresses}">
                                     <span class="fw-bold" th:text="${addr.addressType} + ' :  ' "></span>
-                                    <span th:text="${addr.village} + ', ' + ${addr.thana} + ', ' + ${addr.district}"></span>
+                                    <span th:text="${addr.village + ', ' + addr.policeStation + ', ' + addr.district + ', ' + addr.division}"></span>
+
                                 </li>
                             </ul>
                         </td>
@@ -118,26 +119,26 @@
                         <td class="text-center">
 
                             <!-- View -->
-                            <a class="action-btn view" th:href="@{'/student/detail/'+${student.id}}" title="View">
+                            <a class="action-btn view" href="@{'/student/detail/'+${student.id}}" title="View">
                                 <i class="bi bi-eye-fill"></i>
                             </a>
 
                             <!-- Edit -->
-                            <a class="action-btn edit" th:href="@{'/student/edit/'+${student.id}}" title="Edit">
+                            <a class="action-btn edit" href="@{'/student/edit/'+${student.id}}" title="Edit">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
 
                             <!-- Delete Button -->
-                            <button type="button"
-                                    class="action-btn delete"
+                            <button class="action-btn delete"
+                                    data-bs-target="'#deleteModal_' + ${student.id}"
                                     data-bs-toggle="modal"
-                                    th:data-bs-target="'#deleteModal_' + ${student.id}">
+                                    type="button">
                                 <i class="bi bi-trash-fill"></i>
                             </button>
 
                             <!-- Delete Modal -->
                             <div class="modal fade"
-                                 th:id="'deleteModal_' + ${student.id}"
+                                 id="'deleteModal_' + ${student.id}"
                                  tabindex="-1">
 
                                 <div class="modal-dialog modal-dialog-centered">
@@ -147,24 +148,24 @@
                                             <h5 class="modal-title text-danger">
                                                 Confirm Delete
                                             </h5>
-                                            <button type="button"
-                                                    class="btn-close"
-                                                    data-bs-dismiss="modal"></button>
+                                            <button class="btn-close"
+                                                    data-bs-dismiss="modal"
+                                                    type="button"></button>
                                         </div>
 
                                         <div class="modal-body">
                                             Are you sure you want to delete
-                                            <strong th:text="${student.name}"></strong> ?
+                                            <strong text="${student.name}"></strong> ?
                                         </div>
 
                                         <div class="modal-footer">
-                                            <button type="button"
-                                                    class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">
+                                            <button class="btn btn-secondary"
+                                                    data-bs-dismiss="modal"
+                                                    type="button">
                                                 Cancel
                                             </button>
 
-                                            <form th:action="@{/student/delete/{id}(id=${student.id})}"
+                                            <form action="@{/student/delete/{id}(id=${student.id})}"
                                                   method="post">
                                                 <button class="btn btn-danger">
                                                     <i class="bi bi-trash me-1"></i> Delete
@@ -191,9 +192,9 @@
             <li class="page-item" classappend="${currentPage == 0} ? 'disabled'">
                 <a class="page-link" href="@{/student/all(page = ${currentPage - 1})}">Previous</a>
             </li>
-            <li class="page-item" each=" i : ${#numbers.sequence(0,totalPages -1)}"
-                classappend="${i == currentPage} ? 'active' : ''">
-                <a class="page-link" text="${i + 1}" href="@{/student/all(page = ${i})}">1</a>
+            <li class="page-item" classappend="${i == currentPage} ? 'active' : ''"
+                each=" i : ${#numbers.sequence(0,totalPages -1)}">
+                <a class="page-link" href="@{/student/all(page = ${i})}" text="${i + 1}">1</a>
             </li>
             <li class="page-item" classappend="${currentPage == totalPages - 1} ? 'disabled'">
                 <a class="page-link" href="@{/student/all(page = ${currentPage + 1})}">Next</a>
