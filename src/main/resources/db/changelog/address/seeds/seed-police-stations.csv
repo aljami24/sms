@@ -1,0 +1,460 @@
+"name","district_id","active"
+"Dhanmondi",1,true
+"Gulshan",1,true
+"Banani",1,true
+"Mohammadpur",1,true
+"Mirpur",1,true
+"Pallabi",1,true
+"Kafrul",1,true
+"Uttara",1,true
+"Airport",1,true
+"Badda",1,true
+"Rampura",1,true
+"Tejgaon",1,true
+"Tejgaon Industrial Area",1,true
+"Hatirjheel",1,true
+"Ramna",1,true
+"Shahbagh",1,true
+"New Market",1,true
+"Lalbagh",1,true
+"Kotwali",1,true
+"Hazaribagh",1,true
+"Kamrangirchar",1,true
+"Chakbazar",1,true
+"Bangshal",1,true
+"Wari",1,true
+"Sutrapur",1,true
+"Jatrabari",1,true
+"Demra",1,true
+"Shyampur",1,true
+"Kadamtali",1,true
+"Sabujbagh",1,true
+"Khilgaon",1,true
+"Paltan",1,true
+"Motijheel",1,true
+"Kakrail",1,true
+"Shah Ali",1,true
+"Darus Salam",1,true
+"Adabar",1,true
+"Gazipur Sadar",2,true
+"Tongi",2,true
+"Kaliakair",2,true
+"Kaliganj",2,true
+"Kapasia",2,true
+"Sreepur",2,true
+"Narayanganj Sadar",3,true
+"Bandar",3,true
+"Araihazar",3,true
+"Rupganj",3,true
+"Sonargaon",3,true
+"Narsingdi Sadar",4,true
+"Belabo",4,true
+"Monohardi",4,true
+"Palash",4,true
+"Raipura",4,true
+"Shibpur",4,true
+"Manikganj Sadar",5,true
+"Saturia",5,true
+"Singair",5,true
+"Harirampur",5,true
+"Ghior",5,true
+"Daulatpur",5,true
+"Shivalaya",5,true
+"Munshiganj Sadar",6,true
+"Sreenagar",6,true
+"Sirajdikhan",6,true
+"Louhajong",6,true
+"Tongibari",6,true
+"Gazaria",6,true
+"Faridpur Sadar",7,true
+"Boalmari",7,true
+"Alfadanga",7,true
+"Bhanga",7,true
+"Nagarkanda",7,true
+"Madhukhali",7,true
+"Charbhadrasan",7,true
+"Sadarpur",7,true
+"Saltha",7,true
+"Gopalganj Sadar",8,true
+"Kashiani",8,true
+"Kotalipara",8,true
+"Muksudpur",8,true
+"Tungipara",8,true
+"Madaripur Sadar",9,true
+"Rajoir",9,true
+"Kalkini",9,true
+"Shibchar",9,true
+"Rajbari Sadar",10,true
+"Goalanda",10,true
+"Pangsha",10,true
+"Kalukhali",10,true
+"Baliakandi",10,true
+"Shariatpur Sadar",11,true
+"Naria",11,true
+"Zajira",11,true
+"Gosairhat",11,true
+"Bhedarganj",11,true
+"Damudya",11,true
+"Tangail Sadar",12,true
+"Delduar",12,true
+"Kalihati",12,true
+"Ghatail",12,true
+"Madhupur",12,true
+"Mirzapur",12,true
+"Nagarpur",12,true
+"Basail",12,true
+"Gopalpur",12,true
+"Dhanbari",12,true
+"Kishoreganj Sadar",13,true
+"Bhairab",13,true
+"Pakundia",13,true
+"Katiadi",13,true
+"Karimganj",13,true
+"Tarail",13,true
+"Hossainpur",13,true
+"Itna",13,true
+"Mithamain",13,true
+"Austagram",13,true
+"Bajitpur",13,true
+"Nikli",13,true
+"Chattogram Sadar",14,true
+"Pahartali",14,true
+"Panchlaish",14,true
+"Double Mooring",14,true
+"Halishahar",14,true
+"Akbar Shah",14,true
+"Bakalia",14,true
+"Chandgaon",14,true
+"Patenga",14,true
+"Anwara",14,true
+"Banshkhali",14,true
+"Fatikchhari",14,true
+"Hathazari",14,true
+"Lohagara",14,true
+"Rangunia",14,true
+"Raozan",14,true
+"Satkania",14,true
+"Sandwip",14,true
+"Sitakunda",14,true
+"Cox’s Bazar Sadar",15,true
+"Chakaria",15,true
+"Maheshkhali",15,true
+"Kutubdia",15,true
+"Ukhia",15,true
+"Teknaf",15,true
+"Ramu",15,true
+"Pekua",15,true
+"Cumilla Sadar",16,true
+"Barura",16,true
+"Brahmanpara",16,true
+"Burichang",16,true
+"Chandina",16,true
+"Daudkandi",16,true
+"Debidwar",16,true
+"Homna",16,true
+"Laksam",16,true
+"Monohorgonj",16,true
+"Brahmanbaria Sadar",17,true
+"Ashuganj",17,true
+"Bancharampur",17,true
+"Nabinagar",17,true
+"Sarail",17,true
+"Kasba",17,true
+"Bijoynagar",17,true
+"Chandpur Sadar",18,true
+"Haimchar",18,true
+"Shahrasti",18,true
+"Matlab Uttar",18,true
+"Matlab Dakkhin",18,true
+"Feni Sadar",19,true
+"Chhagalnaiya",19,true
+"Parshuram",19,true
+"Daganbhuiyan",19,true
+"Fulgazi",19,true
+"Pashurampur",19,true
+"Noakhali Sadar",20,true
+"Begumganj",20,true
+"Chatkhil",20,true
+"Companiganj",20,true
+"Hatiya",20,true
+"Senbagh",20,true
+"Subarnachar",20,true
+"Lakshmipur Sadar",21,true
+"Raipur",21,true
+"Ramganj",21,true
+"Ramgati",21,true
+"Kamalnagar",21,true
+"Khagrachhari Sadar",22,true
+"Dighinala",22,true
+"Lakshmichhari",22,true
+"Mahalchhari",22,true
+"Manikchhari",22,true
+"Panchhari",22,true
+"Ramgarh",22,true
+"Kaptai",22,true
+"Rangamati Sadar",23,true
+"Baghaichhari",23,true
+"Belaichhari",23,true
+"Barkal",23,true
+"Kaptai",23,true
+"Rajasthali",23,true
+"Kaukhali",23,true
+"Bandarban Sadar",24,true
+"Thanchi",24,true
+"Ruma",24,true
+"Lama",24,true
+"Alikadam",24,true
+"Rowangchhari",24,true
+"Naikhongchhari",24,true
+"Rajshahi Sadar",25,true
+"Boalia",25,true
+"Motihar",25,true
+"Shah Makhdum",25,true
+"Godagari",25,true
+"Tanore",25,true
+"Bagha",25,true
+"Charghat",25,true
+"Puthia",25,true
+"Durgapur",25,true
+"Natore Sadar",26,true
+"Bagatipara",26,true
+"Baraigram",26,true
+"Gurudaspur",26,true
+"Lalpur",26,true
+"Singra",26,true
+"Naogaon Sadar",27,true
+"Manda",27,true
+"Niamatpur",27,true
+"Patnitala",27,true
+"Porsha",27,true
+"Raninagar",27,true
+"Sapahar",27,true
+"Badalgachhi",27,true
+"Atrai",27,true
+"Chapainawabganj Sadar",28,true
+"Gomastapur",28,true
+"Bholahat",28,true
+"Nachole",28,true
+"Shibganj",28,true
+"Pabna Sadar",29,true
+"Atgharia",29,true
+"Bera",29,true
+"Bhangura",29,true
+"Chatmohar",29,true
+"Faridpur",29,true
+"Ishwardi",29,true
+"Santhia",29,true
+"Sirajganj Sadar",30,true
+"Belkuchi",30,true
+"Chauhali",30,true
+"Raiganj",30,true
+"Shahjadpur",30,true
+"Tarash",30,true
+"Ullahpara",30,true
+"Joypurhat Sadar",31,true
+"Akkelpur",31,true
+"Kalai",31,true
+"Khetlal",31,true
+"Panchbibi",31,true
+"Bogura Sadar",32,true
+"Adamdighi",32,true
+"Bogura Town",32,true
+"Dhunat",32,true
+"Gabtali",32,true
+"Kahaloo",32,true
+"Nandigram",32,true
+"Shibganj",32,true
+"Sherpur",32,true
+"Sariakandi",32,true
+"Khulna Sadar",33,true
+"Sonadanga",33,true
+"Khalishpur",33,true
+"Daulatpur",33,true
+"Khan Jahan Ali",33,true
+"Dighalia",33,true
+"Batiaghata",33,true
+"Rupsha",33,true
+"Terokhada",33,true
+"Jessore Sadar",34,true
+"Abhaynagar",34,true
+"Bagherpara",34,true
+"Chaugachha",34,true
+"Jhikargachha",34,true
+"Keshabpur",34,true
+"Manirampur",34,true
+"Sharsha",34,true
+"Satkhira Sadar",35,true
+"Assasuni",35,true
+"Debhata",35,true
+"Kalaroa",35,true
+"Kaliganj",35,true
+"Shyamnagar",35,true
+"Tala",35,true
+"Bagerhat Sadar",36,true
+"Fakirhat",36,true
+"Kachua",36,true
+"Mollahat",36,true
+"Mongla",36,true
+"Rampal",36,true
+"Rupsa",36,true
+"Sarankhola",36,true
+"Narail Sadar",37,true
+"Kalia",37,true
+"Lohagara",37,true
+"Jhenaidah Sadar",38,true
+"Kaliganj",38,true
+"Kotchandpur",38,true
+"Maheshpur",38,true
+"Shailkupa",38,true
+"Magura Sadar",39,true
+"Mohammadpur",39,true
+"Sreepur",39,true
+"Shalikha",39,true
+"Chuadanga Sadar",40,true
+"Alamdanga",40,true
+"Damurhuda",40,true
+"Jibannagar",40,true
+"Meherpur Sadar",41,true
+"Mujibnagar",41,true
+"Gangni",41,true
+"Kushtia Sadar",42,true
+"Bheramara",42,true
+"Kumarkhali",42,true
+"Mirpur",42,true
+"Khoksa",42,true
+"Barishal Sadar",43,true
+"Agailjhara",43,true
+"Babuganj",43,true
+"Bakerganj",43,true
+"Gaurnadi",43,true
+"Hizla",43,true
+"Mehendiganj",43,true
+"Muladi",43,true
+"Bhola Sadar",44,true
+"Burhanuddin",44,true
+"Char Fasson",44,true
+"Daulatkhan",44,true
+"Lalmohan",44,true
+"Tazumuddin",44,true
+"Patuakhali Sadar",45,true
+"Bauphal",45,true
+"Dashmina",45,true
+"Galachipa",45,true
+"Kalapara",45,true
+"Rangabali",45,true
+"Dumki",45,true
+"Pirojpur Sadar",46,true
+"Bhandaria",46,true
+"Kawkhali",46,true
+"Nesarabad",46,true
+"Indurkani",46,true
+"Zianagar",46,true
+"Jhalokathi Sadar",47,true
+"Kathalia",47,true
+"Nalchity",47,true
+"Rajapur",47,true
+"Barguna Sadar",48,true
+"Amtali",48,true
+"Bamna",48,true
+"Betagi",48,true
+"Patharghata",48,true
+"Taltali",48,true
+"Sylhet Sadar",49,true
+"Beanibazar",49,true
+"Golapganj",49,true
+"Zakiganj",49,true
+"Kanaighat",49,true
+"Companiganj",49,true
+"Balaganj",49,true
+"Moulvibazar Sadar",50,true
+"Barlekha",50,true
+"Kamalganj",50,true
+"Kulaura",50,true
+"Rajnagar",50,true
+"Sreemangal",50,true
+"Habiganj Sadar",51,true
+"Ajmiriganj",51,true
+"Bahubal",51,true
+"Baniachong",51,true
+"Chunarughat",51,true
+"Madhabpur",51,true
+"Sunamganj Sadar",52,true
+"Biswanath",52,true
+"Chhatak",52,true
+"Derai",52,true
+"Dowarabazar",52,true
+"Jagannathpur",52,true
+"Shalla",52,true
+"Tahirpur",52,true
+"Rangpur Sadar",53,true
+"Badarganj",53,true
+"Mithapukur",53,true
+"Gangachhara",53,true
+"Pirganj",53,true
+"Taraganj",53,true
+"Dinajpur Sadar",54,true
+"Birampur",54,true
+"Bochaganj",54,true
+"Chirirbandar",54,true
+"Ghoraghat",54,true
+"Hakimpur",54,true
+"Kaharole",54,true
+"Khansama",54,true
+"Nawabganj",54,true
+"Parbatipur",54,true
+"Thakurgaon Sadar",55,true
+"Pirganj",55,true
+"Ranisankail",55,true
+"Haripur",55,true
+"Panchagarh Sadar",56,true
+"Debiganj",56,true
+"Boda",56,true
+"Atwari",56,true
+"Nilphamari Sadar",57,true
+"Dimla",57,true
+"Domar",57,true
+"Jaldhaka",57,true
+"Kishoreganj",57,true
+"Lalmonirhat Sadar",58,true
+"Aditmari",58,true
+"Hatibandha",58,true
+"Patgram",58,true
+"Kurigram Sadar",59,true
+"Bhurungamari",59,true
+"Chilmari",59,true
+"Nageshwari",59,true
+"Rajarhat",59,true
+"Rowmari",59,true
+"Ulipur",59,true
+"Gaibandha Sadar",60,true
+"Palashbari",60,true
+"Sadullapur",60,true
+"Saghata",60,true
+"Sundarganj",60,true
+"Gobindaganj",60,true
+"Mymensingh Sadar",61,true
+"Muktagacha",61,true
+"Trishal",61,true
+"Fulbaria",61,true
+"Gauripur",61,true
+"Ishwarganj",61,true
+"Haluaghat",61,true
+"Jamalpur Sadar",62,true
+"Baksiganj",62,true
+"Dewanganj",62,true
+"Islampur",62,true
+"Madarganj",62,true
+"Melandaha",62,true
+"Sherpur Sadar",63,true
+"Jhenaigati",63,true
+"Nakla",63,true
+"Nalitabari",63,true
+"Sreebardi",63,true
+"Netrokona Sadar",64,true
+"Atpara",64,true
+"Barhatta",64,true
+"Durgapur",64,true
+"Kalmakanda",64,true
+"Khaliajuri",64,true
+"Mohanganj",64,true
+"Purbadhala",64,true

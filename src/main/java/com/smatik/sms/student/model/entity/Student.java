@@ -38,9 +38,10 @@ public class Student {
     private LocalDate dob;
     @Enumerated(EnumType.STRING)
     private IdentityType identityType;
-    private Long identityNumber;
+    private String identityNumber;
 
     @ManyToOne
+    @JoinColumn(name = "class_version_section_id")
     private ClassroomVersionSection classroomVersionSectionsId;
     private String photoDir;
     private String nidDir;

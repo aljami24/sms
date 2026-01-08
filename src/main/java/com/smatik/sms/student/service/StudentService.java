@@ -4,12 +4,15 @@ import com.smatik.sms.academic.model.entity.ClassroomVersionSection;
 import com.smatik.sms.academic.model.repository.ClassroomVersionSectionRepository;
 import com.smatik.sms.common.util.Helper;
 import com.smatik.sms.student.model.dto.request.StudentRequestDto;
+import com.smatik.sms.student.model.dto.response.StudentResponseDto;
 import com.smatik.sms.student.model.entity.Student;
 import com.smatik.sms.student.model.mapper.StudentMapper;
 import com.smatik.sms.student.model.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.smatik.sms.common.constants.Constants.STUDENT_NID_DOB_PATH;
 import static com.smatik.sms.common.constants.Constants.STUDENT_PHOTO_PATH;
@@ -51,6 +54,10 @@ public class StudentService {
         student.setNidDir(STUDENT_NID_DOB_PATH + student.getId());
         studentRepository.save(student);
 
+    }
+
+    public List<StudentResponseDto> getAllStudent() {
+        return studentRepository.findAll().stream().map(StudentMapper::mapToStudentResponseDto).toList();
     }
 
 }
