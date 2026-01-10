@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * StudentController
@@ -43,8 +44,7 @@ public class StudentController {
     private final PoliceStationRepository policeStationRepository;
     private final StudentService studentService;
 
-    //  show form
-
+    //  Student Form Show
     @GetMapping("/create")
     public String createForm(Model model) {
         StudentRequestDto studentRequestDto = new StudentRequestDto();
@@ -60,35 +60,56 @@ public class StudentController {
         return "student/studentForm";
     }
 
+    //   Division Load For Address
     @GetMapping("/divisions")
     @ResponseBody
     public List<Division> getAllDivisions() {
         return divisionRepository.findByActiveTrueOrderByNameAsc();
     }
 
+    //   District Load For Address
     @GetMapping("/districts")
     @ResponseBody
-    public List<District> getDistricts(@RequestParam Long divisionId) {
+    public List<District> getDistricts(@RequestParam("divisionId") Long divisionId) {
         return districtRepository.findByDivisionIdAndActiveTrueOrderByNameAsc(divisionId);
     }
 
+    //   Police_Station Load For Address
     @GetMapping("/police-stations")
     @ResponseBody
-    public List<PoliceStation> getPoliceStations(@RequestParam Long districtId) {
+    public List<PoliceStation> getPoliceStations(@RequestParam("districtId") Long districtId) {
         return policeStationRepository.findByDistrictIdAndActiveTrueOrderByNameAsc(districtId);
     }
 
+    //   Student Save Method
     @PostMapping("/save")
     public String saveStudent(StudentRequestDto studentRequestDto) {
         studentService.saveStudent(studentRequestDto);
         return "redirect:/student/list";
     }
 
-
+    //   All Student List View
     @GetMapping("/list")
     public String getAllStd(Model model) {
         List<StudentResponseDto> getStudentAll = studentService.getAllStudent();
         model.addAttribute("getStudentAll", getStudentAll);
+        model.addAttribute("title", "Student List");
         return "student/studentList";
     }
+
+    @GetMapping("/roll")
+    public String getStudentByRollNumber(@RequestParam("rollNumber") int rollNumber, Model model) {
+        try {
+            StudentResponseDto student = studentService.getByRoll(rollNumber);
+            model.addAttribute("getStudentAll", List.of(student)); // List হিসেবে দিতে হবে
+        } catch (NoSuchElementException e) {
+            model.addAttribute("getStudentAll", List.of());
+            model.addAttribute("errorMessage", "No student found with Roll: " + rollNumber);
+        }
+
+        model.addAttribute("title", "Student List");
+        return "student/studentList"; // Thymeleaf template
+    }
+
+
 }

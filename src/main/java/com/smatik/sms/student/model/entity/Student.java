@@ -30,6 +30,7 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer roll;
     private String name;
     private String fatherName;
     private String motherName;
@@ -41,7 +42,7 @@ public class Student {
     private String identityNumber;
 
     @ManyToOne
-    @JoinColumn(name = "class_version_section_id")
+    @JoinColumn(name = "classroom_version_sections_id")
     private ClassroomVersionSection classroomVersionSectionsId;
     private String photoDir;
     private String nidDir;
@@ -53,13 +54,14 @@ public class Student {
     public String toString() {
         return "Student{" +
                 "id=" + id +
+                ", roll=" + roll +
                 ", name='" + name + '\'' +
                 ", fatherName='" + fatherName + '\'' +
                 ", motherName='" + motherName + '\'' +
                 ", gender=" + gender +
                 ", dob=" + dob +
                 ", identityType=" + identityType +
-                ", identityNumber=" + identityNumber +
+                ", identityNumber='" + identityNumber + '\'' +
                 ", classroomVersionSectionsId=" + classroomVersionSectionsId +
                 ", photoDir='" + photoDir + '\'' +
                 ", nidDir='" + nidDir + '\'' +
@@ -71,11 +73,11 @@ public class Student {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return Objects.equals(id, student.id) && Objects.equals(name, student.name) && Objects.equals(fatherName, student.fatherName) && Objects.equals(motherName, student.motherName) && gender == student.gender && Objects.equals(dob, student.dob) && identityType == student.identityType && Objects.equals(identityNumber, student.identityNumber) && Objects.equals(classroomVersionSectionsId, student.classroomVersionSectionsId) && Objects.equals(photoDir, student.photoDir) && Objects.equals(nidDir, student.nidDir) && Objects.equals(addresses, student.addresses);
+        return Objects.equals(id, student.id) && Objects.equals(roll, student.roll) && Objects.equals(name, student.name) && Objects.equals(fatherName, student.fatherName) && Objects.equals(motherName, student.motherName) && gender == student.gender && Objects.equals(dob, student.dob) && identityType == student.identityType && Objects.equals(identityNumber, student.identityNumber) && Objects.equals(classroomVersionSectionsId, student.classroomVersionSectionsId) && Objects.equals(photoDir, student.photoDir) && Objects.equals(nidDir, student.nidDir) && Objects.equals(addresses, student.addresses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, fatherName, motherName, gender, dob, identityType, identityNumber, classroomVersionSectionsId, photoDir, nidDir, addresses);
+        return Objects.hash(id, roll, name, fatherName, motherName, gender, dob, identityType, identityNumber, classroomVersionSectionsId, photoDir, nidDir, addresses);
     }
 }

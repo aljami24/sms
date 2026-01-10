@@ -56,6 +56,8 @@ public class StudentMapper {
         studentResponseDto.setMotherName(student.getMotherName());
         studentResponseDto.setDob(student.getDob());
         studentResponseDto.setGender(student.getGender());
+        studentResponseDto.setRoll(student.getRoll());
+        studentResponseDto.setClassroomVersionSectionsId(student.getClassroomVersionSectionsId());
 
         List<AddressResponseDto> addressList = new ArrayList<>();
 

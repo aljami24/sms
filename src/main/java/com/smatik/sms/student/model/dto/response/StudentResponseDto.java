@@ -1,5 +1,6 @@
 package com.smatik.sms.student.model.dto.response;
 
+import com.smatik.sms.academic.model.entity.ClassroomVersionSection;
 import com.smatik.sms.common.address.dto.AddressResponseDto;
 import com.smatik.sms.common.enums.Gender;
 import lombok.Getter;
@@ -21,9 +22,11 @@ import java.util.List;
 public class StudentResponseDto {
 
     private String name;
+    private Integer roll;
     private String fatherName;
     private String motherName;
     private Gender gender;
     private LocalDate dob;
+    private ClassroomVersionSection classroomVersionSectionsId;
     private List<AddressResponseDto> addresses = new ArrayList<>();
 }
