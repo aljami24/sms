@@ -22,11 +22,11 @@
     <!-- ===== Filter Section ===== -->
     <div class="card filter-card shadow-sm border-0 mb-4">
         <div class="card-body">
-            <form action="" method="get">
+            <form method="get" th:action="@{student/roll}">
                 <div class="row g-3">
 
                     <div class="col-md-2">
-                        <input class="form-control" name="name" placeholder="Student Roll"
+                        <input class="form-control" name="rollNumber" placeholder="Student Roll"
                                type="text"
                                value="">
                     </div>
@@ -95,21 +95,33 @@
                         <!-- Serial Number with pagination -->
                         <td class="text-center" th:text="${stat.count}"></td>
                         <td>
-                            <span><strong>Roll :</strong> <span text="${student.roll}"></span></span><br>
+                            <span><strong>Roll :</strong> <span th:text="${student.roll}"></span></span><br>
                             <span><strong>Name :</strong> <span th:text="${student.name}"></span></span><br>
                             <span><strong>Father :</strong> <span th:text="${student.fatherName}"></span></span><br>
                             <span><strong>Mother :</strong> <span th:text="${student.motherName}"></span></span><br>
                         </td>
                         <td>
-                            <span><strong>Class :</strong> <span text="${student.roll}">1</span></span><br>
-                            <span><strong>Version :</strong> <span text="${student.name}">Bangla</span></span><br>
-                            <span><strong>Section :</strong> <span text="${student.name}">A</span></span><br>
+    <span>
+        <strong>Class :</strong>
+        <span th:text="${student.classroomVersionSectionsId != null ? student.classroomVersionSectionsId.classRoom.name : 'N/A'}"></span>
+    </span><br>
+
+                            <span>
+        <strong>Version :</strong>
+        <span th:text="${student.classroomVersionSectionsId != null ? student.classroomVersionSectionsId.version.name : 'N/A'}"></span>
+    </span><br>
+
+                            <span>
+        <strong>Section :</strong>
+        <span th:text="${student.classroomVersionSectionsId != null ? student.classroomVersionSectionsId.section.name : 'N/A'}"></span>
+    </span><br>
                         </td>
+
                         <td>
                             <ul>
                                 <li th:each="addr : ${student.addresses}">
                                     <span class="fw-bold" th:text="${addr.addressType} + ' :  ' "></span>
-                                    <span th:text="${addr.village + ', ' + addr.policeStation + ', ' + addr.district + ', ' + addr.division}"></span>
+                                    <span th:text="${addr.village} + ', ' + ${addr.policeStation?.name} + ', ' + ${addr.district?.name} + ', ' + ${addr.division?.name}"></span>
 
                                 </li>
                             </ul>
