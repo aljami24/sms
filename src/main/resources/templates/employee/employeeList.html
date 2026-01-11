@@ -103,7 +103,7 @@
             <!-- Actions -->
             <td class="text-center">
               <a class="action-btn view"
-                 href="@{'/employee/detail/' + ${employee.id}}">
+                 th:href="@{'/employee/view/' + ${employee.id}}">
                 <i class="bi bi-eye-fill"></i>
               </a>
 
@@ -115,13 +115,13 @@
               <button type="button"
                       class="action-btn delete"
                       data-bs-toggle="modal"
-                      data-bs-target="'#deleteModal_' + ${employee.id}">
+                      th:data-bs-target="'#deleteModal_' + ${employee.id}">
                 <i class="bi bi-trash-fill"></i>
               </button>
 
               <!-- Delete Modal -->
               <div class="modal fade"
-                   id="'deleteModal_' + ${employee.id}"
+                   th:id="'deleteModal_' + ${employee.id}"
                    tabindex="-1">
 
                 <div class="modal-dialog modal-dialog-centered">
@@ -146,7 +146,7 @@
                         Cancel
                       </button>
 
-                      <form action="@{/employee/delete/{id}(id=${employee.id})}"
+                      <form th:action="@{/employee/delete/{id}(id=${employee.id})}"
                             method="post">
                         <button class="btn btn-danger">
                           Delete
