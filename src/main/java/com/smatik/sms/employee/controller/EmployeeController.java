@@ -73,7 +73,7 @@ public class EmployeeController {
         }
 
         employeeService.saveEmployee(employeeFormDto);
-        return "redirect:/employee/create";
+        return "redirect:/employee/list";
     }
 
     @GetMapping("/edit/{id}")
@@ -211,12 +211,12 @@ public class EmployeeController {
         model.addAttribute("employee", employee);
         model.addAttribute("title", "Employee Details");
 
-        return "employee/employeeView"; // Thymeleaf template
+        return "employee/employeeDetail"; // Thymeleaf template
     }
 
 
     // ================= 1. General Delete =================
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return "redirect:/employee/list";

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import static com.smatik.sms.common.constants.Constants.STUDENT_NID_DOB_PATH;
 import static com.smatik.sms.common.constants.Constants.STUDENT_PHOTO_PATH;
@@ -70,16 +71,31 @@ public class StudentService {
 
         // Upload files
         Helper.studentFilesUpload(uploadDir, studentRequestDto);
+        studentRepository.save(student);
     }
 
-
+    //    All Student Show Method
     public List<StudentResponseDto> getAllStudent() {
-        return studentRepository.findAll().stream().map(StudentMapper::mapToStudentResponseDto).toList();
+        return studentRepository.findAll().stream().map(StudentMapper::mapToStudentResponseDto).collect(Collectors.toList());
     }
 
+    //    Student Filter
     public StudentResponseDto getByRoll(int rollNumber) {
         Student student = studentRepository.findByRoll(rollNumber).orElseThrow();
         return StudentMapper.mapToStudentResponseDto(student);
     }
+
+    //    Student Details Method
+    public StudentResponseDto showStudentDetails(Long id) {
+        Student student = studentRepository.findById(id).orElseThrow();
+        return StudentMapper.mapToStudentResponseDto(student);
+    }
+
+    //    Student Delete
+    public void deleteById(Long id) {
+        studentRepository.deleteById(id);
+        Helper.deleteStudentAllFiles(uploadDir, id);
+    }
+
 
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
-      layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -10,75 +10,82 @@
 
 <body>
 
-<div class="container py-4" layout:fragment="content">
+<div layout:fragment="content" class="container py-4">
 
     <!-- ===== Profile Header ===== -->
     <div class="card shadow mb-5">
-
         <div class="card-body">
-            <div class="row">
+            <div class="row align-items-center">
 
                 <!-- Avatar -->
-                <div class="col-md-3 justify-md-center ms-4"
-                     style="bottom:-65px;">
-                    <img alt="Student's Photo"
+                <div class="col-md-3 ms-4">
+                    <img th:src="@{'/UploadFile/' + ${employee.photoDir}}"
+                         alt="Employee Photo"
                          class="img-fluid rounded-circle border border-5 border-light shadow"
-                         style="width: 150px; height: 150px; object-fit: cover;"
-                         th:src="@{'/UploadFile/' + ${showStudentDetail.photoDir}}">
+                         style="width:150px;height:150px;object-fit:cover;">
                 </div>
 
                 <!-- Name -->
-                <div class="col-md-4 pt-4">
+                <div class="col-md-5 pt-4">
                     <h4 class="fw-bold text-dark mb-1"
-                        th:text="${showStudentDetail.name}">
-                        Student Name
+                        th:text="${employee.name}">
+                        Employee Name
                     </h4>
+
                     <span class="badge bg-light text-dark">
-                    Roll:
-                    <span th:text="${showStudentDetail.roll}"></span>
-                </span>
+                        ID:
+                        <span th:text="${employee.employeeId}"></span>
+                    </span>
                 </div>
 
             </div>
-
         </div>
     </div>
 
     <!-- ===== Info Section ===== -->
     <div class="row g-4">
 
-        <!-- Student Info -->
+        <!-- Personal Information -->
         <div class="col-md-4">
             <div class="card shadow h-100">
                 <div class="card-body">
                     <h6 class="fw-semibold text-secondary mb-3">
-                        Student Information
+                        Personal Information
                     </h6>
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
                         <span>Date of Birth</span>
-                        <strong th:text="${showStudentDetail.dob}"></strong>
+                        <strong th:text="${employee.dob}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
                         <span>Gender</span>
-                        <strong th:text="${showStudentDetail.gender}"></strong>
+                        <strong th:text="${employee.gender}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
-                        <span>Father Name</span>
-                        <strong th:text="${showStudentDetail.fatherName}"></strong>
+                        <span>Phone</span>
+                        <strong th:text="${employee.phoneNumber}"></strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-bottom py-2 small">
+                        <span>Salary</span>
+                        <strong th:text="${employee.salary}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between pt-2 small">
-                        <span>Mother Name</span>
-                        <strong th:text="${showStudentDetail.motherName}"></strong>
+                        <span>Identity</span>
+                        <strong>
+                            <span th:text="${employee.identityType}"></span>
+                            -
+                            <span th:text="${employee.identityNumber}"></span>
+                        </strong>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Address Info -->
+        <!-- Address Information -->
         <div class="col-md-4">
             <div class="card shadow h-100">
                 <div class="card-body">
@@ -86,7 +93,7 @@
                         Address Information
                     </h6>
                     <ul>
-                        <li th:each="addr : ${showStudentDetail.addresses}">
+                        <li th:each="addr : ${employee.addressResponseDto}">
                             <span class="fw-bold" th:text="${addr.addressType} + ' :  ' "></span>
                             <span th:text="${addr.village} + ', ' + ${addr.policeStation?.name} + ', ' + ${addr.district?.name} + ', ' + ${addr.division?.name}"></span>
                         </li>
@@ -95,27 +102,29 @@
             </div>
         </div>
 
-        <!-- Academic Info -->
+        <!-- Employment Information -->
         <div class="col-md-4">
             <div class="card shadow h-100">
                 <div class="card-body">
                     <h6 class="fw-semibold text-secondary mb-3">
-                        Academic Information
+                        Employment Information
                     </h6>
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
-                        <span>Class</span>
-                        <strong th:text="${showStudentDetail.classroomVersionSectionsId.classRoom.name}"></strong>
+                        <span>Join Date</span>
+                        <strong th:text="${employee.joiningDate}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
-                        <span>Version</span>
-                        <strong th:text="${showStudentDetail.classroomVersionSectionsId.version.name}"></strong>
+                        <span>Employee Type</span>
+                        <strong th:text="${employee.employeeType}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between pt-2 small">
-                        <span>Section</span>
-                        <strong th:text="${showStudentDetail.classroomVersionSectionsId.section.name}"></strong>
+                        <span>Status</span>
+                        <strong text="${employee.status}"
+                                classappend="${employee.status == 'ACTIVE'} ? 'text-success' : 'text-danger'">
+                        </strong>
                     </div>
                 </div>
             </div>
@@ -127,43 +136,43 @@
     <div class="card shadow mt-4">
         <div class="card-body">
             <h6 class="fw-semibold text-secondary mb-3">
-                Student Documents
+                Employee Documents
             </h6>
 
             <div class="row g-3">
+
+                <!-- NID -->
                 <div class="col-md-4">
                     <div class="border rounded p-3 d-flex justify-content-between align-items-center">
                         <div>
-                            <i class="bi bi-file-earmark-pdf fs-4 text-primary me-2"></i>
-                            Date of Birth
+                            <i class="bi bi-credit-card-2-front fs-4 text-primary me-2"></i>
+                            NID Copy
                         </div>
 
                         <button class="btn btn-sm btn-primary"
-                                data-bs-target="#photoModal2"
-                                data-bs-toggle="modal">
+                                data-bs-toggle="modal"
+                                data-bs-target="#nidModal">
                             View
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <!-- ===== Modal ===== -->
-    <div class="modal fade" id="photoModal2" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+    <!-- ===== NID Modal ===== -->
+    <div class="modal fade" id="nidModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">
-                        Student Date of Birth
-                    </h5>
+                    <h5 class="modal-title">NID Copy</h5>
                     <button class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body text-center">
-                    <img class="img-fluid rounded"
-                         style="max-height:350px;"
-                         th:src="@{'/UploadFile/' + ${showStudentDetail.nidDir}}">
+                    <img th:src="@{'/UploadFile/' + ${employee.nidDir}}"
+                         class="img-fluid rounded">
                 </div>
             </div>
         </div>
