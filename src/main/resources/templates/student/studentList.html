@@ -131,7 +131,7 @@
                         <td class="text-center">
 
                             <!-- View -->
-                            <a class="action-btn view" href="@{'/student/detail/'+${student.id}}" title="View">
+                            <a class="action-btn view" th:href="@{'/student/details/'+${student.id}}" title="View">
                                 <i class="bi bi-eye-fill"></i>
                             </a>
 
@@ -142,16 +142,16 @@
 
                             <!-- Delete Button -->
                             <button class="action-btn delete"
-                                    data-bs-target="'#deleteModal_' + ${student.id}"
                                     data-bs-toggle="modal"
+                                    th:data-bs-target="'#deleteModal_' + ${student.id}"
                                     type="button">
                                 <i class="bi bi-trash-fill"></i>
                             </button>
 
                             <!-- Delete Modal -->
                             <div class="modal fade"
-                                 id="'deleteModal_' + ${student.id}"
-                                 tabindex="-1">
+                                 tabindex="-1"
+                                 th:id="'deleteModal_' + ${student.id}">
 
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
@@ -167,7 +167,7 @@
 
                                         <div class="modal-body">
                                             Are you sure you want to delete
-                                            <strong text="${student.name}"></strong> ?
+                                            <strong th:text="${student.name}"></strong> ?
                                         </div>
 
                                         <div class="modal-footer">
@@ -177,8 +177,8 @@
                                                 Cancel
                                             </button>
 
-                                            <form action="@{/student/delete/{id}(id=${student.id})}"
-                                                  method="post">
+                                            <form method="post"
+                                                  th:action="@{/student/delete/{id}(id=${student.id})}">
                                                 <button class="btn btn-danger">
                                                     <i class="bi bi-trash me-1"></i> Delete
                                                 </button>
