@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout/main}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+
+<div class="container py-4" layout:fragment="content">
+
+    <!-- ===== Profile Header ===== -->
+    <div class="card shadow mb-5">
+
+        <div class="card-body">
+            <div class="row">
+
+                <!-- Avatar -->
+                <div class="col-md-3 justify-md-center ms-4"
+                     style="bottom:-65px;">
+                    <img alt="Student's Photo"
+                         class="img-fluid rounded-circle border border-5 border-light shadow"
+                         style="width: 150px; height: 150px; object-fit: cover;"
+                         th:src="@{'/UploadFile/' + ${studentDetail.photoDir}}">
+                </div>
+
+                <!-- Name -->
+                <div class="col-md-4 pt-4">
+                    <h4 class="fw-bold text-dark mb-1"
+                        th:text="${studentDetail.name}">
+                        Student Name
+                    </h4>
+                    <span class="badge bg-light text-dark">
+                    Roll:
+                    <span text="${studentDetail.roll}"></span>
+                </span>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== Info Section ===== -->
+    <div class="row g-4">
+
+        <!-- Student Info -->
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h6 class="fw-semibold text-secondary mb-3">
+                        Student Information
+                    </h6>
+
+                    <div class="d-flex justify-content-between border-bottom py-2 small">
+                        <span>Date of Birth</span>
+                        <strong th:text="${studentDetail.dob}"></strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-bottom py-2 small">
+                        <span>Gender</span>
+                        <strong th:text="${studentDetail.gender}"></strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-bottom py-2 small">
+                        <span>Father Name</span>
+                        <strong th:text="${studentDetail.father}"></strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between pt-2 small">
+                        <span>Mother Name</span>
+                        <strong th:text="${studentDetail.mother}"></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Info -->
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h6 class="fw-semibold text-secondary mb-3">
+                        Address Information
+                    </h6>
+                    <ul>
+                        <li th:each="addr : ${student.addresses}">
+                            <span class="fw-bold" th:text="${addr.addressType} + ' :  ' "></span>
+                            <span th:text="${addr.village + ', ' + addr.policeStation + ', ' + addr.district + ', ' + addr.division}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic Info -->
+        <div class="col-md-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h6 class="fw-semibold text-secondary mb-3">
+                        Academic Information
+                    </h6>
+
+                    <div class="d-flex justify-content-between border-bottom py-2 small">
+                        <span>Class</span>
+                        <strong text="${studentDetail.className}"></strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between border-bottom py-2 small">
+                        <span>Version</span>
+                        <strong text="${studentDetail.version}"></strong>
+                    </div>
+
+                    <div class="d-flex justify-content-between pt-2 small">
+                        <span>Section</span>
+                        <strong text="${studentDetail.section}"></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== Documents Section ===== -->
+    <div class="card shadow mt-4">
+        <div class="card-body">
+            <h6 class="fw-semibold text-secondary mb-3">
+                Student Documents
+            </h6>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="border rounded p-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-file-earmark-pdf fs-4 text-primary me-2"></i>
+                            Date of Birth
+                        </div>
+
+                        <button class="btn btn-sm btn-primary"
+                                data-bs-target="#photoModal2"
+                                data-bs-toggle="modal">
+                            View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Modal ===== -->
+    <div class="modal fade" id="photoModal2" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Student Date of Birth
+                    </h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <img class="img-fluid rounded"
+                         style="max-height:350px;"
+                         th:src="@{'/UploadFile/' + ${studentDetail.documentDir}}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

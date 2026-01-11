@@ -28,7 +28,7 @@ public class StudentRequestDto extends FileUpload {
     private Gender gender;
     private LocalDate dob;
     private IdentityType identityType;
-    private Long identityNumber;
+    private String identityNumber;
     private Long classRoomId;
     private Long versionId;
     private Long sectionId;
