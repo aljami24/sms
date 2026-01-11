@@ -24,18 +24,18 @@
                     <img alt="Student's Photo"
                          class="img-fluid rounded-circle border border-5 border-light shadow"
                          style="width: 150px; height: 150px; object-fit: cover;"
-                         th:src="@{'/UploadFile/' + ${studentDetail.photoDir}}">
+                         th:src="@{'/UploadFile/' + ${showStudentDetail.photoDir}}">
                 </div>
 
                 <!-- Name -->
                 <div class="col-md-4 pt-4">
                     <h4 class="fw-bold text-dark mb-1"
-                        th:text="${studentDetail.name}">
+                        th:text="${showStudentDetail.name}">
                         Student Name
                     </h4>
                     <span class="badge bg-light text-dark">
                     Roll:
-                    <span text="${studentDetail.roll}"></span>
+                    <span th:text="${showStudentDetail.roll}"></span>
                 </span>
                 </div>
 
@@ -57,22 +57,22 @@
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
                         <span>Date of Birth</span>
-                        <strong th:text="${studentDetail.dob}"></strong>
+                        <strong th:text="${showStudentDetail.dob}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
                         <span>Gender</span>
-                        <strong th:text="${studentDetail.gender}"></strong>
+                        <strong th:text="${showStudentDetail.gender}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
                         <span>Father Name</span>
-                        <strong th:text="${studentDetail.father}"></strong>
+                        <strong th:text="${showStudentDetail.fatherName}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between pt-2 small">
                         <span>Mother Name</span>
-                        <strong th:text="${studentDetail.mother}"></strong>
+                        <strong th:text="${showStudentDetail.motherName}"></strong>
                     </div>
                 </div>
             </div>
@@ -86,9 +86,9 @@
                         Address Information
                     </h6>
                     <ul>
-                        <li th:each="addr : ${student.addresses}">
+                        <li th:each="addr : ${showStudentDetail.addresses}">
                             <span class="fw-bold" th:text="${addr.addressType} + ' :  ' "></span>
-                            <span th:text="${addr.village + ', ' + addr.policeStation + ', ' + addr.district + ', ' + addr.division}"></span>
+                            <span th:text="${addr.village} + ', ' + ${addr.policeStation?.name} + ', ' + ${addr.district?.name} + ', ' + ${addr.division?.name}"></span>
                         </li>
                     </ul>
                 </div>
@@ -105,17 +105,17 @@
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
                         <span>Class</span>
-                        <strong text="${studentDetail.className}"></strong>
+                        <strong th:text="${showStudentDetail.classroomVersionSectionsId.classRoom.name}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between border-bottom py-2 small">
                         <span>Version</span>
-                        <strong text="${studentDetail.version}"></strong>
+                        <strong th:text="${showStudentDetail.classroomVersionSectionsId.version.name}"></strong>
                     </div>
 
                     <div class="d-flex justify-content-between pt-2 small">
                         <span>Section</span>
-                        <strong text="${studentDetail.section}"></strong>
+                        <strong th:text="${showStudentDetail.classroomVersionSectionsId.section.name}"></strong>
                     </div>
                 </div>
             </div>
@@ -163,7 +163,7 @@
                 <div class="modal-body text-center">
                     <img class="img-fluid rounded"
                          style="max-height:350px;"
-                         th:src="@{'/UploadFile/' + ${studentDetail.documentDir}}">
+                         th:src="@{'/UploadFile/' + ${showStudentDetail.nidDir}}">
                 </div>
             </div>
         </div>

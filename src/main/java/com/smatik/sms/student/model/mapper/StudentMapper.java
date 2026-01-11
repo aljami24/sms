@@ -51,6 +51,7 @@ public class StudentMapper {
 
     public static StudentResponseDto mapToStudentResponseDto(Student student) {
         StudentResponseDto studentResponseDto = new StudentResponseDto();
+        studentResponseDto.setId(student.getId());
         studentResponseDto.setName(student.getName());
         studentResponseDto.setFatherName(student.getFatherName());
         studentResponseDto.setMotherName(student.getMotherName());
@@ -58,6 +59,8 @@ public class StudentMapper {
         studentResponseDto.setGender(student.getGender());
         studentResponseDto.setRoll(student.getRoll());
         studentResponseDto.setClassroomVersionSectionsId(student.getClassroomVersionSectionsId());
+        studentResponseDto.setPhotoDir(student.getPhotoDir());
+        studentResponseDto.setNidDir(student.getNidDir());
 
         List<AddressResponseDto> addressList = new ArrayList<>();
 

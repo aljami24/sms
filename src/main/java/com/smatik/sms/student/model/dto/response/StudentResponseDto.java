@@ -21,12 +21,15 @@ import java.util.List;
 @Setter
 public class StudentResponseDto {
 
+    private Long id;
     private String name;
     private Integer roll;
     private String fatherName;
     private String motherName;
     private Gender gender;
     private LocalDate dob;
+    private String photoDir;
+    private String nidDir;
     private ClassroomVersionSection classroomVersionSectionsId;
     private List<AddressResponseDto> addresses = new ArrayList<>();
 }
