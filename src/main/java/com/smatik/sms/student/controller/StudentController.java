@@ -97,6 +97,7 @@ public class StudentController {
         return "student/studentList";
     }
 
+    //    Student Filter
     @GetMapping("/roll")
     public String getStudentByRollNumber(@RequestParam("rollNumber") int rollNumber, Model model) {
         try {
@@ -111,5 +112,19 @@ public class StudentController {
         return "student/studentList"; // Thymeleaf template
     }
 
+    //    Student Details
+    @GetMapping("/details/{id}")
+    public String showStdDetails(@PathVariable Long id, Model model) {
+        StudentResponseDto showStudentDetail = studentService.showStudentDetails(id);
+        model.addAttribute("showStudentDetail", showStudentDetail);
+        model.addAttribute("title", "Student Details");
+        return "student/studentDetails";
 
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteStudent(@PathVariable Long id) {
+        studentService.deleteById(id);
+        return "redirect:/student/list";
+    }
 }
