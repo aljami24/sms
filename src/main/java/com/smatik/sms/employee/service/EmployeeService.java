@@ -1,15 +1,20 @@
 package com.smatik.sms.employee.service;
 
-import com.smatik.sms.common.constants.Constants;
 import com.smatik.sms.common.util.Helper;
 import com.smatik.sms.employee.model.dto.request.EmployeeFormDto;
+import com.smatik.sms.employee.model.dto.response.EmployeeResponseDto;
 import com.smatik.sms.employee.model.entity.Employee;
 import com.smatik.sms.employee.model.mapper.EmployeeMapper;
 import com.smatik.sms.employee.model.repository.EmployeeRepository;
-import org.codehaus.groovy.runtime.metaclass.MetaMethodIndex;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -22,24 +27,24 @@ import org.springframework.stereotype.Service;
 public class EmployeeService {
 
     @Autowired
-    EmployeeRepository empolyeeRepository;
+    EmployeeRepository employeeRepository;
 
     @Value("${file.upload-directory}")
     private String uploadDir;
 
 
     // Create-------------------------------------------------------------------------------
+    @Transactional
     public void saveEmployee (EmployeeFormDto employeeFormDto) {
         Employee employee = new Employee();
         EmployeeMapper.employeeFormToEntity(employee, employeeFormDto);
 
-        empolyeeRepository.save(employee);
+        employeeRepository.save(employee);
         employeeFormDto.setId(employee.getId());
         Helper.employeeFilesUpload(uploadDir, employeeFormDto);
+        EmployeeMapper.mapFileDir(employee, employeeFormDto);
 
-        employee.setPhotoDir(employeeFormDto.getPhotoDir());
-        employee.setNidDir(employeeFormDto.getNidDir());
-        empolyeeRepository.save(employee);
+        employeeRepository.save(employee);
 
     }
     // Update-------------------------------------------------------------------------------
@@ -68,40 +73,75 @@ public class EmployeeService {
 //    }
     // Read---------------------------------------------------------------------------------
 
-//    public List<EmployeeResponseDto> getAllEmployee (int page, int pageSize, String sortField,String sortOrder) {
-//        Sort sort = Sort.by(Sort.Direction.valueOf(sortOrder),sortField);
-//        PageRequest pageRequest = PageRequest.of(page, pageSize, sort);
-//
-//        int serialNo = page * pageSize + 1;
-//
-//        List<EmployeeResponseDto> employeeResponseDtos = empolyeeRepository.findAll(pageRequest)
-//                .stream()
-//                .map(employee -> {
-//                    EmployeeResponseDto employeeResponseDto = new EmployeeResponseDto();
-//                    employeeResponseDto.setEmployId(employee.getEmployId());
-//                    employeeResponseDto.setName(employee.getName());
-//                    employeeResponseDto.setGender(employee.getGender());
-//                    employeeResponseDto.setDob(employee.getDob());
-//                    employeeResponseDto.setJoiningDate(employee.getJoiningDate());
-//                    employeeResponseDto.setSalary(employee.getSalary());
-//                    employeeResponseDto.setEmployType(employee.getEmployType());
-//                    employeeResponseDto.setIdentityType(employee.getIdentityType());
-//                    employeeResponseDto.setIdentityNumber(employee.getIdentityNumber());
-//                    employeeResponseDto.setPhoneNumber(employee.getPhoneNumber());
-//                    employeeResponseDto.setAddress(employee.getAddress());
-//
-//                    return employeeResponseDto;
-//
-//                })
-//                .toList();
-//
-//        for (int i = 0; i < employeeResponseDtos.size(); i++) {
-//            employeeResponseDtos.get(i).setSerialNo(serialNo + i);
-//        }
-//
-//        return employeeResponseDtos;
-//    }
+    public Page<EmployeeResponseDto> getAllEmployee(int page, int pageSize, String sortField, String sortOrder
+    ) {
 
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(direction, sortField));
+
+        AtomicInteger serialNo = new AtomicInteger(page * pageSize + 1);
+
+        Page<Employee> employeePage = employeeRepository.findAll(pageRequest);
+
+        return employeePage.map(employee -> {
+            EmployeeResponseDto employeeResponseDto = EmployeeMapper.employeeEntityToResponse(employee);
+            employeeResponseDto.setSerialNo(serialNo.getAndIncrement());
+            return employeeResponseDto;
+        });
+    }
+
+    @Transactional
+    public Employee updateExistingEmployee(EmployeeFormDto employeeFormDto) {
+
+        Employee existingTeacher = employeeRepository.findById(employeeFormDto.getId()).orElseThrow();
+
+        EmployeeMapper.employeeFormToEntity(existingTeacher, employeeFormDto);
+
+        Helper.employeeFilesUpload(uploadDir, employeeFormDto);
+
+        EmployeeMapper.mapFileDir(existingTeacher, employeeFormDto);
+        return employeeRepository.save(existingTeacher);
+    }
+
+    // ================= Get By ID =================
+    public EmployeeResponseDto getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Employee not found with id: " + id));
+
+        return EmployeeMapper.employeeEntityToResponse(employee);
+    }
+    public Optional<Employee> editById (Long id){
+        return employeeRepository.findById(id);
+    }
 
     // Delete-------------------------------------------------------------------------------
+
+
+    // ================= 1. General Delete =================
+    public void deleteEmployee(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Employee not found with id: " + id));
+
+        // Delete all employee files
+        Helper.deleteEmployeeAllFiles(uploadDir, employee.getId());
+
+        // Delete employee
+        employeeRepository.delete(employee);
+    }
+
+    // ================= 2. Active Check Delete =================
+    public void deleteEmployeeIfInactive(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Employee not found with id: " + id));
+
+        if (Boolean.TRUE.equals(employee.getActive())) {
+            throw new IllegalStateException("Cannot delete employee because active is true");
+        }
+
+        // Delete files
+        Helper.deleteEmployeeAllFiles(uploadDir, employee.getId());
+
+        // Delete employee
+        employeeRepository.delete(employee);
+    }
 }
