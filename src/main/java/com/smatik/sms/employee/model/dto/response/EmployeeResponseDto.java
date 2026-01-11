@@ -4,6 +4,7 @@ import com.smatik.sms.common.address.dto.AddressResponseDto;
 import com.smatik.sms.common.enums.EmployeeType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
+import com.smatik.sms.student.model.dto.request.FileUpload;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,9 +14,8 @@ import java.util.List;
 
 @Getter
 @Setter
-public class EmployeeResponseDto {
+public class EmployeeResponseDto extends FileUpload {
 
-    private Long id;
     private Long employeeId;
     private String name;
     private Gender gender;
@@ -26,10 +26,8 @@ public class EmployeeResponseDto {
     private IdentityType identityType;
     private String identityNumber;
     private String phoneNumber;
-    private String photo;
-    private String photoDir;
-    private String nid;
-    private String nidDir;
+    private Boolean active;
+
 
     private int serialNo;
 

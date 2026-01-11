@@ -76,25 +76,27 @@
           </thead>
 
           <tbody>
-          <tr each="employee,stat : ${employeeResponseDto}">
-            <td class="text-center" text="${stat.count}">1</td>
+          <tr th:each="employee,stat : ${employees}">
+            <td class="text-center" th:text="${stat.count}">1</td>
             <td>
-              <span><strong>ID :</strong> <span text="${employee.employeeId}"></span></span><br>
-              <span><strong>Name :</strong> <span text="${employee.name}"></span></span><br>
-              <span><strong>Phone :</strong> <span text="${employee.phoneNumber}"></span></span>
+              <span><strong>ID :</strong> <span th:text="${employee.employeeId}"></span></span><br>
+              <span><strong>Name :</strong> <span th:text="${employee.name}"></span></span><br>
+              <span><strong>Phone :</strong> <span th:text="${employee.phoneNumber}"></span></span>
             </td>
-            <td class="text-end" text="${employee.salary}">25000</td>
-            <td class="text-center">
-                            <span if="${employee.status == 'ACTIVE'}"
-                                  class="status-active">Active</span>
-              <span if="${employee.status != 'ACTIVE'}"
-                    class="status-inactive">Inactive</span>
-            </td>
+            <td class="text-end" th:text="${employee.salary}">0</td>
+            <td class="text-end" th:text="${employee.active}">25000</td>
+<!--            <td class="text-center">-->
+<!--                            <span if="${employee.active == 'ACTIVE'}"-->
+<!--                                  class="status-active">Active</span>-->
+<!--              <span if="${employee.status != 'ACTIVE'}"-->
+<!--                    class="status-inactive">Inactive</span>-->
+<!--            </td>-->
             <td>
               <ul>
-                <li each="addr : ${employee.address}">
-                  <span class="fw-bold" text="${addr.addressType} + ' :  ' "></span>
-                  <span text="${addr.village} + ', ' + ${addr.policeStation} + ', ' + ${addr.district}', ' + ${addr.division}"></span>
+                <li th:each="addr : ${employee.addressResponseDto}">
+                  <span class="fw-bold" th:text="${addr.addressType} + ' :  ' "></span>
+                  <span th:text="${addr.village + ', ' + addr.policeStation?.name + ', ' + addr.district?.name + ', ' + addr.division?.name}"></span>
+
                 </li>
               </ul>
             </td>
@@ -106,7 +108,7 @@
               </a>
 
               <a class="action-btn edit"
-                 href="@{'/employee/edit/' + ${employee.id}}">
+                 th:href="@{'/employee/edit/' + ${employee.id}}">
                 <i class="bi bi-pencil-square"></i>
               </a>
 
@@ -135,7 +137,7 @@
 
                     <div class="modal-body">
                       Are you sure to delete
-                      <strong text="${employee.name}"></strong> ?
+                      <strong th:text="${employee.name}"></strong> ?
                     </div>
 
                     <div class="modal-footer">
@@ -167,15 +169,15 @@
 
   <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-      <li class="page-item" classappend="${currentPage == 0} ? 'disabled'">
-        <a class="page-link" href="@{/employee/all(page = ${currentPage - 1})}">Previous</a>
+      <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+        <a class="page-link" th:href="@{/employee/list(page = ${currentPage - 1})}">Previous</a>
       </li>
-      <li class="page-item" each=" i : ${#numbers.sequence(0,totalPages -1)}"
-          classappend="${i == currentPage} ? 'active' : ''">
-        <a class="page-link" text="${i + 1}" href="@{/employee/all(page = ${i})}">1</a>
+      <li class="page-item" th:each=" i : ${#numbers.sequence(0,totalPages -1)}"
+          th:classappend="${i == currentPage} ? 'active' : ''">
+        <a class="page-link" th:text="${i + 1}" th:href="@{/employee/list(page = ${i})}">1</a>
       </li>
-      <li class="page-item" classappend="${currentPage == totalPages - 1} ? 'disabled'">
-        <a class="page-link" href="@{/employee/all(page = ${currentPage + 1})}">Next</a>
+      <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+        <a class="page-link" th:href="@{/employee/list(page = ${currentPage + 1})}">Next</a>
       </li>
     </ul>
   </nav>
