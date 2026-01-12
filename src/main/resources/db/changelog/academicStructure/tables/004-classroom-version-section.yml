@@ -1,59 +1,55 @@
 databaseChangeLog:
   - changeSet:
-      id: create-classroom-version-section-table
-      author: afzal
+      id: create-classroom-version-section
+      author: sakib
       changes:
         - createTable:
             tableName: classroom_version_section
-            remarks: "Mapping of Class, Version and Section"
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
-
-              # Foreign key to class_room
               - column:
-                  name: class_id
+                  name: class_room_id
                   type: BIGINT
                   constraints:
                     nullable: false
-
-              # Foreign key to version
               - column:
                   name: version_id
                   type: BIGINT
                   constraints:
                     nullable: false
-
-              # Foreign key to section (nullable as per business rule)
               - column:
                   name: section_id
                   type: BIGINT
                   constraints:
                     nullable: true
-
-        # ===== Foreign Key Constraints =====
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
         - addForeignKeyConstraint:
             baseTableName: classroom_version_section
-            baseColumnNames: class_id
+            baseColumnNames: class_room_id
+            constraintName: fk_cvs_class_room
             referencedTableName: class_room
             referencedColumnNames: id
-            constraintName: fk_cvs_class
-
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: classroom_version_section
             baseColumnNames: version_id
+            constraintName: fk_cvs_version
             referencedTableName: version
             referencedColumnNames: id
-            constraintName: fk_cvs_version
-
+            onDelete: CASCADE
         - addForeignKeyConstraint:
             baseTableName: classroom_version_section
             baseColumnNames: section_id
+            constraintName: fk_cvs_section
             referencedTableName: section
             referencedColumnNames: id
-            constraintName: fk_cvs_section
-
+            onDelete: SET NULL

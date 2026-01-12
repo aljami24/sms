@@ -11,10 +11,13 @@ import com.smatik.sms.student.model.repository.StudentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.smatik.sms.common.constants.Constants.STUDENT_NID_DOB_PATH;
@@ -42,7 +45,8 @@ public class StudentService {
     public void saveStudent(StudentRequestDto studentRequestDto) {
 
         // Map DTO → Entity
-        Student student = StudentMapper.mapToStudentEntity(studentRequestDto);
+        Student student = new Student();
+        StudentMapper.mapToStudentEntity(studentRequestDto, student);
 
         // Get ClassRoom-Version-Section
         ClassroomVersionSection cvs = classroomVersionSectionRepository
@@ -69,32 +73,57 @@ public class StudentService {
         student.setPhotoDir(STUDENT_PHOTO_PATH + student.getId());
         student.setNidDir(STUDENT_NID_DOB_PATH + student.getId());
 
+        studentRequestDto.setId(student.getId());
+
         // Upload files
         Helper.studentFilesUpload(uploadDir, studentRequestDto);
         studentRepository.save(student);
     }
 
-    //    All Student Show Method
-    public List<StudentResponseDto> getAllStudent() {
+    //   All Student Show Method
+    public List<StudentResponseDto> getAllStudent(int page, int pageSize, String sortField, String sortOrder) {
+        Sort sort = Sort.by(Sort.Direction.valueOf(sortOrder), sortField);
+        PageRequest pageable = PageRequest.of(page, pageSize, sort);
+        AtomicInteger serialNo = new AtomicInteger(page * pageSize + 1);
         return studentRepository.findAll().stream().map(StudentMapper::mapToStudentResponseDto).collect(Collectors.toList());
     }
 
-    //    Student Filter
+    //   Student Filter
     public StudentResponseDto getByRoll(int rollNumber) {
         Student student = studentRepository.findByRoll(rollNumber).orElseThrow();
         return StudentMapper.mapToStudentResponseDto(student);
     }
 
-    //    Student Details Method
+    //   Student Details Method
     public StudentResponseDto showStudentDetails(Long id) {
         Student student = studentRepository.findById(id).orElseThrow();
         return StudentMapper.mapToStudentResponseDto(student);
     }
 
-    //    Student Delete
+    //   Student Delete
     public void deleteById(Long id) {
         studentRepository.deleteById(id);
         Helper.deleteStudentAllFiles(uploadDir, id);
+    }
+
+    //   Student Update
+    public StudentResponseDto updateStudent(StudentRequestDto studentRequestDto) {
+        Student existingStudent = studentRepository.findById(studentRequestDto.getId())
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        // Get ClassRoom-Version-Section
+        ClassroomVersionSection cvs = classroomVersionSectionRepository
+                .findByClassRoomIdAndVersionIdAndSectionId(
+                        studentRequestDto.getClassRoomId(),
+                        studentRequestDto.getVersionId(),
+                        studentRequestDto.getSectionId()
+                ).orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section"));
+
+        StudentMapper.mapToStudentEntity(studentRequestDto, existingStudent);
+        // Set CVS after mapper to avoid overwriting with null
+        existingStudent.setClassroomVersionSectionsId(cvs);
+        Student updatedStudent = studentRepository.save(existingStudent);
+        return StudentMapper.mapToStudentResponseDto(updatedStudent);
     }
 
 

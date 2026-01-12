@@ -115,7 +115,7 @@
 
                     <div class="d-flex justify-content-between pt-2 small">
                         <span>Section</span>
-                        <strong th:text="${showStudentDetail.classroomVersionSectionsId.section.name}"></strong>
+                        <strong th:text="${showStudentDetail.classroomVersionSectionsId?.section?.name ?: 'N/A'}"></strong>
                     </div>
                 </div>
             </div>
