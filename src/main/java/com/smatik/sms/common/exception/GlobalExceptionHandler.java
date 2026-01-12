@@ -28,7 +28,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 "Oops! Something went wrong.\n Please refresh the page or try again in a moment.";
 
         ResponseApi<Object, Object> response = new ResponseApi<>(
-                message,
+                ex.getMessage(),
                 null,
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Unsuccessful"

@@ -4,6 +4,7 @@ import com.smatik.sms.common.address.entity.Address;
 import com.smatik.sms.common.enums.EmployeeType;
 import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
+import com.smatik.sms.employee.model.enums.EmployeeStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,10 +41,15 @@ public class Employee {
 
     @Enumerated (EnumType.STRING)
     private IdentityType identityType;
+
     private String identityNumber;
     private String phoneNumber;
     private String photoDir;
     private String nidDir;
+
+    @Enumerated(EnumType.STRING)
+    private EmployeeStatus status;
+
     private Boolean active = true;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
