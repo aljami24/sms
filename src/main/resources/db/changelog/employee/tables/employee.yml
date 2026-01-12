@@ -64,4 +64,13 @@ databaseChangeLog:
               - column:
                   name: active
                   type: BOOLEAN
-                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: APPOINTED
+                  constraints:
+                    nullable: false

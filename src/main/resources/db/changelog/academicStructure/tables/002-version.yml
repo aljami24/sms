@@ -1,21 +1,24 @@
 databaseChangeLog:
   - changeSet:
-      id: create-version-table
-      author: afzal
+      id: create-version
+      author: sakib
       changes:
         - createTable:
             tableName: version
-            remarks: "Academic version like Bangla, English"
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
-
               - column:
                   name: name
                   type: VARCHAR(50)
                   constraints:
                     nullable: false
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true

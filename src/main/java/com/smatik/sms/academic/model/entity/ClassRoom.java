@@ -6,10 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClassRoom {
@@ -17,8 +16,10 @@ public class ClassRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
 
-    @OneToMany(mappedBy = "classRoom",cascade = CascadeType.ALL)
-    private List<ClassroomVersionSection> classroomVersionSections;
+    @Column(nullable = false, unique = true)
+    private String name; // Class 1, Class 2 ...
+
+    @Column(nullable = false)
+    private Integer orderNo;
 }

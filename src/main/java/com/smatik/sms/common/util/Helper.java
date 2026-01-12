@@ -67,6 +67,7 @@ public class Helper {
 
     public static void deleteStudentAllFiles(String uploadDir, Long id) {
         deliteFile(uploadDir + Constants.STUDENT_PHOTO_PATH + id);
+        deliteFile(uploadDir + Constants.STUDENT_NID_DOB_PATH + id);
 
     }
 

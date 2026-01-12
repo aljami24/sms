@@ -9,7 +9,9 @@ import com.smatik.sms.employee.model.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -18,11 +20,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
- * StudentService
+ * EmployeeService
  * Author: afzal
  * Created On: 2026-01-05
  * Module: employee Management
  */
+
 @Service
 public class EmployeeService {
 
@@ -35,7 +38,7 @@ public class EmployeeService {
 
     // Create-------------------------------------------------------------------------------
     @Transactional
-    public void saveEmployee (EmployeeFormDto employeeFormDto) {
+    public void saveEmployee(EmployeeFormDto employeeFormDto) {
         Employee employee = new Employee();
         EmployeeMapper.employeeFormToEntity(employee, employeeFormDto);
 
@@ -110,7 +113,8 @@ public class EmployeeService {
 
         return EmployeeMapper.employeeEntityToResponse(employee);
     }
-    public Optional<Employee> editById (Long id){
+
+    public Optional<Employee> editById(Long id) {
         return employeeRepository.findById(id);
     }
 
