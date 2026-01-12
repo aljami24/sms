@@ -25,7 +25,7 @@ public class CommonController {
 
     @GetMapping
     public String home(Model model){
-        List<StudentResponseDto> allStudent = studentService.getAllStudent();
+        List<StudentResponseDto> allStudent = studentService.getAllStudent(0, 5, "id", "DESC");
         Page<EmployeeResponseDto> allEmployee = employeeService.getAllEmployee(0, 10, "id", "desc");
         model.addAttribute("allStudent",allStudent);
         model.addAttribute("allEmployee",allEmployee);
