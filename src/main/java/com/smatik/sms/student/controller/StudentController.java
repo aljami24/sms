@@ -1,6 +1,9 @@
 package com.smatik.sms.student.controller;
 
+import com.smatik.sms.academic.model.entity.Section;
+import com.smatik.sms.academic.model.entity.Version;
 import com.smatik.sms.academic.model.repository.ClassRoomRepository;
+import com.smatik.sms.academic.model.repository.ClassroomVersionSectionRepository;
 import com.smatik.sms.academic.model.repository.SectionRepository;
 import com.smatik.sms.academic.model.repository.VersionRepository;
 import com.smatik.sms.common.address.dto.AddressRequestDto;
@@ -15,10 +18,17 @@ import com.smatik.sms.common.enums.Gender;
 import com.smatik.sms.common.enums.IdentityType;
 import com.smatik.sms.student.model.dto.request.StudentRequestDto;
 import com.smatik.sms.student.model.dto.response.StudentResponseDto;
+import com.smatik.sms.student.model.entity.Student;
+import com.smatik.sms.student.model.mapper.StudentMapper;
+import com.smatik.sms.student.model.repository.StudentRepository;
 import com.smatik.sms.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +53,9 @@ public class StudentController {
     private final DistrictRepository districtRepository;
     private final PoliceStationRepository policeStationRepository;
     private final StudentService studentService;
+    private final StudentRepository studentRepository;
+    private final ClassroomVersionSectionRepository classroomVersionSectionRepository;
+
 
     //  Student Form Show
     @GetMapping("/create")
@@ -81,6 +94,24 @@ public class StudentController {
         return policeStationRepository.findByDistrictIdAndActiveTrueOrderByNameAsc(districtId);
     }
 
+    //   Versions Load by Class (Cascading Dropdown)
+    @GetMapping("/versions-by-class")
+    @ResponseBody
+    public List<Version> getVersionsByClass(@RequestParam("classRoomId") Long classRoomId) {
+        return classroomVersionSectionRepository.findDistinctVersionsByClassRoomId(classRoomId);
+    }
+
+    //   Sections Load by Class (Cascading Dropdown)
+    @GetMapping("/sections-by-class")
+    @ResponseBody
+    public List<Section> getSectionsByClass(@RequestParam("classRoomId") Long classRoomId,
+                                             @RequestParam(value = "versionId", required = false) Long versionId) {
+        if (versionId != null) {
+            return classroomVersionSectionRepository.findDistinctSectionsByClassRoomIdAndVersionId(classRoomId, versionId);
+        }
+        return classroomVersionSectionRepository.findDistinctSectionsByClassRoomId(classRoomId);
+    }
+
     //   Student Save Method
     @PostMapping("/save")
     public String saveStudent(StudentRequestDto studentRequestDto) {
@@ -90,8 +121,15 @@ public class StudentController {
 
     //   All Student List View
     @GetMapping("/list")
-    public String getAllStd(Model model) {
-        List<StudentResponseDto> getStudentAll = studentService.getAllStudent();
+    public String getAllStd(@RequestParam(defaultValue = "0") int page,
+                            @RequestParam(defaultValue = "5") int pageSize, Model model) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Student> studentPage = studentRepository.findAll(pageable);
+
+        List<StudentResponseDto> getStudentAll = studentService.getAllStudent(
+                page, pageSize, "id", "DESC");
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", studentPage.getTotalPages());
         model.addAttribute("getStudentAll", getStudentAll);
         model.addAttribute("title", "Student List");
         return "student/studentList";
@@ -127,4 +165,50 @@ public class StudentController {
         studentService.deleteById(id);
         return "redirect:/student/list";
     }
+
+    @GetMapping("/update/{id}")
+    public String updateStudent(@PathVariable Long id,
+                                @RequestParam(defaultValue = "0") int page,
+                                @RequestParam(defaultValue = "5") int pageSize,
+                                Model model) {
+
+        Student student = studentRepository.findById(id).orElseThrow();
+        StudentRequestDto studentRequestDto = StudentMapper.mapToStudentRequsetDto(student);
+
+        model.addAttribute("studentForm", studentRequestDto);
+        model.addAttribute("genders", Gender.values());
+        model.addAttribute("identityTypes", IdentityType.values());
+        model.addAttribute("addressTypes", AddressType.values());
+        model.addAttribute("title", "Update Student");
+        model.addAttribute("divisions", divisionRepository.findAll());
+        model.addAttribute("districts", districtRepository.findAll());
+        model.addAttribute("policeStations", policeStationRepository.findAll());
+        model.addAttribute("classRoom", classRoomRepository.findAll());
+        model.addAttribute("version", versionRepository.findAll());
+        model.addAttribute("section", sectionRepository.findAll());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", pageSize);
+        return "student/studentForm";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String updateStudent(@PathVariable Long id,
+                                @ModelAttribute("studentForm") StudentRequestDto studentRequestDto,
+                                @RequestParam(defaultValue = "0") int page,
+                                BindingResult bindingResult, Model model,
+                                @RequestParam(defaultValue = "5") int pageSize) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("genders", Gender.values());
+            model.addAttribute("identityTypes", IdentityType.values());
+            model.addAttribute("addressTypes", AddressType.values());
+            model.addAttribute("title", "Update Student");
+            // If there are errors, the page and pageSize are added back to the form
+            model.addAttribute("currentPage", page);
+            model.addAttribute("pageSize", pageSize);
+            return "/student/studentForm";
+        }
+        studentService.updateStudent(studentRequestDto);
+        return "redirect:/student/list?page=" + page + "&pageSize=" + pageSize + "#student-" + id;
+    }
+
 }

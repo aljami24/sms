@@ -3,7 +3,6 @@ package com.smatik.sms.employee.controller;
 
 import com.smatik.sms.common.address.dto.AddressRequestDto;
 import com.smatik.sms.common.address.entity.Address;
-import com.smatik.sms.common.address.entity.District;
 import com.smatik.sms.common.address.repository.DistrictRepository;
 import com.smatik.sms.common.address.repository.DivisionRepository;
 import com.smatik.sms.common.address.repository.PoliceStationRepository;
@@ -19,8 +18,6 @@ import com.smatik.sms.employee.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,12 +57,12 @@ public class EmployeeController {
     }
 
     @PostMapping("/save")
-    public String saveEmployee (@Valid @ModelAttribute("employeeForm")
-                                EmployeeFormDto employeeFormDto,
-                                BindingResult bindingResult,
-                                Model model) {
+    public String saveEmployee(@Valid @ModelAttribute("employeeForm")
+                               EmployeeFormDto employeeFormDto,
+                               BindingResult bindingResult,
+                               Model model) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("genders", Gender.values());
             model.addAttribute("employTypes", EmployeeType.values());
             model.addAttribute("identityTypes", IdentityType.values());
@@ -117,7 +114,6 @@ public class EmployeeController {
         employeeFormDto.setAddressRequestDto(addressDtoList);
 
 
-
         model.addAttribute("divisions", divisionRepository.findAll());
         model.addAttribute("districts", districtRepository.findAll());
         model.addAttribute("policeStations", policeStationRepository.findAll());
@@ -136,14 +132,12 @@ public class EmployeeController {
     }
 
 
-
-
     @PostMapping("/update/{id}")
     public String updateEmployee(@PathVariable Long id,
-                                @Valid @ModelAttribute("employeeForm") EmployeeFormDto employeeFormDto,
-                                BindingResult bindingResult, Model model,
-                                @RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "5") int pageSize) {
+                                 @Valid @ModelAttribute("employeeForm") EmployeeFormDto employeeFormDto,
+                                 BindingResult bindingResult, Model model,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "5") int pageSize) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("genders", Gender.values());
@@ -182,11 +176,11 @@ public class EmployeeController {
 //    }
 
     @GetMapping("/list")
-    public String getAllEmployee( @RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "10") int pageSize,
-                                  @RequestParam(defaultValue = "id") String sortField,
-                                  @RequestParam(defaultValue = "desc") String sortOrder,
-                                  Model model ) {
+    public String getAllEmployee(@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int pageSize,
+                                 @RequestParam(defaultValue = "id") String sortField,
+                                 @RequestParam(defaultValue = "desc") String sortOrder,
+                                 Model model) {
 
         Page<EmployeeResponseDto> employees = employeeService.getAllEmployee(
                 page, pageSize, sortField, sortOrder);

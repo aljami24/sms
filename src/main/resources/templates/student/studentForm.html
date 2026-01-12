@@ -18,7 +18,9 @@
         <h5 class="fw-bold mb-0">Student Admission</h5>
     </div>
 
-    <form enctype="multipart/form-data" method="post" th:action="@{/student/save}" th:object="${studentForm}">
+    <form enctype="multipart/form-data" method="post"
+          th:attr="action=@{${studentForm.id != null ? '/student/edit/' + studentForm.id : '/student/save'}}"
+          th:object="${studentForm}">
         <div class="form-card">
 
             <!-- ================= Student Information ================= -->
@@ -73,7 +75,9 @@
 
                     <div class="col-md-4">
                         <label class="form-label" for="class">Class</label>
-                        <select class="form-select" id="class" th:field="*{classRoomId}">
+                        <select class="form-select" id="class"
+                                onchange="loadVersionsAndSections(this)"
+                                th:field="*{classRoomId}">
                             <option value="">--Select Class--</option>
                             <option th:each="c : ${classRoom}" th:text="${c.name}" th:value="${c.id}"></option>
                         </select>
@@ -82,7 +86,9 @@
 
                     <div class="col-md-4">
                         <label class="form-label" for="version">Version</label>
-                        <select class="form-select" id="version" th:field="*{versionId}">
+                        <select class="form-select" id="version"
+                                onchange="loadSectionsByVersion()"
+                                th:field="*{versionId}">
                             <option value="">--Select Version--</option>
                             <option th:each="v : ${version}" th:text="${v.name}" th:value="${v.id}"></option>
                         </select>
@@ -90,7 +96,8 @@
 
                     <div class="col-md-4">
                         <label class="form-label" for="section">Section</label>
-                        <select class="form-select" id="section" th:field="*{sectionId}">
+                        <select class="form-select" id="section"
+                                th:field="*{sectionId}">
                             <option value="">--Select Section--</option>
                             <option th:each="s : ${section}" th:text="${s.name}" th:value="${s.id}"></option>
                         </select>
@@ -148,14 +155,17 @@
                                 <label class="form-label">District</label>
                                 <select class="form-select district"
                                         onchange="loadPoliceStations(this)"
+                                        th:data-selected-id="*{addresses[__${iterStat.index}__].district?.id}"
                                         th:field="*{addresses[__${iterStat.index}__].district}">
                                     <option value="">Select District</option>
                                 </select>
+
                             </div>
 
                             <div class="col-md-4 mb-3">
                                 <label class="form-label">Police Station</label>
                                 <select class="form-select policeStation"
+                                        th:data-selected-id="*{addresses[__${iterStat.index}__].policeStation?.id}"
                                         th:field="*{addresses[__${iterStat.index}__].policeStation}">
                                     <option value="">Select Police Station</option>
                                 </select>
@@ -203,120 +213,95 @@
     </form>
 
     <script>
-        // Add new address dynamically
-        function addAddress() {
-            const container = document.getElementById("addressContainer");
-            const index = container.children.length;
-            const template = `
-            <div class="address-block p-3 mb-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6>Address ${index + 1}</h6>
-                    <button type="button" class="btn btn-sm btn-danger" onclick="removeAddress(this)">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Address Type</label>
-                    <select class="form-select" name="addresses[${index}].addressType">
-                        <option value="">Select Address Type</option>
-                        <option value="PRESENT_ADDRESS">PRESENT_ADDRESS</option>
-                        <option value="PERMANENT_ADDRESS">PERMANENT_ADDRESS</option>
-                    </select>
-                </div>
+        /**
+         * Student Management - Class-Version-Section Cascading Dropdown Script
+         * Handles: Class -> Version -> Section
+         */
 
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Division</label>
-                        <select class="form-select division" name="addresses[${index}].division" onchange="loadDistricts(this)">
-                            <option value="">Select Division</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">District</label>
-                        <select class="form-select district" name="addresses[${index}].district" onchange="loadPoliceStations(this)">
-                            <option value="">Select District</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Police Station</label>
-                        <select class="form-select policeStation" name="addresses[${index}].policeStation">
-                            <option value="">Select Police Station</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Village</label>
-                        <input class="form-control" name="addresses[${index}].village">
-                    </div>
-                </div>
-            </div>`;
-            container.insertAdjacentHTML("beforeend", template);
+        // Load versions and sections when class is changed
+        async function loadVersionsAndSections(classSelect) {
+            const classRoomId = classSelect.value;
+            const versionSelect = document.getElementById("version");
+            const sectionSelect = document.getElementById("section");
 
-            // Load divisions dynamically for new address
-            loadDivisionsForAll();
-        }
+            // Clear version and section dropdowns
+            versionSelect.innerHTML = '<option value="">--Select Version--</option>';
+            sectionSelect.innerHTML = '<option value="">--Select Section--</option>';
 
-        function removeAddress(btn) {
-            const container = document.getElementById("addressContainer");
-            if (container.children.length > 1) {
-                btn.closest(".address-block").remove();
-            } else {
-                alert("At least one address is required");
-            }
-        }
-
-        // Load districts when division changes
-        function loadDistricts(divSelect) {
-            const divisionId = divSelect.value;
-            const districtSelect = divSelect.closest(".address-block").querySelector(".district");
-            const policeSelect = divSelect.closest(".address-block").querySelector(".policeStation");
-
-            districtSelect.innerHTML = '<option value="">Select District</option>';
-            policeSelect.innerHTML = '<option value="">Select Police Station</option>';
-
-            if (divisionId) {
-                fetch(`/student/districts?divisionId=${divisionId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        data.forEach(d => {
-                            const option = document.createElement("option");
-                            option.value = d.id;
-                            option.text = d.name;
-                            districtSelect.add(option);
-                        });
+            if (classRoomId) {
+                try {
+                    // Load versions
+                    const versionRes = await fetch(`/student/versions-by-class?classRoomId=${classRoomId}`);
+                    const versions = await versionRes.json();
+                    versions.forEach(v => {
+                        const option = document.createElement("option");
+                        option.value = v.id;
+                        option.text = v.name;
+                        versionSelect.add(option);
                     });
-            }
-        }
 
-        // Load police stations when district changes
-        function loadPoliceStations(distSelect) {
-            const districtId = distSelect.value;
-            const psSelect = distSelect.closest(".address-block").querySelector(".policeStation");
-
-            psSelect.innerHTML = '<option value="">Select Police Station</option>';
-
-            if (districtId) {
-                fetch(`/student/police-stations?districtId=${districtId}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        data.forEach(p => {
-                            const option = document.createElement("option");
-                            option.value = p.id;
-                            option.text = p.name;
-                            psSelect.add(option);
-                        });
+                    // Load sections
+                    const sectionRes = await fetch(`/student/sections-by-class?classRoomId=${classRoomId}`);
+                    const sections = await sectionRes.json();
+                    sections.forEach(s => {
+                        const option = document.createElement("option");
+                        option.value = s.id;
+                        option.text = s.name;
+                        sectionSelect.add(option);
                     });
+                } catch (e) {
+                    console.error('Error loading versions/sections:', e);
+                }
             }
         }
 
-        // Load divisions for dynamically added addresses
+        // Load sections when version is changed (optional - for further filtering)
+        async function loadSectionsByVersion() {
+            const classRoomId = document.getElementById("class").value;
+            const versionId = document.getElementById("version").value;
+            const sectionSelect = document.getElementById("section");
+
+            sectionSelect.innerHTML = '<option value="">--Select Section--</option>';
+
+            if (classRoomId && versionId) {
+                try {
+                    const res = await fetch(`/student/sections-by-class?classRoomId=${classRoomId}&versionId=${versionId}`);
+                    const sections = await res.json();
+                    sections.forEach(s => {
+                        const option = document.createElement("option");
+                        option.value = s.id;
+                        option.text = s.name;
+                        sectionSelect.add(option);
+                    });
+                } catch (e) {
+                    console.error('Error loading sections:', e);
+                }
+            }
+        }
+
+        /**
+         * Student Management - Address Cascading Dropdown Script
+         * Handles: Division -> District -> Police Station
+         */
+
+        // ১. পেজ লোড হওয়ার সময় রান হবে
+        window.onload = async function () {
+            // প্রথমে সব বিভাগ লোড করো
+            await loadDivisionsForAll();
+
+            // তারপর যদি এটি 'Edit' পেজ হয়, তবে বিদ্যমান জেলা ও থানা লোড করো
+            await loadExistingAddressesData();
+        }
+
+        // ২. সব ডাইনামিক ড্রপডাউনে বিভাগ লোড করার ফাংশন
         async function loadDivisionsForAll() {
-            // Fetch divisions from server
             try {
                 const response = await fetch('/student/divisions');
                 const divisions = await response.json();
 
                 document.querySelectorAll(".division").forEach(sel => {
-                    if (sel.options.length <= 1) { // prevent re-adding
+                    // যদি আগে থেকে অপশন না থাকে তবেই যোগ করো (Duplicate প্রতিরোধ)
+                    if (sel.options.length <= 1) {
                         divisions.forEach(d => {
                             const option = document.createElement("option");
                             option.value = d.id;
@@ -330,9 +315,147 @@
             }
         }
 
-        // On page load, populate divisions for all address dropdowns
-        window.onload = async function () {
-            await loadDivisionsForAll();
+        // ৩. এডিট মোডে বিদ্যমান অ্যাড্রেসের ডাটা (District & PS) লোড করার মূল ফাংশন
+        async function loadExistingAddressesData() {
+            const addressBlocks = document.querySelectorAll(".address-block");
+
+            for (const block of addressBlocks) {
+                const divSelect = block.querySelector(".division");
+                const distSelect = block.querySelector(".district");
+                const psSelect = block.querySelector(".policeStation");
+
+                // Thymeleaf থেকে আসা data-selected-id রিড করা
+                const selectedDistrictId = distSelect.getAttribute("data-selected-id");
+                const selectedPsId = psSelect.getAttribute("data-selected-id");
+
+                // যদি বিভাগ সিলেক্ট করা থাকে, তবে জেলাগুলো লোড করো
+                if (divSelect.value && selectedDistrictId) {
+                    await loadDistrictsManual(divSelect, selectedDistrictId);
+                }
+
+                // যদি জেলা সিলেক্ট করা থাকে, তবে থানাগুলো লোড করো
+                if (selectedDistrictId && selectedPsId) {
+                    // এখানে একটু দেরি করা হয় যেন জেলা লোড হওয়ার পর থানা লোড হয়
+                    await loadPoliceStationsManual(distSelect, selectedPsId);
+                }
+            }
+        }
+
+        // ৪. জেলা লোড করার ফাংশন (অন-চেইঞ্জ এবং ম্যানুয়াল লোড উভয় ক্ষেত্রে)
+        async function loadDistricts(divSelect) {
+            await loadDistrictsManual(divSelect, null);
+        }
+
+        async function loadDistrictsManual(divSelect, selectedId) {
+            const divisionId = divSelect.value;
+            const block = divSelect.closest(".address-block");
+            const districtSelect = block.querySelector(".district");
+            const policeSelect = block.querySelector(".policeStation");
+
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+            policeSelect.innerHTML = '<option value="">Select Police Station</option>';
+
+            if (divisionId) {
+                try {
+                    const res = await fetch(`/student/districts?divisionId=${divisionId}`);
+                    const data = await res.json();
+                    data.forEach(d => {
+                        const option = document.createElement("option");
+                        option.value = d.id;
+                        option.text = d.name;
+                        if (selectedId && d.id == selectedId) option.selected = true;
+                        districtSelect.add(option);
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+
+        // ৫. থানা লোড করার ফাংশন (অন-চেইঞ্জ এবং ম্যানুয়াল লোড উভয় ক্ষেত্রে)
+        async function loadPoliceStations(distSelect) {
+            await loadPoliceStationsManual(distSelect, null);
+        }
+
+        async function loadPoliceStationsManual(distSelect, selectedId) {
+            const districtId = distSelect.value;
+            const psSelect = distSelect.closest(".address-block").querySelector(".policeStation");
+
+            psSelect.innerHTML = '<option value="">Select Police Station</option>';
+
+            if (districtId) {
+                try {
+                    const res = await fetch(`/student/police-stations?districtId=${districtId}`);
+                    const data = await res.json();
+                    data.forEach(p => {
+                        const option = document.createElement("option");
+                        option.value = p.id;
+                        option.text = p.name;
+                        if (selectedId && p.id == selectedId) option.selected = true;
+                        psSelect.add(option);
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+
+        // ৬. নতুন অ্যাড্রেস ব্লক যোগ করা (UI)
+        function addAddress() {
+            const container = document.getElementById("addressContainer");
+            const index = container.children.length;
+            const template = `
+    <div class="address-block p-3 mb-3 ">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6>Address ${index + 1}</h6>
+            <button type="button" class="btn btn-sm btn-danger" onclick="removeAddress(this)">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label class="form-label">Address Type</label>
+                <select class="form-select" name="addresses[${index}].addressType">
+                    <option value="">Select Address Type</option>
+                    <option value="PRESENT_ADDRESS">PRESENT_ADDRESS</option>
+                    <option value="PERMANENT_ADDRESS">PERMANENT_ADDRESS</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Division</label>
+                <select class="form-select division" name="addresses[${index}].division" onchange="loadDistricts(this)">
+                    <option value="">Select Division</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">District</label>
+                <select class="form-select district" name="addresses[${index}].district" onchange="loadPoliceStations(this)">
+                    <option value="">Select District</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Police Station</label>
+                <select class="form-select policeStation" name="addresses[${index}].policeStation">
+                    <option value="">Select Police Station</option>
+                </select>
+            </div>
+            <div class="col-md-12 mb-3">
+                <label class="form-label">Village</label>
+                <input class="form-control" name="addresses[${index}].village">
+            </div>
+        </div>
+    </div>`;
+            container.insertAdjacentHTML("beforeend", template);
+            loadDivisionsForAll(); // নতুন ব্লকের জন্য বিভাগ লোড করো
+        }
+
+        function removeAddress(btn) {
+            const container = document.getElementById("addressContainer");
+            if (container.children.length > 1) {
+                btn.closest(".address-block").remove();
+            } else {
+                alert("At least one address is required");
+            }
         }
     </script>
 

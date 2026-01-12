@@ -1,13 +1,10 @@
 package com.smatik.sms.academic.model.entity;
 
-import com.smatik.sms.student.model.entity.Student;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -20,18 +17,15 @@ public class ClassroomVersionSection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "class_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "class_room_id")
     private ClassRoom classRoom;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "version_id")
     private Version version;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id")
-    private Section section;
-
-    @OneToMany(mappedBy = "classroomVersionSectionsId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Student> students;
+    private Section section; // 👈 nullable (Class 6–8)
 }
