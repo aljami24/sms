@@ -36,7 +36,7 @@
                         </div>
                         <div>
                             <div class="text-muted small">Total Students</div>
-                            <h4 class="counter" data-count="128">0</h4>
+                            <h4 class="counter" th:text="${allStudent.size()}">0</h4>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                         </div>
                         <div>
                             <div class="text-muted small">Total Employee</div>
-                            <h4 class="counter" data-count="22">0</h4>
+                            <h4 class="counter" th:text="${allEmployee != null ? allEmployee.getTotalElements() : 0}">0</h4>
                         </div>
                     </div>
                 </div>

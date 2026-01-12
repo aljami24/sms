@@ -41,6 +41,9 @@ databaseChangeLog:
       file: address/tables/address.yml
       relativeToChangelogFile: true
 
+  - include:
+      file: user-role/table/user-role.yml
+      relativeToChangelogFile: true
 
 
 
