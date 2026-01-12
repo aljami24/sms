@@ -109,7 +109,7 @@ public class EmployeeMapper {
         responseDto.setIdentityType(employee.getIdentityType());
         responseDto.setIdentityNumber(employee.getIdentityNumber());
         responseDto.setPhoneNumber(employee.getPhoneNumber());
-
+        responseDto.setStatus(employee.getStatus());
         responseDto.setPhotoDir(employee.getPhotoDir());
         responseDto.setNidDir(employee.getNidDir());
 
