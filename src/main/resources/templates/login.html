@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Login Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .login-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-card h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 1.2rem;
+    }
+
+    /* আইকন স্টাইল */
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      outline: none;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+
+    .input-group input:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 5px rgba(118, 75, 162, 0.3);
+    }
+
+    /* পাসওয়ার্ড টগল আইকন */
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      left: auto !important; /* বাম পাশের আইকনের সাথে যাতে সংঘর্ষ না হয় */
+      cursor: pointer;
+      color: #777;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: #764ba2;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-btn:hover {
+      background: #5a3785;
+    }
+
+    .footer-text {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-card">
+  <h2>Login Here</h2>
+  <form th:action="@{/login}" method="post">
+    <div class="input-group">
+      <i class="fas fa-user"></i>
+      <input type="text" placeholder="user name" name="username" required>
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" id="password" name="password" placeholder="password" required>
+      <i class="fas fa-eye toggle-password" id="toggleIcon"></i>
+    </div>
+
+    <button type="submit" class="login-btn">Login</button>
+  </form>
+
+</div>
+
+<script>
+  const passwordInput = document.getElementById('password');
+  const toggleIcon = document.getElementById('toggleIcon');
+
+  toggleIcon.addEventListener('click', function () {
+    // টাইপ পরিবর্তন করা (password থেকে text)
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+
+    // আইকন পরিবর্তন করা
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+  });
+</script>
+
+</body>
+</html>
