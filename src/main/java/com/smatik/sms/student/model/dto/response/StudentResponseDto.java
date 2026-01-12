@@ -3,6 +3,8 @@ package com.smatik.sms.student.model.dto.response;
 import com.smatik.sms.academic.model.entity.ClassroomVersionSection;
 import com.smatik.sms.common.address.dto.AddressResponseDto;
 import com.smatik.sms.common.enums.Gender;
+import com.smatik.sms.common.enums.IdentityType;
+import com.smatik.sms.student.model.dto.request.FileUpload;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,8 +21,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class StudentResponseDto {
-
+public class StudentResponseDto extends FileUpload {
     private Long id;
     private String name;
     private Integer roll;
@@ -28,8 +29,11 @@ public class StudentResponseDto {
     private String motherName;
     private Gender gender;
     private LocalDate dob;
-    private String photoDir;
-    private String nidDir;
+    private IdentityType identityType;
+    private String identityNumber;
+    private Long classRoomId;
+    private Long versionId;
+    private Long sectionId;
     private ClassroomVersionSection classroomVersionSectionsId;
     private List<AddressResponseDto> addresses = new ArrayList<>();
 }

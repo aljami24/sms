@@ -1,21 +1,24 @@
 databaseChangeLog:
   - changeSet:
-      id: create-section-table
-      author: afzal
+      id: create-section
+      author: sakib
       changes:
         - createTable:
             tableName: section
-            remarks: "Class sections like A, B"
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: BIGINT
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
-
               - column:
                   name: name
-                  type: VARCHAR(10)
+                  type: VARCHAR(20)
                   constraints:
                     nullable: false
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true

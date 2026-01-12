@@ -64,14 +64,13 @@
 
       <div class="table-responsive">
         <table class="table table-hover mb-0">
-          <thead class="table-light">
+          <thead class="table-success">
           <tr>
             <th style="width: 5%;" class="text-center">Sl</th>
-            <th style="width: 25%;" class="text-start">Employee Details</th>
-            <th style="width: 12%;" class="text-end">Salary</th>
+            <th style="width: 30%;" class="text-start">Employee Details</th>
+            <th style="width: 15%;" class="text-center">Salary</th>
+            <th style="width: 40%;" class="text-start">Address</th>
             <th style="width: 10%;" class="text-center">Status</th>
-            <th style="width: 33%;" class="text-start">Address</th>
-            <th style="width: 15%;" class="text-center">Action</th>
           </tr>
           </thead>
 
@@ -80,85 +79,22 @@
             <td class="text-center" th:text="${stat.count}">1</td>
             <td>
               <span><strong>ID :</strong> <span th:text="${employee.employeeId}"></span></span><br>
-              <span><strong>Name :</strong> <span th:text="${employee.name}"></span></span><br>
+              <span><strong>Name :</strong><a th:href="@{'/employee/view/' + ${employee.id}}"
+                                              class="text-decoration-none link-success link-underline-opacity-0 link-underline-opacity-100-hover">
+                <span class="text-success" th:text="${employee.name}"></span></a>
+              </span><br>
               <span><strong>Phone :</strong> <span th:text="${employee.phoneNumber}"></span></span>
             </td>
             <td class="text-center" th:text="${employee.salary}">0</td>
-            <td class="text-center" th:text="${employee.active}">25000</td>
-<!--            <td class="text-center">-->
-<!--                            <span if="${employee.active == 'ACTIVE'}"-->
-<!--                                  class="status-active">Active</span>-->
-<!--              <span if="${employee.status != 'ACTIVE'}"-->
-<!--                    class="status-inactive">Inactive</span>-->
-<!--            </td>-->
             <td>
               <ul>
                 <li th:each="addr : ${employee.addressResponseDto}">
                   <span class="fw-bold" th:text="${addr.addressType} + ' :  ' "></span>
                   <span th:text="${addr.village + ', ' + addr.policeStation?.name + ', ' + addr.district?.name + ', ' + addr.division?.name}"></span>
-
                 </li>
               </ul>
             </td>
-            <!-- Actions -->
-            <td class="text-center">
-              <a class="action-btn view"
-                 th:href="@{'/employee/view/' + ${employee.id}}">
-                <i class="bi bi-eye-fill"></i>
-              </a>
-
-              <a class="action-btn edit"
-                 th:href="@{'/employee/edit/' + ${employee.id}}">
-                <i class="bi bi-pencil-square"></i>
-              </a>
-
-              <button type="button"
-                      class="action-btn delete"
-                      data-bs-toggle="modal"
-                      th:data-bs-target="'#deleteModal_' + ${employee.id}">
-                <i class="bi bi-trash-fill"></i>
-              </button>
-
-              <!-- Delete Modal -->
-              <div class="modal fade"
-                   th:id="'deleteModal_' + ${employee.id}"
-                   tabindex="-1">
-
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-
-                    <div class="modal-header">
-                      <h5 class="modal-title text-danger">
-                        Confirm Delete
-                      </h5>
-                      <button class="btn-close"
-                              data-bs-dismiss="modal"></button>
-                    </div>
-
-                    <div class="modal-body">
-                      Are you sure to delete
-                      <strong th:text="${employee.name}"></strong> ?
-                    </div>
-
-                    <div class="modal-footer">
-                      <button class="btn btn-secondary"
-                              data-bs-dismiss="modal">
-                        Cancel
-                      </button>
-
-                      <form th:action="@{/employee/delete/{id}(id=${employee.id})}"
-                            method="post">
-                        <button class="btn btn-danger">
-                          Delete
-                        </button>
-                      </form>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-            </td>
+            <td class="text-center" th:text="${employee.status}">25000</td>
           </tr>
           </tbody>
         </table>
@@ -167,7 +103,7 @@
     </div>
   </div>
 
-  <nav aria-label="Page navigation example">
+  <nav aria-label="Page navigation example" class="mt-2">
     <ul class="pagination justify-content-center">
       <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
         <a class="page-link" th:href="@{/employee/list(page = ${currentPage - 1})}">Previous</a>

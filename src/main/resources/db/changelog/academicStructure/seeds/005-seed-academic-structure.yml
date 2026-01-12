@@ -1,6 +1,6 @@
 databaseChangeLog:
 
-  # ===== CLASS SEED (1–8) =====
+  # ===== CLASSROOM SEED (1–8) =====
   - changeSet:
       id: seed-classroom
       author: afzal
@@ -10,233 +10,201 @@ databaseChangeLog:
             columns:
               - column: { name: id, valueNumeric: 1 }
               - column: { name: name, value: "Class 1" }
-
+              - column: { name: order_no, valueNumeric: 1 }
         - insert:
             tableName: class_room
             columns:
               - column: { name: id, valueNumeric: 2 }
               - column: { name: name, value: "Class 2" }
-
+              - column: { name: order_no, valueNumeric: 2 }
         - insert:
             tableName: class_room
             columns:
               - column: { name: id, valueNumeric: 3 }
               - column: { name: name, value: "Class 3" }
-
+              - column: { name: order_no, valueNumeric: 3 }
         - insert:
             tableName: class_room
             columns:
               - column: { name: id, valueNumeric: 4 }
               - column: { name: name, value: "Class 4" }
-
+              - column: { name: order_no, valueNumeric: 4 }
         - insert:
             tableName: class_room
             columns:
               - column: { name: id, valueNumeric: 5 }
               - column: { name: name, value: "Class 5" }
-
+              - column: { name: order_no, valueNumeric: 5 }
         - insert:
             tableName: class_room
             columns:
               - column: { name: id, valueNumeric: 6 }
               - column: { name: name, value: "Class 6" }
-
+              - column: { name: order_no, valueNumeric: 6 }
         - insert:
             tableName: class_room
             columns:
               - column: { name: id, valueNumeric: 7 }
               - column: { name: name, value: "Class 7" }
-
+              - column: { name: order_no, valueNumeric: 7 }
         - insert:
             tableName: class_room
             columns:
               - column: { name: id, valueNumeric: 8 }
               - column: { name: name, value: "Class 8" }
+              - column: { name: order_no, valueNumeric: 8 }
 
   # ===== VERSION SEED =====
   - changeSet:
       id: seed-version
-      author: afzal
+      author: sakib
       changes:
         - insert:
             tableName: version
             columns:
               - column: { name: id, valueNumeric: 1 }
-              - column: { name: name, value: Bangla }
-
+              - column: { name: name, value: "Bangla" }
         - insert:
             tableName: version
             columns:
               - column: { name: id, valueNumeric: 2 }
-              - column: { name: name, value: English }
+              - column: { name: name, value: "English" }
 
   # ===== SECTION SEED =====
   - changeSet:
       id: seed-section
-      author: afzal
+      author: sakib
       changes:
         - insert:
             tableName: section
             columns:
               - column: { name: id, valueNumeric: 1 }
-              - column: { name: name, value: A }
-
+              - column: { name: name, value: "A" }
         - insert:
             tableName: section
             columns:
               - column: { name: id, valueNumeric: 2 }
-              - column: { name: name, value: B }
+              - column: { name: name, value: "B" }
 
   # ===== CLASSROOM + VERSION + SECTION MAPPING =====
   - changeSet:
       id: seed-classroom-version-section
-      author: afzal
+      author: sakib
       changes:
 
         # ----- Class 1–3 : Bangla + English with Section A,B -----
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 1 }
+              - column: { name: class_room_id, valueNumeric: 1 }
               - column: { name: version_id, valueNumeric: 1 }
               - column: { name: section_id, valueNumeric: 1 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 1 }
+              - column: { name: class_room_id, valueNumeric: 1 }
               - column: { name: version_id, valueNumeric: 1 }
               - column: { name: section_id, valueNumeric: 2 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 1 }
+              - column: { name: class_room_id, valueNumeric: 1 }
               - column: { name: version_id, valueNumeric: 2 }
               - column: { name: section_id, valueNumeric: 1 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 1 }
+              - column: { name: class_room_id, valueNumeric: 1 }
               - column: { name: version_id, valueNumeric: 2 }
               - column: { name: section_id, valueNumeric: 2 }
 
-        # ----- Class 2 : Bangla + English with Section A,B -----
+        # ----- Class 2 -----
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 2 }
+              - column: { name: class_room_id, valueNumeric: 2 }
               - column: { name: version_id, valueNumeric: 1 }
               - column: { name: section_id, valueNumeric: 1 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 2 }
+              - column: { name: class_room_id, valueNumeric: 2 }
               - column: { name: version_id, valueNumeric: 1 }
               - column: { name: section_id, valueNumeric: 2 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 2 }
+              - column: { name: class_room_id, valueNumeric: 2 }
               - column: { name: version_id, valueNumeric: 2 }
               - column: { name: section_id, valueNumeric: 1 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 2 }
+              - column: { name: class_room_id, valueNumeric: 2 }
               - column: { name: version_id, valueNumeric: 2 }
               - column: { name: section_id, valueNumeric: 2 }
 
-
-        # ----- Class 3 : Bangla + English with Section A,B -----
+        # ----- Class 3 -----
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 3 }
+              - column: { name: class_room_id, valueNumeric: 3 }
               - column: { name: version_id, valueNumeric: 1 }
               - column: { name: section_id, valueNumeric: 1 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 3 }
+              - column: { name: class_room_id, valueNumeric: 3 }
               - column: { name: version_id, valueNumeric: 1 }
               - column: { name: section_id, valueNumeric: 2 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 3 }
+              - column: { name: class_room_id, valueNumeric: 3 }
               - column: { name: version_id, valueNumeric: 2 }
               - column: { name: section_id, valueNumeric: 1 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 3 }
+              - column: { name: class_room_id, valueNumeric: 3 }
               - column: { name: version_id, valueNumeric: 2 }
               - column: { name: section_id, valueNumeric: 2 }
 
-
-
-        # ----- Class 4–5 : Bangla + English, NO SECTION -----
+        # ----- Class 4–5 : Bangla + English, no section -----
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 4 }
+              - column: { name: class_room_id, valueNumeric: 4 }
               - column: { name: version_id, valueNumeric: 1 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 4 }
+              - column: { name: class_room_id, valueNumeric: 4 }
+              - column: { name: version_id, valueNumeric: 2 }
+        - insert:
+            tableName: classroom_version_section
+            columns:
+              - column: { name: class_room_id, valueNumeric: 5 }
+              - column: { name: version_id, valueNumeric: 1 }
+        - insert:
+            tableName: classroom_version_section
+            columns:
+              - column: { name: class_room_id, valueNumeric: 5 }
               - column: { name: version_id, valueNumeric: 2 }
 
+        # ----- Class 6–8 : Only Bangla, no section -----
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 5 }
+              - column: { name: class_room_id, valueNumeric: 6 }
               - column: { name: version_id, valueNumeric: 1 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 5 }
-              - column: { name: version_id, valueNumeric: 2 }
-
-
-        # ----- Class 6–8 : Only Bangla, NO SECTION -----
-        - insert:
-            tableName: classroom_version_section
-            columns:
-              - column: { name: class_id, valueNumeric: 6 }
+              - column: { name: class_room_id, valueNumeric: 7 }
               - column: { name: version_id, valueNumeric: 1 }
-
         - insert:
             tableName: classroom_version_section
             columns:
-              - column: { name: class_id, valueNumeric: 7 }
+              - column: { name: class_room_id, valueNumeric: 8 }
               - column: { name: version_id, valueNumeric: 1 }
-
-
-
-
-  # ===== CLASSROOM + VERSION + SECTION MAPPING-2 =====
-  - changeSet:
-      id: seed-classroom-version-section-2
-      author: afzal
-      changes:
-
-        # ----- Class 8 : Only Bangla, NO SECTION -----
-
-        - insert:
-            tableName: classroom_version_section
-            columns:
-              - column: { name: class_id, valueNumeric: 8 }
-              - column: { name: version_id, valueNumeric: 1 }
-
-

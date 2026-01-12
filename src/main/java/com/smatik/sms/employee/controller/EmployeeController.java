@@ -44,6 +44,7 @@ public class EmployeeController {
     @Autowired
     PoliceStationRepository policeStationRepository;
 
+    //Save Form View---------------------------------------------------------------------------------
     @GetMapping("/create")
     public String createForm(Model model) {
         EmployeeFormDto employeeFormDto = new EmployeeFormDto();
@@ -59,6 +60,7 @@ public class EmployeeController {
         return "employee/employeeForm";
     }
 
+    //Save Employee---------------------------------------------------------------------------------
     @PostMapping("/save")
     public String saveEmployee (@Valid @ModelAttribute("employeeForm")
                                 EmployeeFormDto employeeFormDto,
@@ -76,6 +78,7 @@ public class EmployeeController {
         return "redirect:/employee/list";
     }
 
+    //Update Form View---------------------------------------------------------------------------------
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id,
                            @RequestParam(defaultValue = "0") int page,
@@ -136,8 +139,7 @@ public class EmployeeController {
     }
 
 
-
-
+    //Update Employee---------------------------------------------------------------------------------
     @PostMapping("/update/{id}")
     public String updateEmployee(@PathVariable Long id,
                                 @Valid @ModelAttribute("employeeForm") EmployeeFormDto employeeFormDto,
@@ -161,26 +163,7 @@ public class EmployeeController {
         return "redirect:/employee/list?page=" + page + "&pageSize=" + pageSize + "#employee-" + id;
     }
 
-//    @GetMapping("/all")
-//    public String getAllEmployee(@RequestParam(defaultValue = "0") int page,
-//                                @RequestParam(defaultValue = "5") int pageSize,
-//                                Model model) {
-//
-//        Pageable pageable = PageRequest.of(page, pageSize);
-//        Page<Employee> employeePage = employeeRepository.findAll(pageable);
-//
-//        List<EmployeeResponseDto> employeeResponseDto = employeeService.getAllEmployee(
-//                page, pageSize, "id", "DESC");
-//
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("pageSize", pageSize); // The pageSize was added to the model
-//        model.addAttribute("totalPages", employeePage.getTotalPages());
-//
-//        model.addAttribute("title", "Teacher List");
-//        model.addAttribute("Teachers", employeeResponseDto);
-//        return "teacher/list";
-//    }
-
+    // Employee List---------------------------------------------------------------------------------
     @GetMapping("/list")
     public String getAllEmployee( @RequestParam(defaultValue = "0") int page,
                                   @RequestParam(defaultValue = "10") int pageSize,
@@ -215,24 +198,27 @@ public class EmployeeController {
     }
 
 
-    // ================= 1. General Delete =================
+    // =================  Delete =================
     @PostMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
         return "redirect:/employee/list";
     }
 
-    // ================= 2. Active Check Delete =================
-    @GetMapping("/delete-if-inactive/{id}")
-    public String deleteEmployeeIfInactive(@PathVariable Long id) {
-        try {
-            employeeService.deleteEmployeeIfInactive(id);
-        } catch (IllegalStateException e) {
-            // যদি active থাকে → message দেখাতে চাও Thymeleaf এ
-            return "redirect:/employee/list?error=" + e.getMessage();
-        }
-        return "redirect:/employee/list";
+    // ================= Join Employee =================
+    @PostMapping("/activate/{id}")
+    public String activateEmployee(@PathVariable Long id) {
+        employeeService.activateEmployee(id);
+        return "redirect:/employee/list"; // Redirect back to list
     }
+
+    // ================= Deactivate Employee =================
+    @PostMapping("/deactivate/{id}")
+    public String deactivateEmployee(@PathVariable Long id) {
+        employeeService.deactivateEmployee(id);
+        return "redirect:/employee/list"; // Redirect back to list
+    }
+
 }
 
 
