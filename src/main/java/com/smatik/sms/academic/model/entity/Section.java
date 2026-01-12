@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -18,8 +16,7 @@ public class Section {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
 
-    @OneToMany(mappedBy = "section",cascade = CascadeType.ALL)
-    private List<ClassroomVersionSection> classroomVersionSections;
+    @Column(nullable = false, unique = true)
+    private String name; // A, B
 }

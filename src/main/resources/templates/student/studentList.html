@@ -113,7 +113,7 @@
 
                             <span>
         <strong>Section :</strong>
-        <span th:text="${student.classroomVersionSectionsId != null ? student.classroomVersionSectionsId.section.name : 'N/A'}"></span>
+        <span th:text="${student.classroomVersionSectionsId?.section?.name ?: 'N/A'}"></span>
     </span><br>
                         </td>
 
@@ -131,12 +131,15 @@
                         <td class="text-center">
 
                             <!-- View -->
-                            <a class="action-btn view" th:href="@{'/student/details/'+${student.id}}" title="View">
+                            <a class="action-btn view text-decoration-none"
+                               th:href="@{'/student/details/'+${student.id}}" title="View">
                                 <i class="bi bi-eye-fill"></i>
                             </a>
 
                             <!-- Edit -->
-                            <a class="action-btn edit" href="@{'/student/edit/'+${student.id}}" title="Edit">
+                            <a class="action-btn edit text-decoration-none"
+                               th:href="@{'/student/update/'+${student.id}}"
+                               title="Edit">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
 
@@ -199,17 +202,17 @@
     </div>
 
     <!-- ===== Pagination ===== -->
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example " class="mt-2">
         <ul class="pagination justify-content-center">
-            <li class="page-item" classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" href="@{/student/all(page = ${currentPage - 1})}">Previous</a>
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/student/list(page = ${currentPage - 1})}">Previous</a>
             </li>
-            <li class="page-item" classappend="${i == currentPage} ? 'active' : ''"
-                each=" i : ${#numbers.sequence(0,totalPages -1)}">
-                <a class="page-link" href="@{/student/all(page = ${i})}" text="${i + 1}">1</a>
+            <li class="page-item" th:classappend="${i == currentPage} ? 'active' : ''"
+                th:each=" i : ${#numbers.sequence(0,totalPages -1)}">
+                <a class="page-link" th:href="@{/student/list(page = ${i})}" th:text="${i + 1}">1</a>
             </li>
-            <li class="page-item" classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" href="@{/student/all(page = ${currentPage + 1})}">Next</a>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/student/list(page = ${currentPage + 1})}">Next</a>
             </li>
         </ul>
     </nav>

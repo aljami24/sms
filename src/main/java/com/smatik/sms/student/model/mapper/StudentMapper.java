@@ -1,5 +1,6 @@
 package com.smatik.sms.student.model.mapper;
 
+import com.smatik.sms.academic.model.entity.ClassroomVersionSection;
 import com.smatik.sms.common.address.dto.AddressRequestDto;
 import com.smatik.sms.common.address.dto.AddressResponseDto;
 import com.smatik.sms.common.address.entity.Address;
@@ -19,8 +20,8 @@ import java.util.List;
 
 public class StudentMapper {
 
-    public static Student mapToStudentEntity(StudentRequestDto studentRequestDto) {
-        Student student = new Student();
+    public static void mapToStudentEntity(StudentRequestDto studentRequestDto, Student student) {
+
         student.setId(studentRequestDto.getId());
         student.setName(studentRequestDto.getName());
         student.setDob(studentRequestDto.getDob());
@@ -31,9 +32,16 @@ public class StudentMapper {
         student.setIdentityType(studentRequestDto.getIdentityType());
         student.setPhotoDir(studentRequestDto.getPhotoDir());
         student.setNidDir(studentRequestDto.getNidDir());
-        student.setClassroomVersionSectionsId(studentRequestDto.getClassroomVersionSectionsId());
+        // Note: classroomVersionSectionsId is set in the service layer, not here
 
-        List<Address> addressList = new ArrayList<>();
+
+        if (student.getAddresses() == null) {
+            // SAVE case (new entity)
+            student.setAddresses(new ArrayList<>());
+        } else {
+            // UPDATE case (managed entity)
+            student.getAddresses().clear();
+        }
 
         for (AddressRequestDto addressRequestDto : studentRequestDto.getAddresses()) {
             Address address = new Address();
@@ -43,10 +51,8 @@ public class StudentMapper {
             address.setDivision(addressRequestDto.getDivision());
             address.setPoliceStation(addressRequestDto.getPoliceStation());
             address.setStudent(student);
-            addressList.add(address);
+            student.getAddresses().add(address);
         }
-        student.setAddresses(addressList);
-        return student;
     }
 
     public static StudentResponseDto mapToStudentResponseDto(Student student) {
@@ -76,4 +82,48 @@ public class StudentMapper {
         studentResponseDto.setAddresses(addressList);
         return studentResponseDto;
     }
+
+    public static StudentRequestDto mapToStudentRequsetDto(Student student) {
+
+        StudentRequestDto studentRequestDto = new StudentRequestDto();
+
+        studentRequestDto.setId(student.getId());
+        studentRequestDto.setName(student.getName());
+        studentRequestDto.setDob(student.getDob());
+        studentRequestDto.setGender(student.getGender());
+        studentRequestDto.setFatherName(student.getFatherName());
+        studentRequestDto.setMotherName(student.getMotherName());
+        studentRequestDto.setIdentityNumber(student.getIdentityNumber());
+        studentRequestDto.setIdentityType(student.getIdentityType());
+        studentRequestDto.setPhotoDir(student.getPhotoDir());
+        studentRequestDto.setNidDir(student.getNidDir());
+        studentRequestDto.setClassroomVersionSectionsId(student.getClassroomVersionSectionsId());
+
+        ClassroomVersionSection cvs =
+                student.getClassroomVersionSectionsId();
+
+        if (cvs != null) {
+            studentRequestDto.setClassRoomId(cvs.getClassRoom().getId());
+            studentRequestDto.setVersionId(cvs.getVersion().getId());
+            // Section can be null for classes 6-8
+            studentRequestDto.setSectionId(cvs.getSection() != null ? cvs.getSection().getId() : null);
+        }
+
+        List<AddressRequestDto> addressList = new ArrayList<>();
+
+        for (Address address : student.getAddresses()) {
+            AddressRequestDto addressRequestDto = new AddressRequestDto();
+            addressRequestDto.setVillage(address.getVillage());
+            addressRequestDto.setAddressType(address.getAddressType());
+            addressRequestDto.setDistrict(address.getDistrict());
+            addressRequestDto.setDivision(address.getDivision());
+            addressRequestDto.setPoliceStation(address.getPoliceStation());
+            addressRequestDto.setStudent(student);
+            addressList.add(addressRequestDto);
+        }
+        studentRequestDto.setAddresses(addressList);
+        return studentRequestDto;
+    }
+
+
 }
