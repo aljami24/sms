@@ -24,7 +24,7 @@
                     <img alt="Student's Photo"
                          class="img-fluid rounded-circle border border-5 border-light shadow"
                          style="width: 150px; height: 150px; object-fit: cover;"
-                         th:src="@{'/UploadFile/' + ${showStudentDetail.photoDir}}">
+                         th:src="@{'/UploadFile' + ${showStudentDetail.photoDir}}">
                 </div>
 
                 <!-- Name -->
@@ -163,9 +163,79 @@
                 <div class="modal-body text-center">
                     <img class="img-fluid rounded"
                          style="max-height:350px;"
-                         th:src="@{'/UploadFile/' + ${showStudentDetail.nidDir}}">
+                         th:src="@{'/UploadFile' + ${showStudentDetail.nidDir}}">
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="card shadow mt-4">
+        <div class="card-body">
+
+            <h6 class="fw-bold mb-3">
+                Student Actions
+            </h6>
+
+            <div class="d-flex flex-wrap align-items-center gap-2">
+
+                <!-- Edit -->
+                <a class="btn btn-warning btn-sm"
+                   th:href="@{'/student/update/'+${showStudentDetail.id}}">
+                    Edit
+                </a>
+
+
+                <!-- Spacer -->
+                <div class="ms-auto"></div>
+
+                <!-- Delete -->
+                <button type="button"
+                        class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        th:data-bs-target="'#deleteModal_' + ${showStudentDetail.id}">
+                    Delete
+                </button>
+
+            </div>
+
+            <!-- Delete Modal -->
+            <div class="modal fade"
+                 th:id="'deleteModal_' + ${showStudentDetail.id}"
+                 tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title text-danger">
+                                Confirm Delete
+                            </h5>
+                            <button class="btn-close"
+                                    data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            Are you sure to delete
+                            <strong th:text="${showStudentDetail.name}"></strong> ?
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+
+                            <form th:action="@{/student/delete/{id}(id=${showStudentDetail.id})}"
+                                  method="post">
+                                <button class="btn btn-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
