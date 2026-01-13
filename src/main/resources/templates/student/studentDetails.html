@@ -2,7 +2,7 @@
 <html lang="en"
       layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -169,7 +169,7 @@
         </div>
     </div>
 
-    <div class="card shadow mt-4">
+    <div class="card shadow mt-4" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')">
         <div class="card-body">
 
             <h6 class="fw-bold mb-3">

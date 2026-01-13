@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout/main}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+
+    <!-- ===== Page Header ===== -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">
+            <i class="bi bi-person-check-fill me-2"></i> Old Student – New Admission
+        </h4>
+
+        <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+
+    <!-- ===== Student Basic Info ===== -->
+    <div class="card shadow border-0 mb-4">
+        <div class="card-header bg-light fw-semibold">
+            <i class="bi bi-person-lines-fill me-1"></i> Student Information
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-3">
+                    <label class="text-muted small">Student Name</label>
+                    <div class="fw-semibold" text="${student.name}">
+                        Student Name
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="text-muted small">Roll Number</label>
+                    <div class="fw-semibold" text="${student.roll}">
+                        1025
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="text-muted small">Father's Name</label>
+                    <div class="fw-semibold" text="${student.fatherName}">
+                        Father Name
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="text-muted small">Class</label>
+                    <div class="fw-semibold" text="${student.className}">
+                        Class 8
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== New Admission Form ===== -->
+    <div class="card shadow border-0">
+        <div class="card-header bg-light fw-semibold">
+            <i class="bi bi-journal-plus me-1"></i> New Admission Details
+        </div>
+
+        <div class="card-body">
+            <form action="@{/student/confirm-admission}" method="post">
+
+                <!-- hidden student id -->
+                <input type="hidden" name="studentId" value="${student.id}">
+
+                <div class="row g-3">
+
+                    <!-- Session -->
+                    <div class="col-md-3">
+                        <label class="form-label">Session</label>
+                        <select name="session" class="form-select" required>
+                            <option value="">Select Session</option>
+                            <option>2025</option>
+                            <option>2026</option>
+                        </select>
+                    </div>
+
+                    <!-- Class -->
+                    <div class="col-md-3">
+                        <label class="form-label">Admitted Class</label>
+                        <select name="admittedClass" class="form-select" required>
+                            <option value="">Select Class</option>
+                            <option>Class 6</option>
+                            <option>Class 7</option>
+                            <option>Class 8</option>
+                        </select>
+                    </div>
+
+                    <!-- Section -->
+                    <div class="col-md-2">
+                        <label class="form-label">Section</label>
+                        <select name="section" class="form-select" required>
+                            <option value="">Select</option>
+                            <option>A</option>
+                            <option>B</option>
+                        </select>
+                    </div>
+
+                    <!-- Version -->
+                    <div class="col-md-2">
+                        <label class="form-label">Version</label>
+                        <select name="version" class="form-select">
+                            <option>Bangla</option>
+                            <option>English</option>
+                        </select>
+                    </div>
+
+                    <!-- Admission Date -->
+                    <div class="col-md-2">
+                        <label class="form-label">Admission Date</label>
+                        <input type="date"
+                               name="admissionDate"
+                               class="form-control"
+                               required>
+                    </div>
+
+                </div>
+
+                <!-- Submit -->
+                <div class="d-flex justify-content-end mt-4">
+                    <button class="btn btn-success px-4">
+                        <i class="bi bi-check-circle me-1"></i> Confirm Admission
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

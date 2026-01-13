@@ -2,7 +2,7 @@
 <html lang="en"
       layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -12,11 +12,52 @@
 
 <div class="page-bg" layout:fragment="content">
 
-    <!-- ===== Page Header ===== -->
+    <!-- ===== Page Header + Actions ===== -->
     <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <!-- Left : Title -->
         <h4 class="fw-bold mb-0">
             <i class="bi bi-people-fill me-2"></i> Students List
         </h4>
+
+        <!-- Right : Actions -->
+        <div class="d-flex align-items-center gap-2">
+
+            <!-- New Admission -->
+            <a th:href="@{/student/create}" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')" class="btn btn-primary">
+                <i class="bi bi-clock-history me-1"></i> New Admission
+            </a>
+
+            <!-- Old Admission Button -->
+            <button class="btn btn-secondary" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#OldAdmissionBox"
+                    aria-expanded="false">
+                <i class="bi bi-plus-circle me-1"></i> Old Admission
+            </button>
+
+            <!-- Inline Old Admission Search -->
+            <div class="collapse" id="OldAdmissionBox">
+                <form method="get"
+                      th:action="@{/student/Old-admission}"
+                      class="d-flex align-items-center gap-1 ms-2">
+
+                    <input type="text"
+                           name="roll"
+                           class="form-control form-control-sm text-end"
+                           placeholder="Student Roll"
+                           style="width: 120px;"
+                           required>
+
+                    <button class="btn btn-success btn-sm">
+                        <i class="bi bi-search"></i>
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
     </div>
 
     <!-- ===== Filter Section ===== -->

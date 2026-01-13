@@ -135,7 +135,12 @@
                 </li>
               </ul>
             </td>
-            <td class="text-center" th:text="${employee.status}">25000</td>
+            <td class="text-center" th:switch="${employee.status.name()}">
+              <span th:case="'APPOINTED'">Appointed</span>
+              <span th:case="'ACTIVATE'">Activate</span>
+              <span th:case="'DEACTIVATE'">Deactivate</span>
+              <span th:case="*"></span>
+            </td>
           </tr>
           </tbody>
         </table>
