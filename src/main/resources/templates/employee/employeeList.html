@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout/main}">
 
 <head>
@@ -17,7 +17,7 @@
     <h5 class="fw-bold mb-0">
       <i class="bi bi-person-badge-fill me-2"></i> Employees List
     </h5>
-    <div class="d-flex justify-content-end mট-3">
+    <div class="d-flex justify-content-end mট-3" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')">
       <a th:href="@{/employee/create}"
          class="btn btn-primary d-flex align-items-center gap-2 shadow-sm">
         <i class="bi bi-plus-circle"></i>
@@ -135,7 +135,12 @@
                 </li>
               </ul>
             </td>
-            <td class="text-center" th:text="${employee.status}">25000</td>
+            <td class="text-center" th:switch="${employee.status.name()}">
+              <span th:case="'APPOINTED'">Appointed</span>
+              <span th:case="'ACTIVATE'">Activate</span>
+              <span th:case="'DEACTIVATE'">Deactivate</span>
+              <span th:case="*"></span>
+            </td>
           </tr>
           </tbody>
         </table>
