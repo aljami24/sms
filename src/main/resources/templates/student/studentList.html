@@ -2,7 +2,7 @@
 <html lang="en"
       layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -12,11 +12,52 @@
 
 <div class="page-bg" layout:fragment="content">
 
-    <!-- ===== Page Header ===== -->
+    <!-- ===== Page Header + Actions ===== -->
     <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <!-- Left : Title -->
         <h4 class="fw-bold mb-0">
             <i class="bi bi-people-fill me-2"></i> Students List
         </h4>
+
+        <!-- Right : Actions -->
+        <div class="d-flex align-items-center gap-2">
+
+            <!-- New Admission -->
+            <a th:href="@{/student/create}" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')" class="btn btn-primary">
+                <i class="bi bi-clock-history me-1"></i> New Admission
+            </a>
+
+            <!-- Old Admission Button -->
+            <button class="btn btn-secondary" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#OldAdmissionBox"
+                    aria-expanded="false">
+                <i class="bi bi-plus-circle me-1"></i> Old Admission
+            </button>
+
+            <!-- Inline Old Admission Search -->
+            <div class="collapse" id="OldAdmissionBox">
+                <form method="get"
+                      th:action="@{/student/Old-admission}"
+                      class="d-flex align-items-center gap-1 ms-2">
+
+                    <input type="text"
+                           name="roll"
+                           class="form-control form-control-sm text-end"
+                           placeholder="Student Roll"
+                           style="width: 120px;"
+                           required>
+
+                    <button class="btn btn-success btn-sm">
+                        <i class="bi bi-search"></i>
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
     </div>
 
     <!-- ===== Filter Section ===== -->
@@ -83,10 +124,9 @@
                     <thead class="table-secondary">
                     <tr>
                         <th style="width: 5%;" class="text-center">Sl</th>
-                        <th style="width: 30%;" class="text-center">Student Details</th>
-                        <th style="width: 15%;" class="text-center">Academic Info</th>
-                        <th style="width: 35%;" class="text-center">Address</th>
-                        <th style="width: 15%;" class="text-center">Action</th>
+                        <th style="width: 35%;" class="text-start">Student Details</th>
+                        <th style="width: 20%;" class="text-start">Academic Info</th>
+                        <th style="width: 40%;" class="text-start">Address</th>
                     </tr>
                     </thead>
 
@@ -96,7 +136,10 @@
                         <td class="text-center" th:text="${stat.count}"></td>
                         <td>
                             <span><strong>Roll :</strong> <span th:text="${student.roll}"></span></span><br>
-                            <span><strong>Name :</strong> <span th:text="${student.name}"></span></span><br>
+                            <span><strong>Name :</strong> <a class="text-decoration-none link-success link-underline-opacity-0 link-underline-opacity-100-hover"
+                                                             th:href="@{'/student/details/'+${student.id}}" title="View">
+                                <span th:text="${student.name}"></span></a>
+                            </span><br>
                             <span><strong>Father :</strong> <span th:text="${student.fatherName}"></span></span><br>
                             <span><strong>Mother :</strong> <span th:text="${student.motherName}"></span></span><br>
                         </td>
@@ -125,73 +168,6 @@
 
                                 </li>
                             </ul>
-                        </td>
-
-                        <!-- Actions -->
-                        <td class="text-center">
-
-                            <!-- View -->
-                            <a class="action-btn view text-decoration-none"
-                               th:href="@{'/student/details/'+${student.id}}" title="View">
-                                <i class="bi bi-eye-fill"></i>
-                            </a>
-
-                            <!-- Edit -->
-                            <a class="action-btn edit text-decoration-none"
-                               th:href="@{'/student/update/'+${student.id}}"
-                               title="Edit">
-                                <i class="bi bi-pencil-square"></i>
-                            </a>
-
-                            <!-- Delete Button -->
-                            <button class="action-btn delete"
-                                    data-bs-toggle="modal"
-                                    th:data-bs-target="'#deleteModal_' + ${student.id}"
-                                    type="button">
-                                <i class="bi bi-trash-fill"></i>
-                            </button>
-
-                            <!-- Delete Modal -->
-                            <div class="modal fade"
-                                 tabindex="-1"
-                                 th:id="'deleteModal_' + ${student.id}">
-
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-danger">
-                                                Confirm Delete
-                                            </h5>
-                                            <button class="btn-close"
-                                                    data-bs-dismiss="modal"
-                                                    type="button"></button>
-                                        </div>
-
-                                        <div class="modal-body">
-                                            Are you sure you want to delete
-                                            <strong th:text="${student.name}"></strong> ?
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button class="btn btn-secondary"
-                                                    data-bs-dismiss="modal"
-                                                    type="button">
-                                                Cancel
-                                            </button>
-
-                                            <form method="post"
-                                                  th:action="@{/student/delete/{id}(id=${student.id})}">
-                                                <button class="btn btn-danger">
-                                                    <i class="bi bi-trash me-1"></i> Delete
-                                                </button>
-                                            </form>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
                         </td>
                     </tr>
                     </tbody>
