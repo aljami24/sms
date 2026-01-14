@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-year
+      author: afzal
+      changes:
+        - createTable:
+            tableName: year
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true

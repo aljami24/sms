@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-student-academic-record
+      author: system
+      changes:
+
+        - createTable:
+            tableName: student_academic_record
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: student_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: year_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: classroom_version_section_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: student_academic_record
+            baseColumnNames: student_id
+            referencedTableName: student
+            referencedColumnNames: id
+            constraintName: fk_sar_student
+
+        - addForeignKeyConstraint:
+            baseTableName: student_academic_record
+            baseColumnNames: year_id
+            referencedTableName: year
+            referencedColumnNames: id
+            constraintName: fk_sar_year
+
+        - addForeignKeyConstraint:
+            baseTableName: student_academic_record
+            baseColumnNames: classroom_version_section_id
+            referencedTableName: classroom_version_section
+            referencedColumnNames: id
+            constraintName: fk_sar_classroom
