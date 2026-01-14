@@ -11,6 +11,7 @@ import com.smatik.sms.student.model.repository.StudentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -86,6 +87,41 @@ public class StudentService {
         PageRequest pageable = PageRequest.of(page, pageSize, sort);
         AtomicInteger serialNo = new AtomicInteger(page * pageSize + 1);
         return studentRepository.findAll().stream().map(StudentMapper::mapToStudentResponseDto).collect(Collectors.toList());
+    }
+
+    //   Filter Students Method
+    public List<StudentResponseDto> filterStudents(
+            Integer rollNumber,
+            Long classRoomId,
+            String section,
+            String version,
+            int page,
+            int pageSize) {
+
+        // Convert empty strings to null for proper JPQL query handling
+        String cleanSection = (section != null && section.isEmpty()) ? null : section;
+        String cleanVersion = (version != null && version.isEmpty()) ? null : version;
+
+        PageRequest pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Student> studentPage = studentRepository.filterStudents(
+                rollNumber, classRoomId, cleanSection, cleanVersion, pageable
+        );
+
+        return studentPage.stream()
+                .map(StudentMapper::mapToStudentResponseDto)
+                .collect(Collectors.toList());
+    }
+
+    public long getTotalFilterCount(Integer rollNumber, Long classRoomId, String section, String version) {
+        // Convert empty strings to null for proper JPQL query handling
+        String cleanSection = (section != null && section.isEmpty()) ? null : section;
+        String cleanVersion = (version != null && version.isEmpty()) ? null : version;
+
+        PageRequest pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by(Sort.Direction.DESC, "id"));
+        Page<Student> studentPage = studentRepository.filterStudents(
+                rollNumber, classRoomId, cleanSection, cleanVersion, pageable
+        );
+        return studentPage.getTotalElements();
     }
 
     //   Student Filter

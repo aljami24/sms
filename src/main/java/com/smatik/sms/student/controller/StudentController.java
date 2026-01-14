@@ -122,16 +122,53 @@ public class StudentController {
     //   All Student List View
     @GetMapping("/list")
     public String getAllStd(@RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "5") int pageSize, Model model) {
-        Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Student> studentPage = studentRepository.findAll(pageable);
+                            @RequestParam(defaultValue = "5") int pageSize,
+                            @RequestParam(required = false) String rollNumber,
+                            @RequestParam(required = false) Long className,
+                            @RequestParam(required = false) String section,
+                            @RequestParam(required = false) String version,
+                            Model model) {
 
-        List<StudentResponseDto> getStudentAll = studentService.getAllStudent(
-                page, pageSize, "id", "DESC");
+        List<StudentResponseDto> getStudentAll;
+        long totalPages;
+
+        // Convert empty strings to null for proper filtering
+        String cleanSection = (section != null && section.isEmpty()) ? null : section;
+        String cleanVersion = (version != null && version.isEmpty()) ? null : version;
+        Integer rollNum = (rollNumber != null && !rollNumber.isEmpty()) ? Integer.valueOf(rollNumber) : null;
+
+        // Check if any filter is applied
+        boolean hasFilters = rollNum != null || className != null || cleanSection != null || cleanVersion != null;
+
+        if (hasFilters) {
+            // Apply filters
+            getStudentAll = studentService.filterStudents(
+                    rollNum, className, cleanSection, cleanVersion, page, pageSize);
+
+            long totalElements = studentService.getTotalFilterCount(
+                    rollNum, className, cleanSection, cleanVersion);
+            totalPages = (long) Math.ceil((double) totalElements / pageSize);
+        } else {
+            // No filters - get all students
+            Pageable pageable = PageRequest.of(page, pageSize);
+            Page<Student> studentPage = studentRepository.findAll(pageable);
+            totalPages = studentPage.getTotalPages();
+
+            getStudentAll = studentService.getAllStudent(
+                    page, pageSize, "id", "DESC");
+        }
+
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", studentPage.getTotalPages());
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("getStudentAll", getStudentAll);
         model.addAttribute("title", "Student List");
+        model.addAttribute("classRoom", classRoomRepository.findAll());
+
+        // Preserve filter values
+        model.addAttribute("rollNumber", rollNumber);
+        model.addAttribute("className", className);
+        model.addAttribute("section", section);
+        model.addAttribute("version", version);
         return "student/studentList";
     }
 
