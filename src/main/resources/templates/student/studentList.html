@@ -63,20 +63,22 @@
     <!-- ===== Filter Section ===== -->
     <div class="card filter-card shadow-sm border-0 mb-4">
         <div class="card-body">
-            <form method="get" th:action="@{student/roll}">
+            <form method="get" th:action="@{/student/list}">
                 <div class="row g-3">
 
                     <div class="col-md-2">
                         <input class="form-control" name="rollNumber" placeholder="Student Roll"
                                type="text"
-                               value="">
+                               th:value="${rollNumber}">
                     </div>
 
                     <div class="col-md-2">
                         <select class="form-select" name="className">
                             <option value="">Class</option>
-                            <option
-                                    value="">
+                            <option th:each="classRoom : ${classRoom}"
+                                    th:value="${classRoom.id}"
+                                    th:text="${classRoom.name}"
+                                    th:selected="${className != null && className == classRoom.id}">
                             </option>
                         </select>
                     </div>
@@ -84,30 +86,28 @@
                     <div class="col-md-2">
                         <select class="form-select" name="section">
                             <option value="">Section</option>
-                            <option>A</option>
-                            <option>B</option>
+                            <option value="A" th:selected="${section == 'A'}">A</option>
+                            <option value="B" th:selected="${section == 'B'}">B</option>
                         </select>
                     </div>
 
                     <div class="col-md-2">
                         <select class="form-select" name="version">
                             <option value="">Version</option>
-                            <option>Bangla</option>
-                            <option>English</option>
+                            <option value="Bangla" th:selected="${version == 'Bangla'}">Bangla</option>
+                            <option value="English" th:selected="${version == 'English'}">English</option>
                         </select>
                     </div>
 
                     <div class="col-md-2">
-                        <input class="form-control" name="rollOrReg"
-                               placeholder="Roll / Reg"
-                               type="text"
-                               value="">
-                    </div>
-
-                    <div class="col-md-2 d-grid">
-                        <button class="btn btn-success">
-                            <i class="bi bi-search me-1"></i> Search
-                        </button>
+                        <div class="d-grid gap-2 d-md-flex">
+                            <button class="btn btn-success flex-grow-1">
+                                <i class="bi bi-search me-1"></i> Search
+                            </button>
+                            <a th:href="@{/student/list}" class="btn btn-outline-secondary flex-grow-1">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                            </a>
+                        </div>
                     </div>
 
                 </div>
@@ -133,7 +133,7 @@
                     <tbody>
                     <tr th:each="student,stat : ${getStudentAll}">
                         <!-- Serial Number with pagination -->
-                        <td class="text-center" th:text="${stat.count}"></td>
+                        <td class="text-center" th:text="${currentPage * pageSize + stat.count}"></td>
                         <td>
                             <span><strong>Roll :</strong> <span th:text="${student.roll}"></span></span><br>
                             <span><strong>Name :</strong> <a class="text-decoration-none link-success link-underline-opacity-0 link-underline-opacity-100-hover"
@@ -181,14 +181,14 @@
     <nav aria-label="Page navigation example " class="mt-2">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{/student/list(page = ${currentPage - 1})}">Previous</a>
+                <a class="page-link" th:href="@{/student/list(page=${currentPage - 1}, rollNumber=${rollNumber}, className=${className}, section=${section}, version=${version})}">Previous</a>
             </li>
             <li class="page-item" th:classappend="${i == currentPage} ? 'active' : ''"
                 th:each=" i : ${#numbers.sequence(0,totalPages -1)}">
-                <a class="page-link" th:href="@{/student/list(page = ${i})}" th:text="${i + 1}">1</a>
+                <a class="page-link" th:href="@{/student/list(page=${i}, rollNumber=${rollNumber}, className=${className}, section=${section}, version=${version})}" th:text="${i + 1}">1</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/student/list(page = ${currentPage + 1})}">Next</a>
+                <a class="page-link" th:href="@{/student/list(page=${currentPage + 1}, rollNumber=${rollNumber}, className=${className}, section=${section}, version=${version})}">Next</a>
             </li>
         </ul>
     </nav>

@@ -45,6 +45,12 @@ databaseChangeLog:
       file: user-role/table/user-role.yml
       relativeToChangelogFile: true
 
+  - include:
+      file: academicStructure/tables/year.yml
+      relativeToChangelogFile: true
 
+  - include:
+      file: student/tables/student-academic-record.yml
+      relativeToChangelogFile: true
 
 
