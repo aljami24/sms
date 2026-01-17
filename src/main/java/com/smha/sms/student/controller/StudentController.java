@@ -159,6 +159,7 @@ public class StudentController {
         }
 
         model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("getStudentAll", getStudentAll);
         model.addAttribute("title", "Student List");
@@ -177,7 +178,7 @@ public class StudentController {
     public String getStudentByRollNumber(@RequestParam("rollNumber") int rollNumber, Model model) {
         try {
             StudentResponseDto student = studentService.getByRoll(rollNumber);
-            model.addAttribute("getStudentAll", List.of(student)); // List হিসেবে দিতে হবে
+            model.addAttribute("getStudentAll", List.of(student));
         } catch (NoSuchElementException e) {
             model.addAttribute("getStudentAll", List.of());
             model.addAttribute("errorMessage", "No student found with Roll: " + rollNumber);
@@ -248,4 +249,5 @@ public class StudentController {
         return "redirect:/student/list?page=" + page + "&pageSize=" + pageSize + "#student-" + id;
     }
 
+//    Old Student Form View
 }

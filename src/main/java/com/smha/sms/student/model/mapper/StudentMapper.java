@@ -32,8 +32,6 @@ public class StudentMapper {
         student.setIdentityType(studentRequestDto.getIdentityType());
         student.setPhotoDir(studentRequestDto.getPhotoDir());
         student.setNidDir(studentRequestDto.getNidDir());
-        // Note: classroomVersionSectionsId is set in the service layer, not here
-
 
         if (student.getAddresses() == null) {
             // SAVE case (new entity)
