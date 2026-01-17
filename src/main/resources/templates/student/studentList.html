@@ -99,10 +99,15 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2 d-grid">
-                        <button class="btn btn-success">
-                            <i class="bi bi-search me-1"></i> Search
-                        </button>
+                    <div class="col-md-2">
+                        <div class="d-grid gap-2 d-md-flex">
+                            <button class="btn btn-success flex-grow-1">
+                                <i class="bi bi-search me-1"></i> Search
+                            </button>
+                            <a th:href="@{/student/list}" class="btn btn-outline-secondary flex-grow-1">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                            </a>
+                        </div>
                     </div>
 
                 </div>
@@ -128,7 +133,7 @@
                     <tbody>
                     <tr th:each="student,stat : ${getStudentAll}">
                         <!-- Serial Number with pagination -->
-                        <td class="text-center" th:text="${stat.count}"></td>
+                        <td class="text-center" th:text="${currentPage * pageSize + stat.count}"></td>
                         <td>
                             <span><strong>Roll :</strong> <span th:text="${student.roll}"></span></span><br>
                             <span><strong>Name :</strong> <a class="text-decoration-none link-success link-underline-opacity-0 link-underline-opacity-100-hover"

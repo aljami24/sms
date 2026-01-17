@@ -85,8 +85,8 @@ public class StudentService {
     public List<StudentResponseDto> getAllStudent(int page, int pageSize, String sortField, String sortOrder) {
         Sort sort = Sort.by(Sort.Direction.valueOf(sortOrder), sortField);
         PageRequest pageable = PageRequest.of(page, pageSize, sort);
-        AtomicInteger serialNo = new AtomicInteger(page * pageSize + 1);
-        return studentRepository.findAll().stream().map(StudentMapper::mapToStudentResponseDto).collect(Collectors.toList());
+        Page<Student> studentPage = studentRepository.findAll(pageable);
+        return studentPage.stream().map(StudentMapper::mapToStudentResponseDto).collect(Collectors.toList());
     }
 
     //   Filter Students Method
@@ -147,6 +147,10 @@ public class StudentService {
         Student existingStudent = studentRepository.findById(studentRequestDto.getId())
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
+        // Preserve existing document paths if not being updated
+        String existingPhotoDir = existingStudent.getPhotoDir();
+        String existingNidDir = existingStudent.getNidDir();
+
         // Get ClassRoom-Version-Section
         ClassroomVersionSection cvs = classroomVersionSectionRepository
                 .findByClassRoomIdAndVersionIdAndSectionId(
@@ -156,6 +160,15 @@ public class StudentService {
                 ).orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section"));
 
         StudentMapper.mapToStudentEntity(studentRequestDto, existingStudent);
+
+        // Restore document paths if they were null in the request (not being updated)
+        if (studentRequestDto.getPhotoDir() == null || studentRequestDto.getPhotoDir().isEmpty()) {
+            existingStudent.setPhotoDir(existingPhotoDir);
+        }
+        if (studentRequestDto.getNidDir() == null || studentRequestDto.getNidDir().isEmpty()) {
+            existingStudent.setNidDir(existingNidDir);
+        }
+
         // Set CVS after mapper to avoid overwriting with null
         existingStudent.setClassroomVersionSectionsId(cvs);
         Student updatedStudent = studentRepository.save(existingStudent);
