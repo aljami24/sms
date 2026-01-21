@@ -16,10 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static com.smha.sms.common.constants.Constants.STUDENT_NID_DOB_PATH;
 import static com.smha.sms.common.constants.Constants.STUDENT_PHOTO_PATH;
@@ -57,14 +54,15 @@ public class StudentService {
                         studentRequestDto.getSectionId()
                 ).orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section"));
 
-        student.setClassroomVersionSectionsId(cvs);
+        // Add academic record from the form selection
+        StudentMapper.addAcademicRecordToStudent(student, cvs, studentRequestDto.getYearId());
 
-        // Generate unique 4-digit roll BEFORE saving
-        int roll;
+        // Generate unique 6-digit regi BEFORE saving
+        int regiNo;
         do {
-            roll = ThreadLocalRandom.current().nextInt(1000, 10000);
-        } while (studentRepository.existsByRoll(roll));
-        student.setRoll(roll);
+            regiNo = ThreadLocalRandom.current().nextInt(100000, 1000000);
+        } while (studentRepository.existsByRoll(regiNo));
+        student.setRoll(regiNo);
 
         // Save student → ID generate হবে
         studentRepository.save(student);
@@ -82,15 +80,15 @@ public class StudentService {
     }
 
     //   All Student Show Method
-    public List<StudentResponseDto> getAllStudent(int page, int pageSize, String sortField, String sortOrder) {
+    public Page<StudentResponseDto> getAllStudent(int page, int pageSize, String sortField, String sortOrder) {
         Sort sort = Sort.by(Sort.Direction.valueOf(sortOrder), sortField);
         PageRequest pageable = PageRequest.of(page, pageSize, sort);
         Page<Student> studentPage = studentRepository.findAll(pageable);
-        return studentPage.stream().map(StudentMapper::mapToStudentResponseDto).collect(Collectors.toList());
+        return studentPage.map(StudentMapper::mapToStudentResponseDto);
     }
 
     //   Filter Students Method
-    public List<StudentResponseDto> filterStudents(
+    public Page<StudentResponseDto> filterStudents(
             Integer rollNumber,
             Long classRoomId,
             String section,
@@ -107,9 +105,8 @@ public class StudentService {
                 rollNumber, classRoomId, cleanSection, cleanVersion, pageable
         );
 
-        return studentPage.stream()
-                .map(StudentMapper::mapToStudentResponseDto)
-                .collect(Collectors.toList());
+        return studentPage
+                .map(StudentMapper::mapToStudentResponseDto);
     }
 
     public long getTotalFilterCount(Integer rollNumber, Long classRoomId, String section, String version) {
@@ -143,7 +140,8 @@ public class StudentService {
     }
 
     //   Student Update
-    public StudentResponseDto updateStudent(StudentRequestDto studentRequestDto) {
+    @Transactional
+    public void updateStudent(StudentRequestDto studentRequestDto) {
         Student existingStudent = studentRepository.findById(studentRequestDto.getId())
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
@@ -159,7 +157,11 @@ public class StudentService {
                         studentRequestDto.getSectionId()
                 ).orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section"));
 
+        // Map basic fields and addresses
         StudentMapper.mapToStudentEntity(studentRequestDto, existingStudent);
+
+        // Add/update academic record from the form selection
+        StudentMapper.addAcademicRecordToStudent(existingStudent, cvs, studentRequestDto.getYearId());
 
         // Restore document paths if they were null in the request (not being updated)
         if (studentRequestDto.getPhotoDir() == null || studentRequestDto.getPhotoDir().isEmpty()) {
@@ -169,10 +171,8 @@ public class StudentService {
             existingStudent.setNidDir(existingNidDir);
         }
 
-        // Set CVS after mapper to avoid overwriting with null
-        existingStudent.setClassroomVersionSectionsId(cvs);
         Student updatedStudent = studentRepository.save(existingStudent);
-        return StudentMapper.mapToStudentResponseDto(updatedStudent);
+        StudentMapper.mapToStudentResponseDto(updatedStudent);
     }
 
 
