@@ -1,10 +1,10 @@
 package com.smha.sms.student.model.dto.response;
 
-import com.smha.sms.academic.model.entity.ClassroomVersionSection;
 import com.smha.sms.common.address.dto.AddressResponseDto;
 import com.smha.sms.common.enums.Gender;
 import com.smha.sms.common.enums.IdentityType;
 import com.smha.sms.student.model.dto.request.FileUpload;
+import com.smha.sms.student.model.entity.StudentAcademicRecord;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,15 +25,25 @@ public class StudentResponseDto extends FileUpload {
     private Long id;
     private String name;
     private Integer roll;
+    private Integer registration;
     private String fatherName;
     private String motherName;
     private Gender gender;
     private LocalDate dob;
     private IdentityType identityType;
     private String identityNumber;
+    // IDs for form binding
     private Long classRoomId;
     private Long versionId;
     private Long sectionId;
-    private ClassroomVersionSection classroomVersionSectionsId;
+
+    // Names for display in templates
+    private String classRoomName;
+    private String versionName;
+    private String sectionName;
+    private String yearName;
+
     private List<AddressResponseDto> addresses = new ArrayList<>();
+    private List<StudentAcademicRecord> studentAcademicRecords = new ArrayList<>();
+
 }

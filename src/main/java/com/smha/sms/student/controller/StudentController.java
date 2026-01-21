@@ -2,10 +2,7 @@ package com.smha.sms.student.controller;
 
 import com.smha.sms.academic.model.entity.Section;
 import com.smha.sms.academic.model.entity.Version;
-import com.smha.sms.academic.model.repository.ClassRoomRepository;
-import com.smha.sms.academic.model.repository.ClassroomVersionSectionRepository;
-import com.smha.sms.academic.model.repository.SectionRepository;
-import com.smha.sms.academic.model.repository.VersionRepository;
+import com.smha.sms.academic.model.repository.*;
 import com.smha.sms.common.address.dto.AddressRequestDto;
 import com.smha.sms.common.address.entity.District;
 import com.smha.sms.common.address.entity.Division;
@@ -49,6 +46,7 @@ public class StudentController {
     private final ClassRoomRepository classRoomRepository;
     private final VersionRepository versionRepository;
     private final SectionRepository sectionRepository;
+    private final YearRepository yearRepository;
     private final DivisionRepository divisionRepository;
     private final DistrictRepository districtRepository;
     private final PoliceStationRepository policeStationRepository;
@@ -70,6 +68,7 @@ public class StudentController {
         model.addAttribute("classRoom", classRoomRepository.findAll());
         model.addAttribute("version", versionRepository.findAll());
         model.addAttribute("section", sectionRepository.findAll());
+        model.addAttribute("years", yearRepository.findAll());
         return "student/studentForm";
     }
 
@@ -122,14 +121,14 @@ public class StudentController {
     //   All Student List View
     @GetMapping("/list")
     public String getAllStd(@RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "5") int pageSize,
+                            @RequestParam(defaultValue = "10") int pageSize,
                             @RequestParam(required = false) String rollNumber,
                             @RequestParam(required = false) Long className,
                             @RequestParam(required = false) String section,
                             @RequestParam(required = false) String version,
                             Model model) {
 
-        List<StudentResponseDto> getStudentAll;
+        Page<StudentResponseDto> getStudentAll;
         long totalPages;
 
         // Convert empty strings to null for proper filtering
@@ -204,14 +203,15 @@ public class StudentController {
         return "redirect:/student/list";
     }
 
+    //    Update Form Show
     @GetMapping("/update/{id}")
     public String updateStudent(@PathVariable Long id,
                                 @RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "5") int pageSize,
+                                @RequestParam(defaultValue = "10") int pageSize,
                                 Model model) {
 
         Student student = studentRepository.findById(id).orElseThrow();
-        StudentRequestDto studentRequestDto = StudentMapper.mapToStudentRequsetDto(student);
+        StudentRequestDto studentRequestDto = StudentMapper.mapToStudentRequestDto(student);
 
         model.addAttribute("studentForm", studentRequestDto);
         model.addAttribute("genders", Gender.values());
@@ -224,6 +224,7 @@ public class StudentController {
         model.addAttribute("classRoom", classRoomRepository.findAll());
         model.addAttribute("version", versionRepository.findAll());
         model.addAttribute("section", sectionRepository.findAll());
+        model.addAttribute("years", yearRepository.findAll());
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", pageSize);
         return "student/studentForm";
@@ -234,7 +235,7 @@ public class StudentController {
                                 @ModelAttribute("studentForm") StudentRequestDto studentRequestDto,
                                 @RequestParam(defaultValue = "0") int page,
                                 BindingResult bindingResult, Model model,
-                                @RequestParam(defaultValue = "5") int pageSize) {
+                                @RequestParam(defaultValue = "10") int pageSize) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("genders", Gender.values());
             model.addAttribute("identityTypes", IdentityType.values());
