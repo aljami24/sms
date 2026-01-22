@@ -123,6 +123,7 @@ public class StudentController {
     public String getAllStd(@RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "10") int pageSize,
                             @RequestParam(required = false) String rollNumber,
+                            @RequestParam(required = false) String registrationNumber,
                             @RequestParam(required = false) Long className,
                             @RequestParam(required = false) String section,
                             @RequestParam(required = false) String version,
@@ -135,17 +136,18 @@ public class StudentController {
         String cleanSection = (section != null && section.isEmpty()) ? null : section;
         String cleanVersion = (version != null && version.isEmpty()) ? null : version;
         Integer rollNum = (rollNumber != null && !rollNumber.isEmpty()) ? Integer.valueOf(rollNumber) : null;
+        Integer registrationNum = (registrationNumber != null && !registrationNumber.isEmpty()) ? Integer.valueOf(registrationNumber) : null;
 
         // Check if any filter is applied
-        boolean hasFilters = rollNum != null || className != null || cleanSection != null || cleanVersion != null;
+        boolean hasFilters = rollNum != null || registrationNum != null || className != null || cleanSection != null || cleanVersion != null;
 
         if (hasFilters) {
             // Apply filters
             getStudentAll = studentService.filterStudents(
-                    rollNum, className, cleanSection, cleanVersion, page, pageSize);
+                    rollNum, registrationNum, className, cleanSection, cleanVersion, page, pageSize);
 
             long totalElements = studentService.getTotalFilterCount(
-                    rollNum, className, cleanSection, cleanVersion);
+                    rollNum, registrationNum, className, cleanSection, cleanVersion);
             totalPages = (long) Math.ceil((double) totalElements / pageSize);
         } else {
             // No filters - get all students
@@ -166,6 +168,7 @@ public class StudentController {
 
         // Preserve filter values
         model.addAttribute("rollNumber", rollNumber);
+        model.addAttribute("registrationNumber", registrationNumber);
         model.addAttribute("className", className);
         model.addAttribute("section", section);
         model.addAttribute("version", version);

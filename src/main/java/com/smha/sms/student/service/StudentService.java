@@ -1,7 +1,9 @@
 package com.smha.sms.student.service;
 
 import com.smha.sms.academic.model.entity.ClassroomVersionSection;
+import com.smha.sms.academic.model.entity.Year;
 import com.smha.sms.academic.model.repository.ClassroomVersionSectionRepository;
+import com.smha.sms.academic.model.repository.YearRepository;
 import com.smha.sms.common.util.Helper;
 import com.smha.sms.student.model.dto.request.StudentRequestDto;
 import com.smha.sms.student.model.dto.response.StudentResponseDto;
@@ -34,6 +36,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ClassroomVersionSectionRepository classroomVersionSectionRepository;
+    private final YearRepository yearRepository;
 
     @Value("${file.upload-directory}")
     private String uploadDir;
@@ -57,12 +60,27 @@ public class StudentService {
         // Add academic record from the form selection
         StudentMapper.addAcademicRecordToStudent(student, cvs, studentRequestDto.getYearId());
 
-        // Generate unique 6-digit regi BEFORE saving
-        int regiNo;
+        // Generate sequential roll number based on class and version
+        Integer maxRoll = studentRepository.findMaxRollByClassRoomAndVersion(
+                studentRequestDto.getClassRoomId(),
+                studentRequestDto.getVersionId()
+        );
+        int nextRoll = (maxRoll == null ? 0 : maxRoll) + 1;
+        student.setRoll(nextRoll);
+
+        // Generate 9-digit registration: Year (4 digits) + 5 random digits
+        Year year = yearRepository.findById(studentRequestDto.getYearId())
+                .orElseThrow(() -> new RuntimeException("Year not found"));
+        int yearValue = Integer.parseInt(year.getName());
+
+        int registration;
         do {
-            regiNo = ThreadLocalRandom.current().nextInt(100000, 1000000);
-        } while (studentRepository.existsByRoll(regiNo));
-        student.setRoll(regiNo);
+            // Generate 5 random digits (10000 to 99999)
+            int randomDigits = ThreadLocalRandom.current().nextInt(10000, 100000);
+            // Combine: year * 100000 + randomDigits to get 9-digit number
+            registration = (yearValue * 100000) + randomDigits;
+        } while (studentRepository.existsByRegistration(registration));
+        student.setRegistration(registration);
 
         // Save student → ID generate হবে
         studentRepository.save(student);
@@ -90,6 +108,7 @@ public class StudentService {
     //   Filter Students Method
     public Page<StudentResponseDto> filterStudents(
             Integer rollNumber,
+            Integer registrationNumber,
             Long classRoomId,
             String section,
             String version,
@@ -102,21 +121,21 @@ public class StudentService {
 
         PageRequest pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
         Page<Student> studentPage = studentRepository.filterStudents(
-                rollNumber, classRoomId, cleanSection, cleanVersion, pageable
+                rollNumber, registrationNumber, classRoomId, cleanSection, cleanVersion, pageable
         );
 
         return studentPage
                 .map(StudentMapper::mapToStudentResponseDto);
     }
 
-    public long getTotalFilterCount(Integer rollNumber, Long classRoomId, String section, String version) {
+    public long getTotalFilterCount(Integer rollNumber, Integer registrationNumber, Long classRoomId, String section, String version) {
         // Convert empty strings to null for proper JPQL query handling
         String cleanSection = (section != null && section.isEmpty()) ? null : section;
         String cleanVersion = (version != null && version.isEmpty()) ? null : version;
 
         PageRequest pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by(Sort.Direction.DESC, "id"));
         Page<Student> studentPage = studentRepository.filterStudents(
-                rollNumber, classRoomId, cleanSection, cleanVersion, pageable
+                rollNumber, registrationNumber, classRoomId, cleanSection, cleanVersion, pageable
         );
         return studentPage.getTotalElements();
     }
@@ -171,8 +190,7 @@ public class StudentService {
             existingStudent.setNidDir(existingNidDir);
         }
 
-        Student updatedStudent = studentRepository.save(existingStudent);
-        StudentMapper.mapToStudentResponseDto(updatedStudent);
+        studentRepository.save(existingStudent);
     }
 
 
