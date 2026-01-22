@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<div layout:fragment="content">
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
 
     <!-- ===== Page Header ===== -->
     <div class="mb-4 d-flex align-items-center ps-4 gap-2">
@@ -26,7 +26,7 @@
 
             <!-- ================= Employee Information ================= -->
             <div class="mb-5">
-                <div class="section-title ">
+                <div class="section-title mb-2 fw-semibold">
                     <i class="bi bi-person-badge"></i>
                     Employee Information
                 </div>
@@ -35,12 +35,32 @@
 
                     <div class="col-md-4">
                         <label class="form-label">Employee id</label>
-                        <input type="number" class="form-control" th:field="*{employeeId}">
+                        <div class="position-relative">
+                            <input class="form-control" placeholder="Employee id"
+                                   th:field="*{employeeId}"
+                                   type="number"
+                                   oninput="toggleClearIcon(this)">
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
+                                  style="cursor:pointer"
+                                  onclick="clearInput(this)">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </span>
+                        </div>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Employee Name</label>
-                        <input type="text" class="form-control" th:field="*{name}">
+                        <div class="position-relative">
+                            <input class="form-control" placeholder="Employee Name"
+                                   th:field="*{name}"
+                                   type="text"
+                                   oninput="toggleClearIcon(this)">
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
+                                  style="cursor:pointer"
+                                  onclick="clearInput(this)">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </span>
+                        </div>
                     </div>
 
                     <div class="col-md-4">
@@ -71,12 +91,32 @@
 
                     <div class="col-md-4">
                         <label class="form-label">Salary</label>
-                        <input type="number" step="0.01" class="form-control" th:field="*{salary}">
+                        <div class="position-relative">
+                            <input class="form-control" placeholder="Salary"
+                                   th:field="*{salary}"
+                                   type="number"
+                                   oninput="toggleClearIcon(this)">
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
+                                  style="cursor:pointer"
+                                  onclick="clearInput(this)">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </span>
+                        </div>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" th:field="*{phoneNumber}">
+                        <div class="position-relative">
+                            <input class="form-control" placeholder="Phone Number"
+                                   th:field="*{phoneNumber}"
+                                   type="text"
+                                   oninput="toggleClearIcon(this)">
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
+                                  style="cursor:pointer"
+                                  onclick="clearInput(this)">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </span>
+                        </div>
                     </div>
 
                     <div class="col-md-4">
@@ -89,7 +129,17 @@
 
                     <div class="col-md-4">
                         <label class="form-label">Identity Number</label>
-                        <input type="text" class="form-control" th:field="*{identityNumber}">
+                        <div class="position-relative">
+                            <input class="form-control" placeholder="Identity Number"
+                                   th:field="*{identityNumber}"
+                                   type="text"
+                                   oninput="toggleClearIcon(this)">
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
+                                  style="cursor:pointer"
+                                  onclick="clearInput(this)">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </span>
+                        </div>
                     </div>
 
                 </div>
@@ -98,7 +148,7 @@
             <!-- ================= Address Information ================= -->
             <div class="mb-5">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="section-title mb-0">
+                    <div class="section-title fw-semibold mb-0">
                         <i class="bi bi-geo-alt-fill"></i>
                         Address Information
                     </div>
@@ -170,10 +220,20 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4">
                                 <label class="form-label">Village</label>
-                                <input class="form-control"
-                                       th:field="*{addressRequestDto[__${stat.index}__].village}">
+                                <div class="position-relative">
+                                    <input type="text"
+                                           class="form-control pe-5"
+                                           placeholder="Village"
+                                           th:field="*{addressRequestDto[__${stat.index}__].village}"
+                                           oninput="toggleClearIcon(this)">
+                                    <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
+                                          style="cursor:pointer"
+                                          onclick="clearInput(this)">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
@@ -183,7 +243,7 @@
 
             <!-- ================= Document Upload ================= -->
             <div class="mb-4">
-                <div class="section-title ">
+                <div class="section-title mb-2 fw-semibold">
                     <i class="bi bi-upload"></i>
                     Documents
                 </div>
@@ -388,7 +448,23 @@
             }
         }
     </script>
+    <script>
+        function toggleClearIcon(input) {
+            const icon = input.nextElementSibling;
+            if (input.value.trim() !== '') {
+                icon.classList.remove('d-none');
+            } else {
+                icon.classList.add('d-none');
+            }
+        }
 
+        function clearInput(icon) {
+            const input = icon.previousElementSibling;
+            input.value = '';
+            icon.classList.add('d-none');
+            input.focus();
+        }
+    </script>
 
 </div>
 </body>
