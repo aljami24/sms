@@ -103,6 +103,14 @@
                         </select>
                     </div>
 
+                    <div class="col-md-4">
+                        <label class="form-label" for="year">Year</label>
+                        <select class="form-select" th:field="*{yearId}" id="year">
+                            <option value="">--Select Year--</option>
+                            <option th:each="y : ${years}" th:text="${y.name}" th:value="${y.id}"></option>
+                        </select>
+                    </div>
+
 
                 </div>
             </div>

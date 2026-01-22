@@ -1,6 +1,5 @@
 package com.smha.sms.student.model.entity;
 
-import com.smha.sms.academic.model.entity.ClassroomVersionSection;
 import com.smha.sms.common.address.entity.Address;
 import com.smha.sms.common.entity.BaseEntity;
 import com.smha.sms.common.enums.Gender;
@@ -30,6 +29,7 @@ import java.util.Objects;
 public class Student extends BaseEntity {
 
     private Integer roll;
+    private Integer registration;
     private String name;
     private String fatherName;
     private String motherName;
@@ -39,21 +39,19 @@ public class Student extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private IdentityType identityType;
     private String identityNumber;
-
-    @ManyToOne
-    @JoinColumn(name = "classroom_version_sections_id")
-    private ClassroomVersionSection classroomVersionSectionsId;
     private String photoDir;
     private String nidDir;
-
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentAcademicRecord> studentAcademicRecords;
 
     @Override
     public String toString() {
         return "Student{" +
                 "id=" + getId() +
                 ", roll=" + roll +
+                ", registration=" + registration +
                 ", name='" + name + '\'' +
                 ", fatherName='" + fatherName + '\'' +
                 ", motherName='" + motherName + '\'' +
@@ -61,10 +59,10 @@ public class Student extends BaseEntity {
                 ", dob=" + dob +
                 ", identityType=" + identityType +
                 ", identityNumber='" + identityNumber + '\'' +
-                ", classroomVersionSectionsId=" + classroomVersionSectionsId +
                 ", photoDir='" + photoDir + '\'' +
                 ", nidDir='" + nidDir + '\'' +
                 ", addresses=" + addresses +
+                ", studentAcademicRecords=" + studentAcademicRecords +
                 '}';
     }
 
@@ -72,11 +70,11 @@ public class Student extends BaseEntity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return Objects.equals(getId(), student.getId()) && Objects.equals(roll, student.roll) && Objects.equals(name, student.name) && Objects.equals(fatherName, student.fatherName) && Objects.equals(motherName, student.motherName) && gender == student.gender && Objects.equals(dob, student.dob) && identityType == student.identityType && Objects.equals(identityNumber, student.identityNumber) && Objects.equals(classroomVersionSectionsId, student.classroomVersionSectionsId) && Objects.equals(photoDir, student.photoDir) && Objects.equals(nidDir, student.nidDir) && Objects.equals(addresses, student.addresses);
+        return Objects.equals(id, student.id) && Objects.equals(roll, student.roll) && Objects.equals(registration, student.registration) && Objects.equals(name, student.name) && Objects.equals(fatherName, student.fatherName) && Objects.equals(motherName, student.motherName) && gender == student.gender && Objects.equals(dob, student.dob) && identityType == student.identityType && Objects.equals(identityNumber, student.identityNumber) && Objects.equals(photoDir, student.photoDir) && Objects.equals(nidDir, student.nidDir) && Objects.equals(addresses, student.addresses) && Objects.equals(studentAcademicRecords, student.studentAcademicRecords);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), roll, name, fatherName, motherName, gender, dob, identityType, identityNumber, classroomVersionSectionsId, photoDir, nidDir, addresses);
+        return Objects.hash(id, roll, registration, name, fatherName, motherName, gender, dob, identityType, identityNumber, photoDir, nidDir, addresses, studentAcademicRecords);
     }
 }
