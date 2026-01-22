@@ -41,6 +41,23 @@ databaseChangeLog:
                   name: employ_id
                   type: BIGINT
 
+              # BaseEntity ফিল্ডগুলো
+              - column:
+                  name: created_at
+                  type: timestamp
+
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
         # FK → division
         - addForeignKeyConstraint:
             baseTableName: address

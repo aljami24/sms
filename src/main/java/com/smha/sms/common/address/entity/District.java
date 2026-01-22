@@ -1,6 +1,7 @@
 package com.smha.sms.common.address.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.smha.sms.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,14 +19,13 @@ import java.util.Objects;
 @Setter
 @Entity
 @Table(name = "districts")
-public class District {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class District extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, unique = true)
+    private String nameBn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "division_id", nullable = false)
@@ -37,8 +37,9 @@ public class District {
     @Override
     public String toString() {
         return "District{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", name='" + name + '\'' +
+                ", nameBn" + nameBn + '\'' +
                 ", division=" + division +
                 ", active=" + active +
                 '}';
@@ -48,12 +49,12 @@ public class District {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         District district = (District) o;
-        return Objects.equals(id, district.id) && Objects.equals(name, district.name) && Objects.equals(division, district.division) && Objects.equals(active, district.active);
+        return Objects.equals(getId(), district.getId()) && Objects.equals(name, district.name) && Objects.equals(nameBn, district.nameBn) && Objects.equals(division, district.division) && Objects.equals(active, district.active);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, division, active);
+        return Objects.hash(getId(), name, nameBn, division, active);
     }
 }
 

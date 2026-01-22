@@ -1,5 +1,6 @@
 package com.smha.sms.user.model.entity;
 
+import com.smha.sms.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,11 +17,8 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String userName;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER)

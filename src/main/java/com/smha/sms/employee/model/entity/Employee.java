@@ -1,6 +1,7 @@
 package com.smha.sms.employee.model.entity;
 
 import com.smha.sms.common.address.entity.Address;
+import com.smha.sms.common.entity.BaseEntity;
 import com.smha.sms.common.enums.EmployeeType;
 import com.smha.sms.common.enums.Gender;
 import com.smha.sms.common.enums.IdentityType;
@@ -22,17 +23,15 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Employee {
+public class Employee extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private Long employeeId;
     private String name;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private LocalDate dob;
+
     private LocalDate joiningDate;
     private Double salary;
 
@@ -58,7 +57,7 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", employeeId=" + employeeId +
                 ", name='" + name + '\'' +
                 ", gender=" + gender +
@@ -80,11 +79,11 @@ public class Employee {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return Objects.equals(id, employee.id) && Objects.equals(employeeId, employee.employeeId) && Objects.equals(name, employee.name) && gender == employee.gender && Objects.equals(dob, employee.dob) && Objects.equals(joiningDate, employee.joiningDate) && Objects.equals(salary, employee.salary) && employeeType == employee.employeeType && identityType == employee.identityType && Objects.equals(identityNumber, employee.identityNumber) && Objects.equals(phoneNumber, employee.phoneNumber) && Objects.equals(photoDir, employee.photoDir) && Objects.equals(nidDir, employee.nidDir) && Objects.equals(active, employee.active) && Objects.equals(address, employee.address);
+        return Objects.equals(getId(), employee.getId()) && Objects.equals(employeeId, employee.employeeId) && Objects.equals(name, employee.name) && gender == employee.gender && Objects.equals(dob, employee.dob) && Objects.equals(joiningDate, employee.joiningDate) && Objects.equals(salary, employee.salary) && employeeType == employee.employeeType && identityType == employee.identityType && Objects.equals(identityNumber, employee.identityNumber) && Objects.equals(phoneNumber, employee.phoneNumber) && Objects.equals(photoDir, employee.photoDir) && Objects.equals(nidDir, employee.nidDir) && Objects.equals(active, employee.active) && Objects.equals(address, employee.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, employeeId, name, gender, dob, joiningDate, salary, employeeType, identityType, identityNumber, phoneNumber, photoDir, nidDir, active, address);
+        return Objects.hash(getId(), employeeId, name, gender, dob, joiningDate, salary, employeeType, identityType, identityNumber, phoneNumber, photoDir, nidDir, active, address);
     }
 }

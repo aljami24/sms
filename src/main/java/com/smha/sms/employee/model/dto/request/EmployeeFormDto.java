@@ -7,6 +7,7 @@ import com.smha.sms.common.enums.IdentityType;
 import com.smha.sms.student.model.dto.request.FileUpload;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,7 +20,9 @@ public class EmployeeFormDto extends FileUpload {
     private Long employeeId;
     private String name;
     private Gender gender;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dob;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate joiningDate;
     private Double salary;
     private EmployeeType employeeType;
