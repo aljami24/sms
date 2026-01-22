@@ -13,10 +13,10 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.smatik.sms</groupId>
+    <groupId>com.smha.sms</groupId>
     <artifactId>sms</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Smatik SMS</name>
+    <name>smha SMS</name>
     <description>School Management System</description>
 
     <properties>

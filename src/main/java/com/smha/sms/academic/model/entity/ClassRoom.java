@@ -1,5 +1,6 @@
 package com.smha.sms.academic.model.entity;
 
+import com.smha.sms.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,11 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClassRoom {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ClassRoom extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String name; // Class 1, Class 2 ...

@@ -1,5 +1,6 @@
 package com.smha.sms.common.address.entity;
 
+import com.smha.sms.common.entity.BaseEntity;
 import com.smha.sms.common.enums.AddressType;
 import com.smha.sms.student.model.entity.Student;
 import com.smha.sms.employee.model.entity.Employee;
@@ -24,11 +25,7 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Address extends BaseEntity {
 
     private String village;
     @Enumerated(EnumType.STRING)
@@ -57,7 +54,7 @@ public class Address {
     @Override
     public String toString() {
         return "Address{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", village='" + village + '\'' +
                 ", addressType=" + addressType +
                 ", division=" + division +
@@ -71,12 +68,12 @@ public class Address {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(id, address.id) && Objects.equals(village, address.village) && addressType == address.addressType && Objects.equals(division, address.division) && Objects.equals(district, address.district) && Objects.equals(policeStation, address.policeStation) && Objects.equals(student, address.student);
+        return Objects.equals(getId(), address.getId()) && Objects.equals(village, address.village) && addressType == address.addressType && Objects.equals(division, address.division) && Objects.equals(district, address.district) && Objects.equals(policeStation, address.policeStation) && Objects.equals(student, address.student);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, village, addressType, division, district, policeStation, student);
+        return Objects.hash(getId(), village, addressType, division, district, policeStation, student);
     }
 }
 

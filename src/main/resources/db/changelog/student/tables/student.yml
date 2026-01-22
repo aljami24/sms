@@ -23,7 +23,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     unique: true
-                  
+
 
               - column:
                   name: name
@@ -57,11 +57,6 @@ databaseChangeLog:
                   name: identity_number
                   type: VARCHAR(150)
 
-              # FK → classroom_version_section
-              - column:
-                  name: classroom_version_sections_id
-                  type: BIGINT
-
               - column:
                   name: photo_dir
                   type: VARCHAR(255)
@@ -69,6 +64,23 @@ databaseChangeLog:
               - column:
                   name: nid_dir
                   type: VARCHAR(255)
+
+              # BaseEntity ফিল্ডগুলো
+              - column:
+                  name: created_at
+                  type: timestamp
+
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
 
         # -----------------------------------
         # Foreign Key → ClassroomVersionSection

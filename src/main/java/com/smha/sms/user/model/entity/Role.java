@@ -1,5 +1,6 @@
 package com.smha.sms.user.model.entity;
 
+import com.smha.sms.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,10 +15,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Role extends BaseEntity {
     private String name;
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();

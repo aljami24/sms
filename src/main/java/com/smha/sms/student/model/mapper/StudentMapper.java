@@ -1,12 +1,14 @@
 package com.smha.sms.student.model.mapper;
 
 import com.smha.sms.academic.model.entity.ClassroomVersionSection;
+import com.smha.sms.academic.model.entity.Year;
 import com.smha.sms.common.address.dto.AddressRequestDto;
 import com.smha.sms.common.address.dto.AddressResponseDto;
 import com.smha.sms.common.address.entity.Address;
 import com.smha.sms.student.model.dto.request.StudentRequestDto;
 import com.smha.sms.student.model.dto.response.StudentResponseDto;
 import com.smha.sms.student.model.entity.Student;
+import com.smha.sms.student.model.entity.StudentAcademicRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,108 +22,213 @@ import java.util.List;
 
 public class StudentMapper {
 
-    public static void mapToStudentEntity(StudentRequestDto studentRequestDto, Student student) {
+    // ======================== Basic Field Mappers ========================
 
-        student.setId(studentRequestDto.getId());
-        student.setName(studentRequestDto.getName());
-        student.setDob(studentRequestDto.getDob());
-        student.setGender(studentRequestDto.getGender());
-        student.setFatherName(studentRequestDto.getFatherName());
-        student.setMotherName(studentRequestDto.getMotherName());
-        student.setIdentityNumber(studentRequestDto.getIdentityNumber());
-        student.setIdentityType(studentRequestDto.getIdentityType());
-        student.setPhotoDir(studentRequestDto.getPhotoDir());
-        student.setNidDir(studentRequestDto.getNidDir());
+    /**
+     * Maps basic student fields from RequestDto to Entity
+     */
+    private static void mapBasicFields(StudentRequestDto dto, Student student) {
+        student.setId(dto.getId());
+        student.setName(dto.getName());
+        student.setDob(dto.getDob());
+        student.setGender(dto.getGender());
+        student.setFatherName(dto.getFatherName());
+        student.setMotherName(dto.getMotherName());
+        student.setIdentityNumber(dto.getIdentityNumber());
+        student.setIdentityType(dto.getIdentityType());
+        student.setPhotoDir(dto.getPhotoDir());
+        student.setNidDir(dto.getNidDir());
+    }
 
+    /**
+     * Maps basic student fields from Entity to ResponseDto
+     */
+    private static void mapBasicFields(Student student, StudentResponseDto dto) {
+        dto.setId(student.getId());
+        dto.setName(student.getName());
+        dto.setFatherName(student.getFatherName());
+        dto.setMotherName(student.getMotherName());
+        dto.setDob(student.getDob());
+        dto.setGender(student.getGender());
+        dto.setRegistration(student.getRegistration());
+        dto.setPhotoDir(student.getPhotoDir());
+        dto.setNidDir(student.getNidDir());
+    }
+
+    /**
+     * Maps basic student fields from Entity to RequestDto (for edit form)
+     */
+    private static void mapBasicFieldsToDto(Student student, StudentRequestDto dto) {
+        dto.setId(student.getId());
+        dto.setName(student.getName());
+        dto.setDob(student.getDob());
+        dto.setGender(student.getGender());
+        dto.setFatherName(student.getFatherName());
+        dto.setMotherName(student.getMotherName());
+        dto.setIdentityNumber(student.getIdentityNumber());
+        dto.setIdentityType(student.getIdentityType());
+        dto.setPhotoDir(student.getPhotoDir());
+        dto.setNidDir(student.getNidDir());
+    }
+
+    // ======================== Address Mapping ========================
+
+    /**
+     * Maps addresses from RequestDto to Entity
+     */
+    private static void mapAddressesToEntity(StudentRequestDto studentRequestDto, Student student) {
         if (student.getAddresses() == null) {
-            // SAVE case (new entity)
             student.setAddresses(new ArrayList<>());
         } else {
-            // UPDATE case (managed entity)
             student.getAddresses().clear();
         }
 
-        for (AddressRequestDto addressRequestDto : studentRequestDto.getAddresses()) {
+        for (AddressRequestDto addressDto : studentRequestDto.getAddresses()) {
             Address address = new Address();
-            address.setVillage(addressRequestDto.getVillage());
-            address.setAddressType(addressRequestDto.getAddressType());
-            address.setDistrict(addressRequestDto.getDistrict());
-            address.setDivision(addressRequestDto.getDivision());
-            address.setPoliceStation(addressRequestDto.getPoliceStation());
+            address.setVillage(addressDto.getVillage());
+            address.setAddressType(addressDto.getAddressType());
+            address.setDistrict(addressDto.getDistrict());
+            address.setDivision(addressDto.getDivision());
+            address.setPoliceStation(addressDto.getPoliceStation());
             address.setStudent(student);
             student.getAddresses().add(address);
         }
     }
 
+    /**
+     * Maps addresses from Entity to ResponseDto
+     */
+    private static List<AddressResponseDto> mapAddressesToResponseDto(Student student) {
+        List<AddressResponseDto> addressList = new ArrayList<>();
+        for (Address address : student.getAddresses()) {
+            AddressResponseDto addressDto = new AddressResponseDto();
+            addressDto.setVillage(address.getVillage());
+            addressDto.setAddressType(address.getAddressType());
+            addressDto.setDistrict(address.getDistrict());
+            addressDto.setDivision(address.getDivision());
+            addressDto.setPoliceStation(address.getPoliceStation());
+            addressList.add(addressDto);
+        }
+        return addressList;
+    }
+
+    /**
+     * Maps addresses from Entity to RequestDto (for edit form)
+     */
+    private static List<AddressRequestDto> mapAddressesToRequestDto(Student student) {
+        List<AddressRequestDto> addressList = new ArrayList<>();
+        for (Address address : student.getAddresses()) {
+            AddressRequestDto addressDto = new AddressRequestDto();
+            addressDto.setVillage(address.getVillage());
+            addressDto.setAddressType(address.getAddressType());
+            addressDto.setDistrict(address.getDistrict());
+            addressDto.setDivision(address.getDivision());
+            addressDto.setPoliceStation(address.getPoliceStation());
+            addressList.add(addressDto);
+        }
+        return addressList;
+    }
+
+    // ======================== Academic Record Mapping ========================
+
+    /**
+     * Creates a StudentAcademicRecord from the class/version/section/year selection
+     * This is called from the service after finding the ClassroomVersionSection
+     */
+    public static void addAcademicRecordToStudent(Student student, ClassroomVersionSection cvs, Long yearId) {
+        if (student.getStudentAcademicRecords() == null) {
+            student.setStudentAcademicRecords(new ArrayList<>());
+        }
+
+        StudentAcademicRecord academicRecord = new StudentAcademicRecord();
+        academicRecord.setStudent(student);
+        academicRecord.setClassroomVersionSection(cvs);
+
+        if (yearId != null) {
+            Year year = new Year();
+            year.setId(yearId);
+            academicRecord.setYear(year);
+        }
+
+        student.getStudentAcademicRecords().add(academicRecord);
+    }
+
+    /**
+     * Extracts class/version/section/year IDs from academic record for ResponseDto
+     */
+
+    private static void extractAcademicInfoForResponse(Student student, StudentResponseDto studentResponseDto) {
+        if (student.getStudentAcademicRecords() != null && !student.getStudentAcademicRecords().isEmpty()) {
+            StudentAcademicRecord record = student.getStudentAcademicRecords().get(0);
+            if (record.getClassroomVersionSection() != null) {
+                ClassroomVersionSection cvs = record.getClassroomVersionSection();
+                studentResponseDto.setClassRoomId(cvs.getClassRoom().getId());
+                studentResponseDto.setClassRoomName(cvs.getClassRoom().getName());
+                studentResponseDto.setVersionId(cvs.getVersion().getId());
+                studentResponseDto.setVersionName(cvs.getVersion().getName());
+                if (cvs.getSection() != null) {
+                    studentResponseDto.setSectionId(cvs.getSection().getId());
+                    studentResponseDto.setSectionName(cvs.getSection().getName());
+                }
+            }
+            if (record.getYear() != null) {
+                studentResponseDto.setYearName(record.getYear().getName());
+            }
+        }
+    }
+
+    /**
+     * Extracts class/version/section/year IDs from academic record for RequestDto (edit form)
+     */
+    private static void extractAcademicInfoForRequest(Student student, StudentRequestDto studentRequestDto) {
+        if (student.getStudentAcademicRecords() != null && !student.getStudentAcademicRecords().isEmpty()) {
+            StudentAcademicRecord record = student.getStudentAcademicRecords().get(0);
+            if (record.getClassroomVersionSection() != null) {
+                ClassroomVersionSection cvs = record.getClassroomVersionSection();
+                studentRequestDto.setClassRoomId(cvs.getClassRoom().getId());
+                studentRequestDto.setVersionId(cvs.getVersion().getId());
+                if (cvs.getSection() != null) {
+                    studentRequestDto.setSectionId(cvs.getSection().getId());
+                }
+            }
+            if (record.getYear() != null) {
+                studentRequestDto.setYearId(record.getYear().getId());
+            }
+        }
+    }
+
+    // ======================== Public Mapping Methods ========================
+
+    /**
+     * Maps StudentRequestDto to Student Entity
+     * Used for both create and update operations
+     */
+    public static void mapToStudentEntity(StudentRequestDto studentRequestDto, Student student) {
+        mapBasicFields(studentRequestDto, student);
+        mapAddressesToEntity(studentRequestDto, student);
+    }
+
+    /**
+     * Maps Student Entity to StudentResponseDto
+     * Used for displaying student data in templates
+     */
     public static StudentResponseDto mapToStudentResponseDto(Student student) {
         StudentResponseDto studentResponseDto = new StudentResponseDto();
-        studentResponseDto.setId(student.getId());
-        studentResponseDto.setName(student.getName());
-        studentResponseDto.setFatherName(student.getFatherName());
-        studentResponseDto.setMotherName(student.getMotherName());
-        studentResponseDto.setDob(student.getDob());
-        studentResponseDto.setGender(student.getGender());
-        studentResponseDto.setRoll(student.getRoll());
-        studentResponseDto.setClassroomVersionSectionsId(student.getClassroomVersionSectionsId());
-        studentResponseDto.setPhotoDir(student.getPhotoDir());
-        studentResponseDto.setNidDir(student.getNidDir());
-
-        List<AddressResponseDto> addressList = new ArrayList<>();
-
-        for (Address address : student.getAddresses()) {
-            AddressResponseDto addressResponseDto = new AddressResponseDto();
-            addressResponseDto.setVillage(address.getVillage());
-            addressResponseDto.setAddressType(address.getAddressType());
-            addressResponseDto.setDistrict(address.getDistrict());
-            addressResponseDto.setDivision(address.getDivision());
-            addressResponseDto.setPoliceStation(address.getPoliceStation());
-            addressList.add(addressResponseDto);
-        }
-        studentResponseDto.setAddresses(addressList);
+        mapBasicFields(student, studentResponseDto);
+        extractAcademicInfoForResponse(student, studentResponseDto);
+        studentResponseDto.setAddresses(mapAddressesToResponseDto(student));
         return studentResponseDto;
     }
 
-    public static StudentRequestDto mapToStudentRequsetDto(Student student) {
-
+    /**
+     * Maps Student Entity to StudentRequestDto
+     * Used for populating edit form
+     */
+    public static StudentRequestDto mapToStudentRequestDto(Student student) {
         StudentRequestDto studentRequestDto = new StudentRequestDto();
-
-        studentRequestDto.setId(student.getId());
-        studentRequestDto.setName(student.getName());
-        studentRequestDto.setDob(student.getDob());
-        studentRequestDto.setGender(student.getGender());
-        studentRequestDto.setFatherName(student.getFatherName());
-        studentRequestDto.setMotherName(student.getMotherName());
-        studentRequestDto.setIdentityNumber(student.getIdentityNumber());
-        studentRequestDto.setIdentityType(student.getIdentityType());
-        studentRequestDto.setPhotoDir(student.getPhotoDir());
-        studentRequestDto.setNidDir(student.getNidDir());
-        studentRequestDto.setClassroomVersionSectionsId(student.getClassroomVersionSectionsId());
-
-        ClassroomVersionSection cvs =
-                student.getClassroomVersionSectionsId();
-
-        if (cvs != null) {
-            studentRequestDto.setClassRoomId(cvs.getClassRoom().getId());
-            studentRequestDto.setVersionId(cvs.getVersion().getId());
-            // Section can be null for classes 6-8
-            studentRequestDto.setSectionId(cvs.getSection() != null ? cvs.getSection().getId() : null);
-        }
-
-        List<AddressRequestDto> addressList = new ArrayList<>();
-
-        for (Address address : student.getAddresses()) {
-            AddressRequestDto addressRequestDto = new AddressRequestDto();
-            addressRequestDto.setVillage(address.getVillage());
-            addressRequestDto.setAddressType(address.getAddressType());
-            addressRequestDto.setDistrict(address.getDistrict());
-            addressRequestDto.setDivision(address.getDivision());
-            addressRequestDto.setPoliceStation(address.getPoliceStation());
-            addressRequestDto.setStudent(student);
-            addressList.add(addressRequestDto);
-        }
-        studentRequestDto.setAddresses(addressList);
+        mapBasicFieldsToDto(student, studentRequestDto);
+        extractAcademicInfoForRequest(student, studentRequestDto);
+        studentRequestDto.setAddresses(mapAddressesToRequestDto(student));
         return studentRequestDto;
     }
-
-
 }
