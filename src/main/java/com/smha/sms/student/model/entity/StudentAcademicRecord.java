@@ -29,4 +29,6 @@ public class StudentAcademicRecord extends BaseEntity {
     @JoinColumn(name = "classroom_version_section_id", nullable = false)
     private ClassroomVersionSection classroomVersionSection;
 
+    private Integer roll;
+
 }
