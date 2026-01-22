@@ -50,6 +50,7 @@ public class StudentMapper {
         dto.setMotherName(student.getMotherName());
         dto.setDob(student.getDob());
         dto.setGender(student.getGender());
+        dto.setRoll(student.getRoll());
         dto.setRegistration(student.getRegistration());
         dto.setPhotoDir(student.getPhotoDir());
         dto.setNidDir(student.getNidDir());
