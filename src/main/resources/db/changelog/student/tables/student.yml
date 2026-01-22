@@ -64,3 +64,30 @@ databaseChangeLog:
               - column:
                   name: nid_dir
                   type: VARCHAR(255)
+
+              # BaseEntity ফিল্ডগুলো
+              - column:
+                  name: created_at
+                  type: timestamp
+
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
+        # -----------------------------------
+        # Foreign Key → ClassroomVersionSection
+        # -----------------------------------
+        - addForeignKeyConstraint:
+            baseTableName: student
+            baseColumnNames: classroom_version_sections_id
+            referencedTableName: classroom_version_section
+            referencedColumnNames: id
+            constraintName: fk_student_classroom_version_section

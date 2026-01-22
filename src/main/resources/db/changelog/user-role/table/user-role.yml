@@ -28,6 +28,23 @@ databaseChangeLog:
                   constraints:
                     nullable: false
 
+              # BaseEntity ফিল্ডগুলো
+              - column:
+                  name: created_at
+                  type: timestamp
+
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
   # =========================
   # ROLES TABLE
   # =========================
@@ -50,6 +67,23 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     unique: true
+
+              # BaseEntity ফিল্ডগুলো
+              - column:
+                  name: created_at
+                  type: timestamp
+
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
 
   # =========================
   # USER_ROLES JOIN TABLE

@@ -19,6 +19,28 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
+                  name: name_bn
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
                   name: active
                   type: BOOLEAN
                   defaultValueBoolean: true
+
+              # BaseEntity ফিল্ডগুলো
+              - column:
+                  name: created_at
+                  type: timestamp
+
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)

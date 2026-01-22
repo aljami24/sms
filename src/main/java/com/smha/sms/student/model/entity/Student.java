@@ -1,6 +1,7 @@
 package com.smha.sms.student.model.entity;
 
 import com.smha.sms.common.address.entity.Address;
+import com.smha.sms.common.entity.BaseEntity;
 import com.smha.sms.common.enums.Gender;
 import com.smha.sms.common.enums.IdentityType;
 import jakarta.persistence.*;
@@ -25,10 +26,8 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Student extends BaseEntity {
+
     private Integer roll;
     private Integer registration;
     private String name;
@@ -50,7 +49,7 @@ public class Student {
     @Override
     public String toString() {
         return "Student{" +
-                "id=" + id +
+                "id=" + getId() +
                 ", roll=" + roll +
                 ", registration=" + registration +
                 ", name='" + name + '\'' +

@@ -1,5 +1,6 @@
 package com.smha.sms.academic.model.entity;
 
+import com.smha.sms.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,12 +12,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Year {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Year extends BaseEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
+
 }
