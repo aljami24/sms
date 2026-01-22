@@ -6,8 +6,8 @@
 </head>
 <body>
 
-<div class="sidebar d-none d-lg-block">
-    <div class="sidebar-header">
+<div class="sidebar d-none d-lg-block ">
+    <div class="sidebar-header sticky-top">
         <div class="logo-circle"><i class="bi bi-mortarboard-fill fs-3"></i></div>
         <h5>SMS</h5>
     </div>
@@ -82,7 +82,7 @@
 
 <div class="main-wrapper">
     <div th:replace="~{layout/navbar :: navbar}"></div>
-
+    <th:block th:replace="layout/breadcrumb :: breadcrumb"></th:block>
     <div class="container-fluid py-4 content" layout:fragment="content"></div>
 
     <!-- Footer -->
