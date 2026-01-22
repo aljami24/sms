@@ -75,10 +75,11 @@ public class StudentService {
                         studentRequestDto.getSectionId()
                 ).orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section"));
 
-        // Generate sequential roll number based on class and version
+        // Generate sequential roll number based on class, version, and YEAR
         Integer maxRoll = studentRepository.findMaxRollByClassRoomAndVersion(
                 studentRequestDto.getClassRoomId(),
-                studentRequestDto.getVersionId()
+                studentRequestDto.getVersionId(),
+                year.getId()
         );
         int nextRoll = (maxRoll == null ? 0 : maxRoll) + 1;
 
@@ -174,6 +175,23 @@ public class StudentService {
         Student existingStudent = studentRepository.findById(studentRequestDto.getId())
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
+        // Find the most recent year from academic records
+        Integer mostRecentYear = existingStudent.getStudentAcademicRecords().stream()
+                .filter(ar -> ar.getYear() != null)
+                .map(ar -> Integer.parseInt(ar.getYear().getName()))
+                .max(Integer::compareTo)
+                .orElse(null);
+
+        // Get the year being updated
+        Year selectedYear = yearRepository.findById(studentRequestDto.getYearId())
+                .orElseThrow(() -> new RuntimeException("Year not found"));
+        int selectedYearValue = Integer.parseInt(selectedYear.getName());
+
+        // Validate: Only the most recent year's academic record can be updated
+        if (mostRecentYear != null && selectedYearValue < mostRecentYear) {
+            throw new RuntimeException("Cannot update academic information for previous years. Only the most recent year's record can be modified.");
+        }
+
         // Preserve existing document paths if not being updated
         String existingPhotoDir = existingStudent.getPhotoDir();
         String existingNidDir = existingStudent.getNidDir();
@@ -247,8 +265,8 @@ public class StudentService {
                 .findByClassRoomIdAndVersionIdAndSectionId(classRoomId, versionId, sectionId)
                 .orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section combination"));
 
-        // Generate sequential roll number based on class and version
-        Integer maxRoll = studentRepository.findMaxRollByClassRoomAndVersion(classRoomId, versionId);
+        // Generate sequential roll number based on class, version, and YEAR
+        Integer maxRoll = studentRepository.findMaxRollByClassRoomAndVersion(classRoomId, versionId, year.getId());
         int nextRoll = (maxRoll == null ? 0 : maxRoll) + 1;
 
         // Create new academic record with roll only (registration stays on student)

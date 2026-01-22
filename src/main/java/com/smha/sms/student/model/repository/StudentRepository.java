@@ -47,8 +47,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT COALESCE(MAX(sar.roll), 0) FROM StudentAcademicRecord sar " +
             "JOIN sar.classroomVersionSection cvs " +
             "WHERE cvs.classRoom.id = :classRoomId " +
-            "AND cvs.version.id = :versionId")
+            "AND cvs.version.id = :versionId " +
+            "AND sar.year.id = :yearId")
     Integer findMaxRollByClassRoomAndVersion(@Param("classRoomId") Long classRoomId,
-                                              @Param("versionId") Long versionId);
+                                              @Param("versionId") Long versionId,
+                                              @Param("yearId") Long yearId);
 
 }

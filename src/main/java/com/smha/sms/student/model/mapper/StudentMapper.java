@@ -207,10 +207,24 @@ public class StudentMapper {
 
     /**
      * Extracts class/version/section/year IDs from academic record for RequestDto (edit form)
+     * Loads the most recent year's academic record
      */
     private static void extractAcademicInfoForRequest(Student student, StudentRequestDto studentRequestDto) {
         if (student.getStudentAcademicRecords() != null && !student.getStudentAcademicRecords().isEmpty()) {
-            StudentAcademicRecord record = student.getStudentAcademicRecords().get(0);
+            // Get the most recent year's academic record (highest year value)
+            StudentAcademicRecord record = student.getStudentAcademicRecords().stream()
+                    .filter(ar -> ar.getYear() != null)
+                    .max((ar1, ar2) -> {
+                        try {
+                            int year1 = Integer.parseInt(ar1.getYear().getName());
+                            int year2 = Integer.parseInt(ar2.getYear().getName());
+                            return Integer.compare(year1, year2);
+                        } catch (Exception e) {
+                            return 0;
+                        }
+                    })
+                    .orElse(student.getStudentAcademicRecords().get(0));
+
             if (record.getClassroomVersionSection() != null) {
                 ClassroomVersionSection cvs = record.getClassroomVersionSection();
                 studentRequestDto.setClassRoomId(cvs.getClassRoom().getId());
