@@ -2,8 +2,7 @@ package com.smha.sms.student.service;
 
 import com.smha.sms.academic.model.entity.ClassroomVersionSection;
 import com.smha.sms.academic.model.entity.Year;
-import com.smha.sms.academic.model.repository.ClassroomVersionSectionRepository;
-import com.smha.sms.academic.model.repository.YearRepository;
+import com.smha.sms.academic.model.repository.*;
 import com.smha.sms.common.util.Helper;
 import com.smha.sms.student.model.dto.request.StudentRequestDto;
 import com.smha.sms.student.model.dto.response.StudentResponseDto;
@@ -18,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.smha.sms.common.constants.Constants.STUDENT_NID_DOB_PATH;
@@ -37,6 +37,9 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final ClassroomVersionSectionRepository classroomVersionSectionRepository;
     private final YearRepository yearRepository;
+    private final ClassRoomRepository classRoomRepository;
+    private final VersionRepository versionRepository;
+    private final SectionRepository sectionRepository;
 
     @Value("${file.upload-directory}")
     private String uploadDir;
@@ -112,6 +115,7 @@ public class StudentService {
             Long classRoomId,
             String section,
             String version,
+            Long yearId,
             int page,
             int pageSize) {
 
@@ -121,21 +125,22 @@ public class StudentService {
 
         PageRequest pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
         Page<Student> studentPage = studentRepository.filterStudents(
-                rollNumber, registrationNumber, classRoomId, cleanSection, cleanVersion, pageable
+                rollNumber, registrationNumber, classRoomId, cleanSection, cleanVersion, yearId, pageable
         );
 
+        final Long filterYearId = yearId;
         return studentPage
-                .map(StudentMapper::mapToStudentResponseDto);
+                .map(student -> StudentMapper.mapToStudentResponseDto(student, filterYearId));
     }
 
-    public long getTotalFilterCount(Integer rollNumber, Integer registrationNumber, Long classRoomId, String section, String version) {
+    public long getTotalFilterCount(Integer rollNumber, Integer registrationNumber, Long classRoomId, String section, String version, Long yearId) {
         // Convert empty strings to null for proper JPQL query handling
         String cleanSection = (section != null && section.isEmpty()) ? null : section;
         String cleanVersion = (version != null && version.isEmpty()) ? null : version;
 
         PageRequest pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by(Sort.Direction.DESC, "id"));
         Page<Student> studentPage = studentRepository.filterStudents(
-                rollNumber, registrationNumber, classRoomId, cleanSection, cleanVersion, pageable
+                rollNumber, registrationNumber, classRoomId, cleanSection, cleanVersion, yearId, pageable
         );
         return studentPage.getTotalElements();
     }
@@ -143,6 +148,11 @@ public class StudentService {
     //   Student Filter
     public StudentResponseDto getByRoll(int rollNumber) {
         Student student = studentRepository.findByRoll(rollNumber).orElseThrow();
+        return StudentMapper.mapToStudentResponseDto(student);
+    }
+
+    public StudentResponseDto getByRegistration(int registrationNumber) {
+        Student student = studentRepository.findByRegistration(registrationNumber).orElseThrow();
         return StudentMapper.mapToStudentResponseDto(student);
     }
 
@@ -191,6 +201,40 @@ public class StudentService {
         }
 
         studentRepository.save(existingStudent);
+    }
+
+    //   Old Student Admission - Create New Academic Record
+    @Transactional
+    public void admitOldStudent(Long studentId, Long yearId, Long classRoomId,
+                                Long sectionId, Long versionId) {
+        // Find the student
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+
+        // Find the year entity
+        Year year = yearRepository.findById(yearId)
+                .orElseThrow(() -> new RuntimeException("Year not found"));
+
+        // Get ClassRoom-Version-Section combination
+        ClassroomVersionSection cvs = classroomVersionSectionRepository
+                .findByClassRoomIdAndVersionIdAndSectionId(classRoomId, versionId, sectionId)
+                .orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section combination"));
+
+        // Create new academic record with proper year entity
+        if (student.getStudentAcademicRecords() == null) {
+            student.setStudentAcademicRecords(new ArrayList<>());
+        }
+
+        com.smha.sms.student.model.entity.StudentAcademicRecord academicRecord =
+                new com.smha.sms.student.model.entity.StudentAcademicRecord();
+        academicRecord.setStudent(student);
+        academicRecord.setClassroomVersionSection(cvs);
+        academicRecord.setYear(year);
+
+        student.getStudentAcademicRecords().add(academicRecord);
+
+        // Save the student with new academic record
+        studentRepository.save(student);
     }
 
 

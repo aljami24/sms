@@ -159,8 +159,21 @@ public class StudentMapper {
      */
 
     private static void extractAcademicInfoForResponse(Student student, StudentResponseDto studentResponseDto) {
+        extractAcademicInfoForResponse(student, studentResponseDto, null);
+    }
+
+    /**
+     * Extracts class/version/section/year IDs from academic record for ResponseDto
+     * If yearId is provided, finds the academic record matching that year
+     */
+    private static void extractAcademicInfoForResponse(Student student, StudentResponseDto studentResponseDto, Long yearId) {
         if (student.getStudentAcademicRecords() != null && !student.getStudentAcademicRecords().isEmpty()) {
-            StudentAcademicRecord record = student.getStudentAcademicRecords().get(0);
+            // Find the academic record matching the yearId, or get the first one if no yearId specified
+            StudentAcademicRecord record = student.getStudentAcademicRecords().stream()
+                    .filter(ar -> yearId == null || (ar.getYear() != null && ar.getYear().getId().equals(yearId)))
+                    .findFirst()
+                    .orElse(student.getStudentAcademicRecords().get(0));
+
             if (record.getClassroomVersionSection() != null) {
                 ClassroomVersionSection cvs = record.getClassroomVersionSection();
                 studentResponseDto.setClassRoomId(cvs.getClassRoom().getId());
@@ -214,9 +227,17 @@ public class StudentMapper {
      * Used for displaying student data in templates
      */
     public static StudentResponseDto mapToStudentResponseDto(Student student) {
+        return mapToStudentResponseDto(student, null);
+    }
+
+    /**
+     * Maps Student Entity to StudentResponseDto with specific year filter
+     * Used for displaying student data in templates when filtering by year
+     */
+    public static StudentResponseDto mapToStudentResponseDto(Student student, Long yearId) {
         StudentResponseDto studentResponseDto = new StudentResponseDto();
         mapBasicFields(student, studentResponseDto);
-        extractAcademicInfoForResponse(student, studentResponseDto);
+        extractAcademicInfoForResponse(student, studentResponseDto, yearId);
         studentResponseDto.setAddresses(mapAddressesToResponseDto(student));
         return studentResponseDto;
     }

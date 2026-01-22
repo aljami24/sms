@@ -16,23 +16,27 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByRegistration(Integer registration);
 
     Optional<Student> findByRoll(int roll);
+    Optional<Student> findByRegistration(int registration);
 
     @Query("SELECT s FROM Student s " +
             "JOIN s.studentAcademicRecords sar " +
             "JOIN sar.classroomVersionSection cvs " +
             "LEFT JOIN cvs.section sec " +
             "LEFT JOIN cvs.version ver " +
+            "LEFT JOIN sar.year y " +
             "WHERE (:rollNumber IS NULL OR s.roll = :rollNumber) " +
             "AND (:registrationNumber IS NULL OR s.registration = :registrationNumber) " +
             "AND (:classRoomId IS NULL OR cvs.classRoom.id = :classRoomId) " +
             "AND (:section IS NULL OR sec.name = :section) " +
-            "AND (:version IS NULL OR ver.name = :version)")
+            "AND (:version IS NULL OR ver.name = :version) " +
+            "AND (:yearId IS NULL OR y.id = :yearId)")
     Page<Student> filterStudents(
             @Param("rollNumber") Integer rollNumber,
             @Param("registrationNumber") Integer registrationNumber,
             @Param("classRoomId") Long classRoomId,
             @Param("section") String section,
             @Param("version") String version,
+            @Param("yearId") Long yearId,
             Pageable pageable
     );
 
