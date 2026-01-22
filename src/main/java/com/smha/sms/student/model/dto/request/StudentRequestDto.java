@@ -1,6 +1,5 @@
 package com.smha.sms.student.model.dto.request;
 
-import com.smha.sms.academic.model.entity.ClassroomVersionSection;
 import com.smha.sms.common.address.dto.AddressRequestDto;
 import com.smha.sms.common.enums.Gender;
 import com.smha.sms.common.enums.IdentityType;
@@ -32,8 +31,8 @@ public class StudentRequestDto extends FileUpload {
     private Long classRoomId;
     private Long versionId;
     private Long sectionId;
+    private Long yearId;
     private String photoDir;
     private String nidDir;
-    private ClassroomVersionSection classroomVersionSectionsId;
     private List<AddressRequestDto> addresses = new ArrayList<>();
 }

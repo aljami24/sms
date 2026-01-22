@@ -2,7 +2,7 @@
 <html lang="en"
       layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -24,31 +24,32 @@
         <div class="d-flex align-items-center gap-2">
 
             <!-- New Admission -->
-            <a th:href="@{/student/create}" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')" class="btn btn-primary">
+            <a class="btn btn-primary" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')"
+               th:href="@{/student/create}">
                 <i class="bi bi-clock-history me-1"></i> New Admission
             </a>
 
             <!-- Old Admission Button -->
-            <button class="btn btn-secondary" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')"
-                    type="button"
-                    data-bs-toggle="collapse"
+            <button aria-expanded="false" class="btn btn-secondary"
                     data-bs-target="#OldAdmissionBox"
-                    aria-expanded="false">
+                    data-bs-toggle="collapse"
+                    sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')"
+                    type="button">
                 <i class="bi bi-plus-circle me-1"></i> Old Admission
             </button>
 
             <!-- Inline Old Admission Search -->
             <div class="collapse" id="OldAdmissionBox">
-                <form method="get"
-                      th:action="@{/student/Old-admission}"
-                      class="d-flex align-items-center gap-1 ms-2">
+                <form class="d-flex align-items-center gap-1 ms-2"
+                      method="get"
+                      th:action="@{/student/Old-admission}">
 
-                    <input type="text"
+                    <input class="form-control form-control-sm text-end"
                            name="roll"
-                           class="form-control form-control-sm text-end"
                            placeholder="Student Roll"
+                           required
                            style="width: 120px;"
-                           required>
+                           type="text">
 
                     <button class="btn btn-success btn-sm">
                         <i class="bi bi-search"></i>
@@ -67,18 +68,18 @@
                 <div class="row g-3">
 
                     <div class="col-md-2">
-                        <input class="form-control" name="rollNumber" placeholder="Student Roll"
-                               type="text"
-                               th:value="${rollNumber}">
+                        <input class="form-control" name="rollNumber" placeholder="Registration"
+                               th:value="${rollNumber}"
+                               type="text">
                     </div>
 
                     <div class="col-md-2">
                         <select class="form-select" name="className">
                             <option value="">Class</option>
                             <option th:each="classRoom : ${classRoom}"
-                                    th:value="${classRoom.id}"
+                                    th:selected="${className != null && className == classRoom.id}"
                                     th:text="${classRoom.name}"
-                                    th:selected="${className != null && className == classRoom.id}">
+                                    th:value="${classRoom.id}">
                             </option>
                         </select>
                     </div>
@@ -86,16 +87,16 @@
                     <div class="col-md-2">
                         <select class="form-select" name="section">
                             <option value="">Section</option>
-                            <option value="A" th:selected="${section == 'A'}">A</option>
-                            <option value="B" th:selected="${section == 'B'}">B</option>
+                            <option th:selected="${section == 'A'}" value="A">A</option>
+                            <option th:selected="${section == 'B'}" value="B">B</option>
                         </select>
                     </div>
 
                     <div class="col-md-2">
                         <select class="form-select" name="version">
                             <option value="">Version</option>
-                            <option value="Bangla" th:selected="${version == 'Bangla'}">Bangla</option>
-                            <option value="English" th:selected="${version == 'English'}">English</option>
+                            <option th:selected="${version == 'Bangla'}" value="Bangla">Bangla</option>
+                            <option th:selected="${version == 'English'}" value="English">English</option>
                         </select>
                     </div>
 
@@ -104,7 +105,7 @@
                             <button class="btn btn-success flex-grow-1">
                                 <i class="bi bi-search me-1"></i> Search
                             </button>
-                            <a th:href="@{/student/list}" class="btn btn-outline-secondary flex-grow-1">
+                            <a class="btn btn-outline-secondary flex-grow-1" th:href="@{/student/list}">
                                 <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
                             </a>
                         </div>
@@ -123,10 +124,10 @@
                 <table class="table table-hover mb-0">
                     <thead class="table-secondary">
                     <tr>
-                        <th style="width: 5%;" class="text-center">Sl</th>
-                        <th style="width: 35%;" class="text-start">Student Details</th>
-                        <th style="width: 20%;" class="text-start">Academic Info</th>
-                        <th style="width: 40%;" class="text-start">Address</th>
+                        <th class="text-center" style="width: 5%;">Sl</th>
+                        <th class="text-start" style="width: 35%;">Student Details</th>
+                        <th class="text-start" style="width: 20%;">Academic Info</th>
+                        <th class="text-start" style="width: 40%;">Address</th>
                     </tr>
                     </thead>
 
@@ -135,9 +136,10 @@
                         <!-- Serial Number with pagination -->
                         <td class="text-center" th:text="${currentPage * pageSize + stat.count}"></td>
                         <td>
-                            <span><strong>Roll :</strong> <span th:text="${student.roll}"></span></span><br>
-                            <span><strong>Name :</strong> <a class="text-decoration-none link-success link-underline-opacity-0 link-underline-opacity-100-hover"
-                                                             th:href="@{'/student/details/'+${student.id}}" title="View">
+                            <span><strong>Registration No :</strong> <span th:text="${student.roll}"></span></span><br>
+                            <span><strong>Name :</strong> <a
+                                    class="text-decoration-none link-success link-underline-opacity-0 link-underline-opacity-100-hover"
+                                    th:href="@{'/student/details/'+${student.id}}" title="View">
                                 <span th:text="${student.name}"></span></a>
                             </span><br>
                             <span><strong>Father :</strong> <span th:text="${student.fatherName}"></span></span><br>
@@ -146,17 +148,17 @@
                         <td>
     <span>
         <strong>Class :</strong>
-        <span th:text="${student.classroomVersionSectionsId != null ? student.classroomVersionSectionsId.classRoom.name : 'N/A'}"></span>
+        <span th:text="${student.classRoomName != null ? student.classRoomName : 'N/A'}"></span>
     </span><br>
 
                             <span>
         <strong>Version :</strong>
-        <span th:text="${student.classroomVersionSectionsId != null ? student.classroomVersionSectionsId.version.name : 'N/A'}"></span>
+        <span th:text="${student.versionName != null ? student.versionName : 'N/A'}"></span>
     </span><br>
 
                             <span>
         <strong>Section :</strong>
-        <span th:text="${student.classroomVersionSectionsId?.section?.name ?: 'N/A'}"></span>
+        <span th:text="${student.sectionName != null ? student.sectionName : 'N/A'}"></span>
     </span><br>
                         </td>
 
@@ -181,14 +183,18 @@
     <nav aria-label="Page navigation example " class="mt-2">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{/student/list(page=${currentPage - 1}, rollNumber=${rollNumber}, className=${className}, section=${section}, version=${version})}">Previous</a>
+                <a class="page-link"
+                   th:href="@{/student/list(page=${currentPage - 1}, rollNumber=${rollNumber}, className=${className}, section=${section}, version=${version})}">Previous</a>
             </li>
             <li class="page-item" th:classappend="${i == currentPage} ? 'active' : ''"
                 th:each=" i : ${#numbers.sequence(0,totalPages -1)}">
-                <a class="page-link" th:href="@{/student/list(page=${i}, rollNumber=${rollNumber}, className=${className}, section=${section}, version=${version})}" th:text="${i + 1}">1</a>
+                <a class="page-link"
+                   th:href="@{/student/list(page=${i}, rollNumber=${rollNumber}, className=${className}, section=${section}, version=${version})}"
+                   th:text="${i + 1}">1</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/student/list(page=${currentPage + 1}, rollNumber=${rollNumber}, className=${className}, section=${section}, version=${version})}">Next</a>
+                <a class="page-link"
+                   th:href="@{/student/list(page=${currentPage + 1}, rollNumber=${rollNumber}, className=${className}, section=${section}, version=${version})}">Next</a>
             </li>
         </ul>
     </nav>

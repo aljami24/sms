@@ -21,6 +21,7 @@ public class MonthlyHoliday {
     private Long id;
     @ManyToOne
     private Year yearId;
+    @Enumerated(EnumType.STRING)
     private MonthName monthName;
     private int totalDay;
     private int workingDay;
