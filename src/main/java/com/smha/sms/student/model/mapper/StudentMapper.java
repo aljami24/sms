@@ -50,8 +50,9 @@ public class StudentMapper {
         dto.setMotherName(student.getMotherName());
         dto.setDob(student.getDob());
         dto.setGender(student.getGender());
-        dto.setRoll(student.getRoll());
+        // Registration comes from student (remains constant)
         dto.setRegistration(student.getRegistration());
+        // Roll is set from academic records (changes per year)
         dto.setPhotoDir(student.getPhotoDir());
         dto.setNidDir(student.getNidDir());
     }
@@ -136,7 +137,7 @@ public class StudentMapper {
      * Creates a StudentAcademicRecord from the class/version/section/year selection
      * This is called from the service after finding the ClassroomVersionSection
      */
-    public static void addAcademicRecordToStudent(Student student, ClassroomVersionSection cvs, Long yearId) {
+    public static void addAcademicRecordToStudent(Student student, ClassroomVersionSection cvs, Long yearId, Integer roll) {
         if (student.getStudentAcademicRecords() == null) {
             student.setStudentAcademicRecords(new ArrayList<>());
         }
@@ -144,6 +145,7 @@ public class StudentMapper {
         StudentAcademicRecord academicRecord = new StudentAcademicRecord();
         academicRecord.setStudent(student);
         academicRecord.setClassroomVersionSection(cvs);
+        academicRecord.setRoll(roll);
 
         if (yearId != null) {
             Year year = new Year();
@@ -152,6 +154,15 @@ public class StudentMapper {
         }
 
         student.getStudentAcademicRecords().add(academicRecord);
+    }
+
+    /**
+     * Creates a StudentAcademicRecord from the class/version/section/year selection
+     * This is called from the service after finding the ClassroomVersionSection
+     * Overloaded method without roll for backward compatibility
+     */
+    public static void addAcademicRecordToStudent(Student student, ClassroomVersionSection cvs, Long yearId) {
+        addAcademicRecordToStudent(student, cvs, yearId, null);
     }
 
     /**
@@ -173,6 +184,9 @@ public class StudentMapper {
                     .filter(ar -> yearId == null || (ar.getYear() != null && ar.getYear().getId().equals(yearId)))
                     .findFirst()
                     .orElse(student.getStudentAcademicRecords().get(0));
+
+            // Set roll from academic record (changes per year)
+            studentResponseDto.setRoll(record.getRoll());
 
             if (record.getClassroomVersionSection() != null) {
                 ClassroomVersionSection cvs = record.getClassroomVersionSection();
@@ -239,6 +253,10 @@ public class StudentMapper {
         mapBasicFields(student, studentResponseDto);
         extractAcademicInfoForResponse(student, studentResponseDto, yearId);
         studentResponseDto.setAddresses(mapAddressesToResponseDto(student));
+        // Set all academic records for display
+        if (student.getStudentAcademicRecords() != null) {
+            studentResponseDto.setStudentAcademicRecords(student.getStudentAcademicRecords());
+        }
         return studentResponseDto;
     }
 

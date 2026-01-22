@@ -52,30 +52,12 @@ public class StudentService {
         Student student = new Student();
         StudentMapper.mapToStudentEntity(studentRequestDto, student);
 
-        // Get ClassRoom-Version-Section
-        ClassroomVersionSection cvs = classroomVersionSectionRepository
-                .findByClassRoomIdAndVersionIdAndSectionId(
-                        studentRequestDto.getClassRoomId(),
-                        studentRequestDto.getVersionId(),
-                        studentRequestDto.getSectionId()
-                ).orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section"));
-
-        // Add academic record from the form selection
-        StudentMapper.addAcademicRecordToStudent(student, cvs, studentRequestDto.getYearId());
-
-        // Generate sequential roll number based on class and version
-        Integer maxRoll = studentRepository.findMaxRollByClassRoomAndVersion(
-                studentRequestDto.getClassRoomId(),
-                studentRequestDto.getVersionId()
-        );
-        int nextRoll = (maxRoll == null ? 0 : maxRoll) + 1;
-        student.setRoll(nextRoll);
-
-        // Generate 9-digit registration: Year (4 digits) + 5 random digits
+        // Get year
         Year year = yearRepository.findById(studentRequestDto.getYearId())
                 .orElseThrow(() -> new RuntimeException("Year not found"));
-        int yearValue = Integer.parseInt(year.getName());
 
+        // Generate 9-digit registration: Year (4 digits) + 5 random digits
+        int yearValue = Integer.parseInt(year.getName());
         int registration;
         do {
             // Generate 5 random digits (10000 to 99999)
@@ -84,6 +66,24 @@ public class StudentService {
             registration = (yearValue * 100000) + randomDigits;
         } while (studentRepository.existsByRegistration(registration));
         student.setRegistration(registration);
+
+        // Get ClassRoom-Version-Section
+        ClassroomVersionSection cvs = classroomVersionSectionRepository
+                .findByClassRoomIdAndVersionIdAndSectionId(
+                        studentRequestDto.getClassRoomId(),
+                        studentRequestDto.getVersionId(),
+                        studentRequestDto.getSectionId()
+                ).orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section"));
+
+        // Generate sequential roll number based on class and version
+        Integer maxRoll = studentRepository.findMaxRollByClassRoomAndVersion(
+                studentRequestDto.getClassRoomId(),
+                studentRequestDto.getVersionId()
+        );
+        int nextRoll = (maxRoll == null ? 0 : maxRoll) + 1;
+
+        // Add academic record with roll only (registration is on student)
+        StudentMapper.addAcademicRecordToStudent(student, cvs, year.getId(), nextRoll);
 
         // Save student → ID generate হবে
         studentRepository.save(student);
@@ -186,11 +186,28 @@ public class StudentService {
                         studentRequestDto.getSectionId()
                 ).orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section"));
 
+        // Check if academic record already exists for this year
+        if (existingStudent.getStudentAcademicRecords() != null) {
+            boolean recordExistsForYear = existingStudent.getStudentAcademicRecords().stream()
+                    .anyMatch(record -> record.getYear() != null && record.getYear().getId().equals(studentRequestDto.getYearId()));
+
+            if (recordExistsForYear) {
+                // Update existing record instead of adding a new one
+                existingStudent.getStudentAcademicRecords().stream()
+                        .filter(record -> record.getYear() != null && record.getYear().getId().equals(studentRequestDto.getYearId()))
+                        .findFirst()
+                        .ifPresent(record -> record.setClassroomVersionSection(cvs));
+            } else {
+                // Add new academic record
+                StudentMapper.addAcademicRecordToStudent(existingStudent, cvs, studentRequestDto.getYearId());
+            }
+        } else {
+            // Add new academic record
+            StudentMapper.addAcademicRecordToStudent(existingStudent, cvs, studentRequestDto.getYearId());
+        }
+
         // Map basic fields and addresses
         StudentMapper.mapToStudentEntity(studentRequestDto, existingStudent);
-
-        // Add/update academic record from the form selection
-        StudentMapper.addAcademicRecordToStudent(existingStudent, cvs, studentRequestDto.getYearId());
 
         // Restore document paths if they were null in the request (not being updated)
         if (studentRequestDto.getPhotoDir() == null || studentRequestDto.getPhotoDir().isEmpty()) {
@@ -211,6 +228,16 @@ public class StudentService {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
+        // Check if academic record already exists for this year
+        if (student.getStudentAcademicRecords() != null) {
+            boolean recordExistsForYear = student.getStudentAcademicRecords().stream()
+                    .anyMatch(record -> record.getYear() != null && record.getYear().getId().equals(yearId));
+
+            if (recordExistsForYear) {
+                throw new RuntimeException("Student already has an academic record for this year. Please update the existing record instead.");
+            }
+        }
+
         // Find the year entity
         Year year = yearRepository.findById(yearId)
                 .orElseThrow(() -> new RuntimeException("Year not found"));
@@ -220,7 +247,11 @@ public class StudentService {
                 .findByClassRoomIdAndVersionIdAndSectionId(classRoomId, versionId, sectionId)
                 .orElseThrow(() -> new RuntimeException("Invalid Class-Version-Section combination"));
 
-        // Create new academic record with proper year entity
+        // Generate sequential roll number based on class and version
+        Integer maxRoll = studentRepository.findMaxRollByClassRoomAndVersion(classRoomId, versionId);
+        int nextRoll = (maxRoll == null ? 0 : maxRoll) + 1;
+
+        // Create new academic record with roll only (registration stays on student)
         if (student.getStudentAcademicRecords() == null) {
             student.setStudentAcademicRecords(new ArrayList<>());
         }
@@ -230,6 +261,7 @@ public class StudentService {
         academicRecord.setStudent(student);
         academicRecord.setClassroomVersionSection(cvs);
         academicRecord.setYear(year);
+        academicRecord.setRoll(nextRoll);
 
         student.getStudentAcademicRecords().add(academicRecord);
 

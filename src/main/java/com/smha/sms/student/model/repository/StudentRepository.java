@@ -12,11 +12,15 @@ import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    boolean existsByRoll(Integer roll);
-    boolean existsByRegistration(Integer registration);
 
-    Optional<Student> findByRoll(int roll);
-    Optional<Student> findByRegistration(int registration);
+    @Query("SELECT DISTINCT s FROM Student s " +
+            "JOIN s.studentAcademicRecords sar " +
+            "WHERE sar.roll = :roll")
+    Optional<Student> findByRoll(@Param("roll") Integer roll);
+
+    Optional<Student> findByRegistration(Integer registration);
+
+    boolean existsByRegistration(Integer registration);
 
     @Query("SELECT s FROM Student s " +
             "JOIN s.studentAcademicRecords sar " +
@@ -24,7 +28,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             "LEFT JOIN cvs.section sec " +
             "LEFT JOIN cvs.version ver " +
             "LEFT JOIN sar.year y " +
-            "WHERE (:rollNumber IS NULL OR s.roll = :rollNumber) " +
+            "WHERE (:rollNumber IS NULL OR sar.roll = :rollNumber) " +
             "AND (:registrationNumber IS NULL OR s.registration = :registrationNumber) " +
             "AND (:classRoomId IS NULL OR cvs.classRoom.id = :classRoomId) " +
             "AND (:section IS NULL OR sec.name = :section) " +
@@ -40,8 +44,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             Pageable pageable
     );
 
-    @Query("SELECT COALESCE(MAX(s.roll), 0) FROM Student s " +
-            "JOIN s.studentAcademicRecords sar " +
+    @Query("SELECT COALESCE(MAX(sar.roll), 0) FROM StudentAcademicRecord sar " +
             "JOIN sar.classroomVersionSection cvs " +
             "WHERE cvs.classRoom.id = :classRoomId " +
             "AND cvs.version.id = :versionId")
