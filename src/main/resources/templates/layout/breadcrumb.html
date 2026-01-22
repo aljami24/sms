@@ -1,0 +1,26 @@
+<th:block th:fragment="breadcrumb">
+
+    <nav class="p-2"
+         style="--bs-breadcrumb-divider: '>';"
+         aria-label="breadcrumb">
+
+        <ol class="breadcrumb mb-0">
+
+            <!-- Parent -->
+            <li class="breadcrumb-item"
+                th:if="${breadcrumbParent != null}">
+                <a th:href="${breadcrumbParentUrl}"
+                   th:text="${breadcrumbParent}">
+                </a>
+            </li>
+
+            <!-- Current -->
+            <li class="breadcrumb-item active"
+                aria-current="page"
+                th:text="${breadcrumbCurrent}">
+            </li>
+
+        </ol>
+    </nav>
+
+</th:block>
