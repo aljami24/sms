@@ -70,11 +70,11 @@ public class Student extends BaseEntity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return Objects.equals(id, student.id) && Objects.equals(roll, student.roll) && Objects.equals(registration, student.registration) && Objects.equals(name, student.name) && Objects.equals(fatherName, student.fatherName) && Objects.equals(motherName, student.motherName) && gender == student.gender && Objects.equals(dob, student.dob) && identityType == student.identityType && Objects.equals(identityNumber, student.identityNumber) && Objects.equals(photoDir, student.photoDir) && Objects.equals(nidDir, student.nidDir) && Objects.equals(addresses, student.addresses) && Objects.equals(studentAcademicRecords, student.studentAcademicRecords);
+        return Objects.equals(getId(), student.getId()) && Objects.equals(roll, student.roll) && Objects.equals(registration, student.registration) && Objects.equals(name, student.name) && Objects.equals(fatherName, student.fatherName) && Objects.equals(motherName, student.motherName) && gender == student.gender && Objects.equals(dob, student.dob) && identityType == student.identityType && Objects.equals(identityNumber, student.identityNumber) && Objects.equals(photoDir, student.photoDir) && Objects.equals(nidDir, student.nidDir) && Objects.equals(addresses, student.addresses) && Objects.equals(studentAcademicRecords, student.studentAcademicRecords);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roll, registration, name, fatherName, motherName, gender, dob, identityType, identityNumber, photoDir, nidDir, addresses, studentAcademicRecords);
+        return Objects.hash(getId(), roll, registration, name, fatherName, motherName, gender, dob, identityType, identityNumber, photoDir, nidDir, addresses, studentAcademicRecords);
     }
 }
