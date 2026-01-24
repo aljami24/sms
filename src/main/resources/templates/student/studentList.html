@@ -42,13 +42,13 @@
             <div class="collapse" id="OldAdmissionBox">
                 <form class="d-flex align-items-center gap-1 ms-2"
                       method="get"
-                      th:action="@{/student/Old-admission}">
+                      th:action="@{/student/old-admission}">
 
                     <input class="form-control form-control-sm text-end"
-                           name="roll"
-                           placeholder="Student Roll"
+                           name="registration"
+                           placeholder="Registration No"
                            required
-                           style="width: 120px;"
+                           style="width: 150px;"
                            type="text">
 
                     <button class="btn btn-success btn-sm">
@@ -69,13 +69,13 @@
 
                     <div class="col-md-2">
                         <div class="position-relative">
-                            <input class="form-control" name="rollNumber" placeholder="Roll"
+                            <input class="form-control" name="rollNumber" oninput="toggleClearIcon(this)"
+                                   placeholder="Roll"
                                    th:value="${rollNumber}"
-                                   type="number"
-                                   oninput="toggleClearIcon(this)">
+                                   type="text">
                             <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
-                                  style="cursor:pointer"
-                                  onclick="clearInput(this)">
+                                  onclick="clearInput(this)"
+                                  style="cursor:pointer">
                                         <i class="bi bi-x-circle-fill"></i>
                                     </span>
                         </div>
@@ -83,13 +83,13 @@
 
                     <div class="col-md-2">
                         <div class="position-relative">
-                            <input class="form-control" name="registrationNumber" placeholder="Registration"
+                            <input class="form-control" name="registrationNumber" oninput="toggleClearIcon(this)"
+                                   placeholder="Registration"
                                    th:value="${registrationNumber}"
-                                   type="number"
-                                   oninput="toggleClearIcon(this)">
+                                   type="text">
                             <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
-                                  style="cursor:pointer"
-                                  onclick="clearInput(this)">
+                                  onclick="clearInput(this)"
+                                  style="cursor:pointer">
                                         <i class="bi bi-x-circle-fill"></i>
                                     </span>
                         </div>
@@ -123,6 +123,17 @@
                     </div>
 
                     <div class="col-md-2">
+                        <select class="form-select" name="yearId">
+                            <option value="">Year</option>
+                            <option th:each="y : ${years}"
+                                    th:selected="${yearId != null && yearId == y.id}"
+                                    th:text="${y.name}"
+                                    th:value="${y.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
                         <div class="d-grid gap-2 d-md-flex">
                             <button class="btn btn-success flex-grow-1">
                                 <i class="bi bi-search me-1"></i> Search
@@ -141,6 +152,10 @@
     <!-- ===== Table Section ===== -->
     <div class="card table-card shadow-sm border-0">
         <div class="card-body p-0">
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <strong>Total : <span th:text="${getStudentAll.totalElements}"></span></strong>
+                <strong><span th:text="'Page ' + ${currentPage + 1} + ' of ' + ${totalPages}"></span></strong>
+            </div>
 
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
@@ -183,6 +198,11 @@
         <strong>Section :</strong>
         <span th:text="${student.sectionName != null ? student.sectionName : 'N/A'}"></span>
     </span><br>
+
+                            <span>
+        <strong>Year :</strong>
+        <span th:text="${student.yearName != null ? student.yearName : 'N/A'}"></span>
+    </span><br>
                         </td>
 
                         <td>
@@ -207,17 +227,17 @@
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{/student/list(page=${currentPage - 1}, rollNumber=${rollNumber}, registrationNumber=${registrationNumber}, className=${className}, section=${section}, version=${version})}">Previous</a>
+                   th:href="@{/student/list(page=${currentPage - 1}, rollNumber=${rollNumber}, registrationNumber=${registrationNumber}, className=${className}, section=${section}, version=${version}, yearId=${yearId})}">Previous</a>
             </li>
             <li class="page-item" th:classappend="${i == currentPage} ? 'active' : ''"
                 th:each=" i : ${#numbers.sequence(0,totalPages -1)}">
                 <a class="page-link"
-                   th:href="@{/student/list(page=${i}, rollNumber=${rollNumber}, registrationNumber=${registrationNumber}, className=${className}, section=${section}, version=${version})}"
+                   th:href="@{/student/list(page=${i}, rollNumber=${rollNumber}, registrationNumber=${registrationNumber}, className=${className}, section=${section}, version=${version}, yearId=${yearId})}"
                    th:text="${i + 1}">1</a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                 <a class="page-link"
-                   th:href="@{/student/list(page=${currentPage + 1}, rollNumber=${rollNumber}, registrationNumber=${registrationNumber}, className=${className}, section=${section}, version=${version})}">Next</a>
+                   th:href="@{/student/list(page=${currentPage + 1}, rollNumber=${rollNumber}, registrationNumber=${registrationNumber}, className=${className}, section=${section}, version=${version}, yearId=${yearId})}">Next</a>
             </li>
         </ul>
     </nav>

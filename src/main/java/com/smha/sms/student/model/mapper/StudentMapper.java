@@ -50,8 +50,9 @@ public class StudentMapper {
         dto.setMotherName(student.getMotherName());
         dto.setDob(student.getDob());
         dto.setGender(student.getGender());
-        dto.setRoll(student.getRoll());
+        // Registration comes from student (remains constant)
         dto.setRegistration(student.getRegistration());
+        // Roll is set from academic records (changes per year)
         dto.setPhotoDir(student.getPhotoDir());
         dto.setNidDir(student.getNidDir());
     }
@@ -136,7 +137,7 @@ public class StudentMapper {
      * Creates a StudentAcademicRecord from the class/version/section/year selection
      * This is called from the service after finding the ClassroomVersionSection
      */
-    public static void addAcademicRecordToStudent(Student student, ClassroomVersionSection cvs, Long yearId) {
+    public static void addAcademicRecordToStudent(Student student, ClassroomVersionSection cvs, Long yearId, Integer roll) {
         if (student.getStudentAcademicRecords() == null) {
             student.setStudentAcademicRecords(new ArrayList<>());
         }
@@ -144,6 +145,7 @@ public class StudentMapper {
         StudentAcademicRecord academicRecord = new StudentAcademicRecord();
         academicRecord.setStudent(student);
         academicRecord.setClassroomVersionSection(cvs);
+        academicRecord.setRoll(roll);
 
         if (yearId != null) {
             Year year = new Year();
@@ -155,12 +157,37 @@ public class StudentMapper {
     }
 
     /**
+     * Creates a StudentAcademicRecord from the class/version/section/year selection
+     * This is called from the service after finding the ClassroomVersionSection
+     * Overloaded method without roll for backward compatibility
+     */
+    public static void addAcademicRecordToStudent(Student student, ClassroomVersionSection cvs, Long yearId) {
+        addAcademicRecordToStudent(student, cvs, yearId, null);
+    }
+
+    /**
      * Extracts class/version/section/year IDs from academic record for ResponseDto
      */
 
     private static void extractAcademicInfoForResponse(Student student, StudentResponseDto studentResponseDto) {
+        extractAcademicInfoForResponse(student, studentResponseDto, null);
+    }
+
+    /**
+     * Extracts class/version/section/year IDs from academic record for ResponseDto
+     * If yearId is provided, finds the academic record matching that year
+     */
+    private static void extractAcademicInfoForResponse(Student student, StudentResponseDto studentResponseDto, Long yearId) {
         if (student.getStudentAcademicRecords() != null && !student.getStudentAcademicRecords().isEmpty()) {
-            StudentAcademicRecord record = student.getStudentAcademicRecords().get(0);
+            // Find the academic record matching the yearId, or get the first one if no yearId specified
+            StudentAcademicRecord record = student.getStudentAcademicRecords().stream()
+                    .filter(ar -> yearId == null || (ar.getYear() != null && ar.getYear().getId().equals(yearId)))
+                    .findFirst()
+                    .orElse(student.getStudentAcademicRecords().get(0));
+
+            // Set roll from academic record (changes per year)
+            studentResponseDto.setRoll(record.getRoll());
+
             if (record.getClassroomVersionSection() != null) {
                 ClassroomVersionSection cvs = record.getClassroomVersionSection();
                 studentResponseDto.setClassRoomId(cvs.getClassRoom().getId());
@@ -180,10 +207,24 @@ public class StudentMapper {
 
     /**
      * Extracts class/version/section/year IDs from academic record for RequestDto (edit form)
+     * Loads the most recent year's academic record
      */
     private static void extractAcademicInfoForRequest(Student student, StudentRequestDto studentRequestDto) {
         if (student.getStudentAcademicRecords() != null && !student.getStudentAcademicRecords().isEmpty()) {
-            StudentAcademicRecord record = student.getStudentAcademicRecords().get(0);
+            // Get the most recent year's academic record (highest year value)
+            StudentAcademicRecord record = student.getStudentAcademicRecords().stream()
+                    .filter(ar -> ar.getYear() != null)
+                    .max((ar1, ar2) -> {
+                        try {
+                            int year1 = Integer.parseInt(ar1.getYear().getName());
+                            int year2 = Integer.parseInt(ar2.getYear().getName());
+                            return Integer.compare(year1, year2);
+                        } catch (Exception e) {
+                            return 0;
+                        }
+                    })
+                    .orElse(student.getStudentAcademicRecords().get(0));
+
             if (record.getClassroomVersionSection() != null) {
                 ClassroomVersionSection cvs = record.getClassroomVersionSection();
                 studentRequestDto.setClassRoomId(cvs.getClassRoom().getId());
@@ -214,10 +255,22 @@ public class StudentMapper {
      * Used for displaying student data in templates
      */
     public static StudentResponseDto mapToStudentResponseDto(Student student) {
+        return mapToStudentResponseDto(student, null);
+    }
+
+    /**
+     * Maps Student Entity to StudentResponseDto with specific year filter
+     * Used for displaying student data in templates when filtering by year
+     */
+    public static StudentResponseDto mapToStudentResponseDto(Student student, Long yearId) {
         StudentResponseDto studentResponseDto = new StudentResponseDto();
         mapBasicFields(student, studentResponseDto);
-        extractAcademicInfoForResponse(student, studentResponseDto);
+        extractAcademicInfoForResponse(student, studentResponseDto, yearId);
         studentResponseDto.setAddresses(mapAddressesToResponseDto(student));
+        // Set all academic records for display
+        if (student.getStudentAcademicRecords() != null) {
+            studentResponseDto.setStudentAcademicRecords(student.getStudentAcademicRecords());
+        }
         return studentResponseDto;
     }
 
