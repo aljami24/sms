@@ -212,6 +212,15 @@ public class StudentController {
 
     }
 
+    //    Student Payment
+    @GetMapping("/payment/{id}")
+    public String showStdPayment(@PathVariable Long id, Model model) {
+        StudentResponseDto showStudentDetail = studentService.showStudentDetails(id);
+        model.addAttribute("showStudentDetail", showStudentDetail);
+        model.addAttribute("title", "Student Payment");
+        return "student/studentFeePayment";
+    }
+
     @PostMapping("/delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.deleteById(id);
