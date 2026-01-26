@@ -213,6 +213,11 @@
                    th:href="@{'/student/update/'+${showStudentDetail.id}}">
                     Edit
                 </a>
+                <!-- Payment -->
+                <a class="btn btn-success btn-sm" sec:authorize="hasAnyRole('ADMIN', 'ACCOUNT_ADMIN')"
+                   th:href="@{'/student/payment/'+${showStudentDetail.id}}">
+                    Payment
+                </a>
 
 
                 <!-- Spacer -->
