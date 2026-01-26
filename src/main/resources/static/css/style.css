@@ -18,7 +18,18 @@ body { margin: 0;
 /*  ===================== navbar =======================*/
 .navbar {
     background: #e0f2fe;
-    z-index: 1050;
+    position: relative;
+    z-index: 1040;
+    overflow: visible !important;
+}
+
+.navbar .nav-item.dropdown {
+    position: relative;
+}
+
+.navbar .dropdown-menu {
+    position: absolute;
+    z-index: 1055;
 }
 
 /* ========================= sidebar =======================*/
@@ -170,6 +181,27 @@ table td {
 
 .action-btn:hover {
     transform: scale(1.15);
+}
+
+
+
+/*===============  month check box  =========================*/
+
+.month-tile {
+    cursor: pointer;
+    background: #f8f9fa;
+    min-height: 80px;
+    transition: all 0.2s ease;
+}
+
+.month-checkbox:checked + .month-tile {
+    background: green;
+    color: #fff;
+    border-color: #0d6efd;
+}
+
+.month-tile:hover {
+    background: #e9ecef;
 }
 
 

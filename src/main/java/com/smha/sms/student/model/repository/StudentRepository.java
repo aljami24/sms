@@ -12,36 +12,45 @@ import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    boolean existsByRoll(Integer roll);
-    boolean existsByRegistration(Integer registration);
 
-    Optional<Student> findByRoll(int roll);
+    @Query("SELECT DISTINCT s FROM Student s " +
+            "JOIN s.studentAcademicRecords sar " +
+            "WHERE sar.roll = :roll")
+    Optional<Student> findByRoll(@Param("roll") Integer roll);
+
+    Optional<Student> findByRegistration(Integer registration);
+
+    boolean existsByRegistration(Integer registration);
 
     @Query("SELECT s FROM Student s " +
             "JOIN s.studentAcademicRecords sar " +
             "JOIN sar.classroomVersionSection cvs " +
             "LEFT JOIN cvs.section sec " +
             "LEFT JOIN cvs.version ver " +
-            "WHERE (:rollNumber IS NULL OR s.roll = :rollNumber) " +
+            "LEFT JOIN sar.year y " +
+            "WHERE (:rollNumber IS NULL OR sar.roll = :rollNumber) " +
             "AND (:registrationNumber IS NULL OR s.registration = :registrationNumber) " +
             "AND (:classRoomId IS NULL OR cvs.classRoom.id = :classRoomId) " +
             "AND (:section IS NULL OR sec.name = :section) " +
-            "AND (:version IS NULL OR ver.name = :version)")
+            "AND (:version IS NULL OR ver.name = :version) " +
+            "AND (:yearId IS NULL OR y.id = :yearId)")
     Page<Student> filterStudents(
             @Param("rollNumber") Integer rollNumber,
             @Param("registrationNumber") Integer registrationNumber,
             @Param("classRoomId") Long classRoomId,
             @Param("section") String section,
             @Param("version") String version,
+            @Param("yearId") Long yearId,
             Pageable pageable
     );
 
-    @Query("SELECT COALESCE(MAX(s.roll), 0) FROM Student s " +
-            "JOIN s.studentAcademicRecords sar " +
+    @Query("SELECT COALESCE(MAX(sar.roll), 0) FROM StudentAcademicRecord sar " +
             "JOIN sar.classroomVersionSection cvs " +
             "WHERE cvs.classRoom.id = :classRoomId " +
-            "AND cvs.version.id = :versionId")
+            "AND cvs.version.id = :versionId " +
+            "AND sar.year.id = :yearId")
     Integer findMaxRollByClassRoomAndVersion(@Param("classRoomId") Long classRoomId,
-                                              @Param("versionId") Long versionId);
+                                              @Param("versionId") Long versionId,
+                                              @Param("yearId") Long yearId);
 
 }
