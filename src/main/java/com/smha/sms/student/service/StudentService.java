@@ -2,7 +2,8 @@ package com.smha.sms.student.service;
 
 import com.smha.sms.academic.model.entity.ClassroomVersionSection;
 import com.smha.sms.academic.model.entity.Year;
-import com.smha.sms.academic.model.repository.*;
+import com.smha.sms.academic.model.repository.ClassroomVersionSectionRepository;
+import com.smha.sms.academic.model.repository.YearRepository;
 import com.smha.sms.common.util.Helper;
 import com.smha.sms.student.model.dto.request.StudentRequestDto;
 import com.smha.sms.student.model.dto.response.StudentResponseDto;
@@ -37,9 +38,6 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final ClassroomVersionSectionRepository classroomVersionSectionRepository;
     private final YearRepository yearRepository;
-    private final ClassRoomRepository classRoomRepository;
-    private final VersionRepository versionRepository;
-    private final SectionRepository sectionRepository;
 
     @Value("${file.upload-directory}")
     private String uploadDir;
