@@ -27,50 +27,48 @@ public class StudentMapper {
     /**
      * Maps basic student fields from RequestDto to Entity
      */
-    private static void mapBasicFields(StudentRequestDto dto, Student student) {
-        student.setId(dto.getId());
-        student.setName(dto.getName());
-        student.setDob(dto.getDob());
-        student.setGender(dto.getGender());
-        student.setFatherName(dto.getFatherName());
-        student.setMotherName(dto.getMotherName());
-        student.setIdentityNumber(dto.getIdentityNumber());
-        student.setIdentityType(dto.getIdentityType());
-        student.setPhotoDir(dto.getPhotoDir());
-        student.setNidDir(dto.getNidDir());
+    private static void mapBasicFields(StudentRequestDto studentRequestDto, Student student) {
+        student.setId(studentRequestDto.getId());
+        student.setName(studentRequestDto.getName());
+        student.setDob(studentRequestDto.getDob());
+        student.setGender(studentRequestDto.getGender());
+        student.setFatherName(studentRequestDto.getFatherName());
+        student.setMotherName(studentRequestDto.getMotherName());
+        student.setIdentityNumber(studentRequestDto.getIdentityNumber());
+        student.setIdentityType(studentRequestDto.getIdentityType());
+        student.setPhotoDir(studentRequestDto.getPhotoDir());
+        student.setNidDir(studentRequestDto.getNidDir());
     }
 
     /**
      * Maps basic student fields from Entity to ResponseDto
      */
-    private static void mapBasicFields(Student student, StudentResponseDto dto) {
-        dto.setId(student.getId());
-        dto.setName(student.getName());
-        dto.setFatherName(student.getFatherName());
-        dto.setMotherName(student.getMotherName());
-        dto.setDob(student.getDob());
-        dto.setGender(student.getGender());
-        // Registration comes from student (remains constant)
-        dto.setRegistration(student.getRegistration());
-        // Roll is set from academic records (changes per year)
-        dto.setPhotoDir(student.getPhotoDir());
-        dto.setNidDir(student.getNidDir());
+    private static void mapBasicFields(Student student, StudentResponseDto studentResponseDto) {
+        studentResponseDto.setId(student.getId());
+        studentResponseDto.setName(student.getName());
+        studentResponseDto.setFatherName(student.getFatherName());
+        studentResponseDto.setMotherName(student.getMotherName());
+        studentResponseDto.setDob(student.getDob());
+        studentResponseDto.setGender(student.getGender());
+        studentResponseDto.setRegistration(student.getRegistration());
+        studentResponseDto.setPhotoDir(student.getPhotoDir());
+        studentResponseDto.setNidDir(student.getNidDir());
     }
 
     /**
      * Maps basic student fields from Entity to RequestDto (for edit form)
      */
-    private static void mapBasicFieldsToDto(Student student, StudentRequestDto dto) {
-        dto.setId(student.getId());
-        dto.setName(student.getName());
-        dto.setDob(student.getDob());
-        dto.setGender(student.getGender());
-        dto.setFatherName(student.getFatherName());
-        dto.setMotherName(student.getMotherName());
-        dto.setIdentityNumber(student.getIdentityNumber());
-        dto.setIdentityType(student.getIdentityType());
-        dto.setPhotoDir(student.getPhotoDir());
-        dto.setNidDir(student.getNidDir());
+    private static void mapBasicFieldsToDto(Student student, StudentRequestDto studentRequestDto) {
+        studentRequestDto.setId(student.getId());
+        studentRequestDto.setName(student.getName());
+        studentRequestDto.setDob(student.getDob());
+        studentRequestDto.setGender(student.getGender());
+        studentRequestDto.setFatherName(student.getFatherName());
+        studentRequestDto.setMotherName(student.getMotherName());
+        studentRequestDto.setIdentityNumber(student.getIdentityNumber());
+        studentRequestDto.setIdentityType(student.getIdentityType());
+        studentRequestDto.setPhotoDir(student.getPhotoDir());
+        studentRequestDto.setNidDir(student.getNidDir());
     }
 
     // ======================== Address Mapping ========================
@@ -163,14 +161,6 @@ public class StudentMapper {
      */
     public static void addAcademicRecordToStudent(Student student, ClassroomVersionSection cvs, Long yearId) {
         addAcademicRecordToStudent(student, cvs, yearId, null);
-    }
-
-    /**
-     * Extracts class/version/section/year IDs from academic record for ResponseDto
-     */
-
-    private static void extractAcademicInfoForResponse(Student student, StudentResponseDto studentResponseDto) {
-        extractAcademicInfoForResponse(student, studentResponseDto, null);
     }
 
     /**
