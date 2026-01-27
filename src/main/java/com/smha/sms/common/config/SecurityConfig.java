@@ -1,7 +1,10 @@
 package com.smha.sms.common.config;
 
+import com.smha.sms.user.service.SpringSecurityAuditorAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @EnableMethodSecurity
 @Configuration
+@EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class SecurityConfig {
 
     @Bean
@@ -34,5 +38,10 @@ public class SecurityConfig {
                         .logoutUrl("/logout").logoutSuccessUrl("/login"));
         return http.build();
 
+    }
+
+    @Bean
+    public AuditorAware<String> auditorProvider() {
+        return new SpringSecurityAuditorAware();
     }
 }
