@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+<div layout:fragment="content" class="page-bg card mx-2 shadow">
+
+    <!-- ===== Invoice Header ===== -->
+    <div class="card mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="fw-bold mb-0">Student Fee</h4>
+                <small class="text-muted">
+                    Date:
+                    <span th:text="${#dates.format(#dates.createNow(),'dd MMM yyyy')}"></span>
+                </small>
+            </div>
+            <span class="badge bg-warning fs-6">Pending</span>
+        </div>
+    </div>
+
+    <!-- ===== Student Info ===== -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold bg-light">
+            <i class="bi bi-person-badge me-1"></i> Student Details
+        </div>
+        <div class="card-body row g-3">
+            <div class="col-md-4"><strong>Roll:</strong> <span th:text="${showStudentDetail.roll}"></span></div>
+            <div class="col-md-4"><strong>Roll:</strong> <span th:text="${showStudentDetail.registration}"></span></div>
+            <div class="col-md-4"><strong>Name:</strong> <span th:text="${showStudentDetail.name}"></span></div>
+            <div class="col-md-4"><strong>Class:</strong> <span th:text="${showStudentDetail.classRoomName}"></span></div>
+            <div class="col-md-4"><strong>Version:</strong> <span th:text="${showStudentDetail.versionName}"></span></div>
+            <div class="col-md-4"><strong>Section:</strong> <span th:text="${showStudentDetail.sectionName}"></span></div>
+        </div>
+    </div>
+
+    <!-- ===== Payment Form ===== -->
+    <form action="@{/save}"
+          object="${/}"
+          method="post">
+
+        <div class="card shadow p-4">
+
+            <!-- ===== Payment Type ===== -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Payment Type</label>
+                    <select class="form-select" field="*{paymentType}" required>
+                        <option value="" disabled selected>-- Select Payment Type --</option>
+                        <option each="p : ${PaymentType}"
+                                value="${p}"
+                                text="${p.label}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ===== Month Selection ===== -->
+            <h6 class="fw-bold mb-3">
+                <i class="bi bi-calendar-check me-1"></i> Select Month(s)
+            </h6>
+
+            <div class="row g-3" id="monthGrid">
+                <div class="col-5 col-md-2 d-flex"
+                     th:each="m : ${T(com.smha.sms.common.enums.MonthName).values()}">
+
+                    <input type="checkbox"
+                           class="d-none month-checkbox"
+                           name="months"
+                           th:value="${m}"
+                           th:id="${'month_' + m}">
+
+                    <label th:for="${'month_' + m}"
+                           class="month-tile border rounded fw-semibold
+               d-flex align-items-center justify-content-center w-100 text-center p-3">
+                        <span th:text="${#strings.capitalize(m.name().toLowerCase())}"></span>
+                    </label>
+                </div>
+            </div>
+
+
+            <!-- ===== Amount ===== -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Total Payable</label>
+                    <div class="input-group">
+                        <span class="input-group-text">৳</span>
+                        <input type="text"
+                               class="form-control bg-light fw-bold"
+                               value="*{payAmount}"
+                               readonly>
+                    </div>
+                    <input type="hidden" field="*{payAmount}">
+                </div>
+            </div>
+
+            <!-- Hidden -->
+            <input type="hidden" field="*{studentId}" value="${student.id}">
+            <input type="hidden" field="*{paymentType}" value="STUDENTFEE">
+
+            <!-- Submit -->
+            <div class="text-end">
+                <button type="submit" class="btn btn-success btn-lg px-5">
+                    <i class="bi bi-credit-card me-1"></i> Confirm Payment
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+</div>
+</body>
+</html>
