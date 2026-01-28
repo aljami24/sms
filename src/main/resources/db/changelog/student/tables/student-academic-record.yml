@@ -16,6 +16,13 @@ databaseChangeLog:
                     nullable: false
 
               - column:
+                  name: roll
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: false
+
+              - column:
                   name: student_id
                   type: BIGINT
                   constraints:

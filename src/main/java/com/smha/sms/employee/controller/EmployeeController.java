@@ -162,7 +162,7 @@ public class EmployeeController {
     // Employee List---------------------------------------------------------------------------------
     @GetMapping("/list")
     public String getAllEmployee(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "1") int pageSize,
+                                 @RequestParam(defaultValue = "5") int pageSize,
                                  @RequestParam(defaultValue = "id") String sortField,
                                  @RequestParam(defaultValue = "desc") String sortOrder,
                                  Model model) {

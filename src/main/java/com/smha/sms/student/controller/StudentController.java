@@ -127,6 +127,7 @@ public class StudentController {
                             @RequestParam(required = false) Long className,
                             @RequestParam(required = false) String section,
                             @RequestParam(required = false) String version,
+                            @RequestParam(required = false) Long yearId,
                             Model model) {
 
         Page<StudentResponseDto> getStudentAll;
@@ -138,16 +139,25 @@ public class StudentController {
         Integer rollNum = (rollNumber != null && !rollNumber.isEmpty()) ? Integer.valueOf(rollNumber) : null;
         Integer registrationNum = (registrationNumber != null && !registrationNumber.isEmpty()) ? Integer.valueOf(registrationNumber) : null;
 
+        // Get current year and set as default if not provided
+        Long selectedYearId = yearId;
+        if (selectedYearId == null) {
+            String currentYear = String.valueOf(java.time.Year.now());
+            selectedYearId = yearRepository.findByName(currentYear)
+                    .map(com.smha.sms.academic.model.entity.Year::getId)
+                    .orElse(null);
+        }
+
         // Check if any filter is applied
-        boolean hasFilters = rollNum != null || registrationNum != null || className != null || cleanSection != null || cleanVersion != null;
+        boolean hasFilters = rollNum != null || registrationNum != null || className != null || cleanSection != null || cleanVersion != null || selectedYearId != null;
 
         if (hasFilters) {
             // Apply filters
             getStudentAll = studentService.filterStudents(
-                    rollNum, registrationNum, className, cleanSection, cleanVersion, page, pageSize);
+                    rollNum, registrationNum, className, cleanSection, cleanVersion, selectedYearId, page, pageSize);
 
             long totalElements = studentService.getTotalFilterCount(
-                    rollNum, registrationNum, className, cleanSection, cleanVersion);
+                    rollNum, registrationNum, className, cleanSection, cleanVersion, selectedYearId);
             totalPages = (long) Math.ceil((double) totalElements / pageSize);
         } else {
             // No filters - get all students
@@ -165,6 +175,7 @@ public class StudentController {
         model.addAttribute("getStudentAll", getStudentAll);
         model.addAttribute("title", "Student List");
         model.addAttribute("classRoom", classRoomRepository.findAll());
+        model.addAttribute("years", yearRepository.findAll());
 
         // Preserve filter values
         model.addAttribute("rollNumber", rollNumber);
@@ -172,6 +183,7 @@ public class StudentController {
         model.addAttribute("className", className);
         model.addAttribute("section", section);
         model.addAttribute("version", version);
+        model.addAttribute("yearId", selectedYearId);
         return "student/studentList";
     }
 
@@ -198,6 +210,15 @@ public class StudentController {
         model.addAttribute("title", "Student Details");
         return "student/studentDetails";
 
+    }
+
+    //    Student Payment
+    @GetMapping("/payment/{id}")
+    public String showStdPayment(@PathVariable Long id, Model model) {
+        StudentResponseDto showStudentDetail = studentService.showStudentDetails(id);
+        model.addAttribute("showStudentDetail", showStudentDetail);
+        model.addAttribute("title", "Student Payment");
+        return "student/studentFeePayment";
     }
 
     @PostMapping("/delete/{id}")
@@ -253,5 +274,40 @@ public class StudentController {
         return "redirect:/student/list?page=" + page + "&pageSize=" + pageSize + "#student-" + id;
     }
 
-//    Old Student Form View
+    //    Old Student Admission - Search by Registration
+    @GetMapping("/old-admission")
+    public String searchOldStudent(@RequestParam("registration") int registration, Model model) {
+        try {
+            StudentResponseDto student = studentService.getByRegistration(registration);
+            model.addAttribute("student", student);
+            model.addAttribute("classRoom", classRoomRepository.findAll());
+            model.addAttribute("version", versionRepository.findAll());
+            model.addAttribute("section", sectionRepository.findAll());
+            model.addAttribute("years", yearRepository.findAll());
+            model.addAttribute("title", "Old Student Admission");
+            return "student/oldAdmission";
+        } catch (NoSuchElementException e) {
+            model.addAttribute("errorMessage", "No student found with Registration: " + registration);
+            return "redirect:/student/list?error=" + "No student found with Registration: " + registration;
+        }
+    }
+
+    //    Old Student Admission - Confirm Admission
+    @PostMapping("/confirm-admission")
+    public String confirmOldAdmission(
+            @RequestParam("studentId") Long studentId,
+            @RequestParam("yearId") Long yearId,
+            @RequestParam("classRoomId") Long classRoomId,
+            @RequestParam(value = "sectionId", required = false) String sectionIdStr,
+            @RequestParam(value = "versionId", required = false) String versionIdStr) {
+
+        // Convert empty strings to null
+        Long sectionId = (sectionIdStr != null && !sectionIdStr.isEmpty()) ? Long.valueOf(sectionIdStr) : null;
+        Long versionId = (versionIdStr != null && !versionIdStr.isEmpty()) ? Long.valueOf(versionIdStr) : null;
+
+        studentService.admitOldStudent(studentId, yearId, classRoomId, sectionId, versionId);
+        return "redirect:/student/list";
+    }
+
+
 }

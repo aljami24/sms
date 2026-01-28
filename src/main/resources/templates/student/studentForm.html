@@ -10,7 +10,7 @@
 
 <body>
 
-<div layout:fragment="content">
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
 
     <!-- ===== Page Header ===== -->
     <div class="mb-4 d-flex align-items-center ps-4 gap-2">
@@ -25,7 +25,7 @@
 
             <!-- ================= Student Information ================= -->
             <div class="mb-5">
-                <div class="section-title ">
+                <div class="section-title mb-2 fw-semibold">
                     <i class="bi bi-person-fill"></i>
                     Student Information
                 </div>
@@ -33,19 +33,56 @@
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label">Student Name</label>
-                        <input class="form-control" placeholder="student name" th:field="*{name}" type="text">
+
+                        <div class="position-relative">
+                            <input type="text"
+                                   class="form-control pe-5"
+                                   placeholder="Student name"
+                                   th:field="*{name}"
+                                   oninput="toggleClearIcon(this)">
+
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3
+                                     d-none text-secondary"
+                                  style="cursor:pointer"
+                                  onclick="clearInput(this)">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </span>
+                        </div>
                     </div>
+
 
                     <div class="col-md-4">
                         <label class="form-label">Father Name</label>
-                        <input class="form-control" placeholder="father name" th:field="*{fatherName}" type="text">
+                        <div class="position-relative">
+                            <input type="text"
+                                   class="form-control pe-5"
+                                   placeholder="Father name"
+                                   th:field="*{fatherName}"
+                                   oninput="toggleClearIcon(this)">
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3
+                                         d-none text-secondary"
+                                  style="cursor:pointer"
+                                  onclick="clearInput(this)">
+                                    <i class="bi bi-x-circle-fill"></i>
+                            </span>
+                        </div>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label">Mother Name</label>
-                        <input class="form-control" placeholder="mother name" th:field="*{motherName}" type="text">
+                        <div class="position-relative">
+                            <input type="text"
+                                   class="form-control pe-5"
+                                   placeholder="Mother name"
+                                   th:field="*{motherName}"
+                                   oninput="toggleClearIcon(this)">
+                            <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
+                                  style="cursor:pointer"
+                                  onclick="clearInput(this)">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </span>
+                        </div>
                     </div>
-
                     <div class="col-md-4">
                         <label class="form-label">Date of Birth</label>
                         <input class="form-control" th:field="*{dob}" type="date">
@@ -118,7 +155,7 @@
             <div class="mb-5">
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="section-title mb-0">
+                    <div class="section-title mb-0 fw-semibold">
                         <i class="bi bi-geo-alt-fill me-1"></i>
                         Address Information
                     </div>
@@ -179,9 +216,20 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4">
                                 <label class="form-label">Village</label>
-                                <input class="form-control" th:field="*{addresses[__${iterStat.index}__].village}">
+                                <div class="position-relative">
+                                    <input type="text"
+                                           class="form-control pe-5"
+                                           placeholder="Village"
+                                           th:field="*{addresses[__${iterStat.index}__].village}"
+                                           oninput="toggleClearIcon(this)">
+                                    <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
+                                          style="cursor:pointer"
+                                          onclick="clearInput(this)">
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
@@ -191,7 +239,7 @@
 
             <!-- ================= Document Upload ================= -->
             <div class="mb-4">
-                <div class="section-title ">
+                <div class="section-title mb-2 fw-semibold">
                     <i class="bi bi-upload"></i>
                     Document Upload
                 </div>
@@ -464,6 +512,23 @@
             } else {
                 alert("At least one address is required");
             }
+        }
+    </script>
+    <script>
+        function toggleClearIcon(input) {
+            const icon = input.nextElementSibling;
+            if (input.value.trim() !== '') {
+                icon.classList.remove('d-none');
+            } else {
+                icon.classList.add('d-none');
+            }
+        }
+
+        function clearInput(icon) {
+            const input = icon.previousElementSibling;
+            input.value = '';
+            icon.classList.add('d-none');
+            input.focus();
         }
     </script>
 

@@ -26,6 +26,7 @@ public class CommonController {
         Page<EmployeeResponseDto> allEmployee = employeeService.getAllEmployee(0, 10, "id", "desc");
         model.addAttribute("allStudent", allStudent);
         model.addAttribute("allEmployee", allEmployee);
+        model.addAttribute("breadcrumbCurrent", "Dashboard");
         return "dashboard";
     }
 

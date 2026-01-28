@@ -10,7 +10,7 @@
 
 <body>
 
-<div class="container py-4" layout:fragment="content">
+<div class="container py-4 page-bg card mx-2 shadow" layout:fragment="content">
 
     <!-- ===== Profile Header ===== -->
     <div class="card shadow mb-5">
@@ -35,7 +35,7 @@
                     </h4>
                     <span class="badge bg-light text-dark">
                     Registration No:
-                    <span th:text="${showStudentDetail.roll}"></span>
+                    <span th:text="${showStudentDetail.registration}"></span>
                 </span>
                 </div>
 
@@ -100,27 +100,52 @@
             <div class="card shadow h-100">
                 <div class="card-body">
                     <h6 class="fw-semibold text-secondary mb-3">
-                        Academic Information
+                        Academic History
                     </h6>
 
-                    <div class="d-flex justify-content-between border-bottom py-2 small">
-                        <span>Class</span>
-                        <strong th:text="${showStudentDetail.classRoomName != null ? showStudentDetail.classRoomName : 'N/A'}"></strong>
-                    </div>
-
-                    <div class="d-flex justify-content-between border-bottom py-2 small">
-                        <span>Version</span>
-                        <strong th:text="${showStudentDetail.versionName != null ? showStudentDetail.versionName : 'N/A'}"></strong>
-                    </div>
-
-                    <div class="d-flex justify-content-between border-bottom py-2 small">
-                        <span>Section</span>
-                        <strong th:text="${showStudentDetail.sectionName != null ? showStudentDetail.sectionName : 'N/A'}"></strong>
-                    </div>
-
-                    <div class="d-flex justify-content-between pt-2 small">
-                        <span>Year</span>
-                        <strong th:text="${showStudentDetail.yearName != null ? showStudentDetail.yearName : 'N/A'}"></strong>
+                    <!-- Academic Records Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm table-hover mb-0">
+                            <thead class="table-light">
+                            <tr>
+                                <th class="text-center" style="width: 10%;">Year</th>
+                                <th style="width: 15%;">Roll</th>
+                                <th style="width: 25%;">Class</th>
+                                <th style="width: 20%;">Version</th>
+                                <th style="width: 20%;">Section</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="record : ${showStudentDetail.studentAcademicRecords}">
+                                <td class="text-center">
+                                    <span th:if="${record.year != null}" class="fw-semibold"
+                                          th:text="${record.year.name} ?: 'N/A'"></span>
+                                    <span th:if="${record.year == null}">N/A</span>
+                                </td>
+                                <td>
+                                    <span class="fw-semibold" th:text="${record.roll} ?: 'N/A'"></span>
+                                </td>
+                                <td>
+                                    <span th:if="${record.classroomVersionSection?.classRoom != null}"
+                                          th:text="${record.classroomVersionSection.classRoom.name} ?: 'N/A'"></span>
+                                    <span th:if="${record.classroomVersionSection?.classRoom == null}">N/A</span>
+                                </td>
+                                <td>
+                                    <span th:if="${record.classroomVersionSection?.version != null}"
+                                          th:text="${record.classroomVersionSection.version.name} ?: 'N/A'"></span>
+                                    <span th:if="${record.classroomVersionSection?.version == null}">N/A</span>
+                                </td>
+                                <td>
+                                    <span th:if="${record.classroomVersionSection?.section != null}"
+                                          th:text="${record.classroomVersionSection.section.name} ?: 'N/A'"></span>
+                                    <span th:if="${record.classroomVersionSection?.section == null}">-</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(showStudentDetail.studentAcademicRecords)}">
+                                <td colspan="5" class="text-center text-muted small">No academic records found</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -187,6 +212,11 @@
                 <a class="btn btn-warning btn-sm"
                    th:href="@{'/student/update/'+${showStudentDetail.id}}">
                     Edit
+                </a>
+                <!-- Payment -->
+                <a class="btn btn-success btn-sm" sec:authorize="hasAnyRole('ADMIN', 'ACCOUNT_ADMIN')"
+                   th:href="@{'/student/payment/'+${showStudentDetail.id}}">
+                    Payment
                 </a>
 
 
