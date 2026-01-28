@@ -32,14 +32,6 @@ databaseChangeLog:
                     unique: true
 
               - column:
-                  name: registration
-                  type: bigint
-                  constraints:
-                    nullable: false
-                    unique: true
-
-
-              - column:
                   name: name
                   type: VARCHAR(150)
                   constraints:
