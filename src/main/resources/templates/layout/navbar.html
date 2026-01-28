@@ -34,15 +34,15 @@
                     </div>
 
                     <div class="text-start lh-sm">
-                        <div class="fw-semibold text-dark">Abdullah Mahmud</div>
-                        <small class="text-muted">ADMIN</small>
+                        <div class="fw-semibold text-dark" th:text="${user.userName}"  ></div>
+                        <small class="text-muted" th:text="${user.getUserRoles}"></small>
                     </div>
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                     <li class="px-3 py-2">
-                        <div class="fw-bold">Abdullah Mahmud</div>
-                        <div class="small text-muted">ADMIN</div>
+                        <div class="fw-bold" sec:authentication="name" ></div>
+                        <div class="small text-muted" sec:authentication="principal.authorities" ></div>
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>

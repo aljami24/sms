@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-exam-fee
+      author: afzal
+      changes:
+        - createTable:
+            tableName: exam_fee
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: amount
+                  type: DOUBLE
+              - column:
+                  name: exam_name
+                  type: VARCHAR(100)
+              - column:
+                  name: year_id
+                  type: BIGINT
+              - column:
+                  name: student_id
+                  type: BIGINT
+              - column:
+                  name: cvs_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
+        - addForeignKeyConstraint:
+            constraintName: fk_admission_fee_year
+            baseTableName: exam_fee
+            baseColumnNames: year_id
+            referencedTableName: year
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_admission_fee_student
+            baseTableName: exam_fee
+            baseColumnNames: student_id
+            referencedTableName: student
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_admission_fee_cvs
+            baseTableName: exam_fee
+            baseColumnNames: cvs_id
+            referencedTableName: classroom_version_section
+            referencedColumnNames: id
