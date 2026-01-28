@@ -1,0 +1,68 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-expense-record
+      author: afzal
+      changes:
+        - createTable:
+            tableName: expense_record
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: date
+                  type: DATE
+              - column:
+                  name: amount
+                  type: DOUBLE
+              - column:
+                  name: month
+                  type: VARCHAR(20)
+              - column:
+                  name: year_id
+                  type: BIGINT
+              - column:
+                  name: expense_type_id
+                  type: BIGINT
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+              - column:
+                  name: employee_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
+        - addForeignKeyConstraint:
+            constraintName: fk_admission_fee_year
+            baseTableName: expense_record
+            baseColumnNames: year_id
+            referencedTableName: year
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_admission_fee_expense_type
+            baseTableName: expense_record
+            baseColumnNames: expense_type_id
+            referencedTableName: expense_type
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_admission_fee_employee
+            baseTableName: expense_record
+            baseColumnNames: employee_id
+            referencedTableName: employee
+            referencedColumnNames: id

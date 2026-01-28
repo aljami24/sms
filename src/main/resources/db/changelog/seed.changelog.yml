@@ -27,6 +27,25 @@ databaseChangeLog:
             tableName: police_stations
             quotchar: '"'
 
+        - loadData:
+            file: academicStructure/seeds/seed-year.csv
+            relativeToChangelogFile: true
+            tableName: year
+            quotchar: '"'
+
+        - loadData:
+            file: employee/seeds/employee_seed.csv
+            relativeToChangelogFile: true
+            tableName: employee
+            quotchar: '"'
+
+        - loadData:
+            file: address/seeds/seed-address.csv
+            relativeToChangelogFile: true
+            tableName: address
+            quotchar: '"'
+
+
   - changeSet:
       id: load-user-role-seed-data
       author: imran
@@ -50,13 +69,3 @@ databaseChangeLog:
             tableName: user_roles
             quotchar: '"'
 
-
-  - changeSet:
-      id: load-year-data
-      author: afzal
-      changes:
-        - loadData:
-            file: academicStructure/seeds/seed-year.csv
-            relativeToChangelogFile: true
-            tableName: year
-            quotchar: '"'

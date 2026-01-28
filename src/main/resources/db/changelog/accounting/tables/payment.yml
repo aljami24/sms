@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-payment
+      author: afzal
+      changes:
+        - createTable:
+            tableName: payment
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: student_id
+                  type: BIGINT
+              - column:
+                  name: cvs_id
+                  type: BIGINT
+              - column:
+                  name: year_id
+                  type: BIGINT
+              - column:
+                  name: invoice_id
+                  type: VARCHAR(100)
+              - column:
+                  name: payment_method
+                  type: VARCHAR(50)
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+              - column:
+                  name: amount
+                  type: DOUBLE
+              - column:
+                  name: payment_type_id
+                  type: BIGINT
+              - column:
+                  name: transaction_id
+                  type: VARCHAR(100)
+              - column:
+                  name: month
+                  type: VARCHAR(20)
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: updated_at
+                  type: DATETIME
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
