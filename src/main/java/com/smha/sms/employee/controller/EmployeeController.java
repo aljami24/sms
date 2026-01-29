@@ -10,11 +10,14 @@ import com.smha.sms.common.enums.AddressType;
 import com.smha.sms.common.enums.EmployeeType;
 import com.smha.sms.common.enums.Gender;
 import com.smha.sms.common.enums.IdentityType;
+import com.smha.sms.employee.model.dto.EmployeeFilter;
 import com.smha.sms.employee.model.dto.request.EmployeeFormDto;
 import com.smha.sms.employee.model.dto.response.EmployeeResponseDto;
 import com.smha.sms.employee.model.entity.Employee;
+import com.smha.sms.employee.model.enums.EmployeeStatus;
 import com.smha.sms.employee.model.repository.EmployeeRepository;
 import com.smha.sms.employee.service.EmployeeService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -161,22 +164,30 @@ public class EmployeeController {
 
     // Employee List---------------------------------------------------------------------------------
     @GetMapping("/list")
-    public String getAllEmployee(@RequestParam(defaultValue = "0") int page,
+    public String getAllEmployee(@ModelAttribute("filter")EmployeeFilter filter,
+                                 @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "5") int pageSize,
                                  @RequestParam(defaultValue = "id") String sortField,
                                  @RequestParam(defaultValue = "desc") String sortOrder,
                                  Model model) {
 
-        Page<EmployeeResponseDto> employees = employeeService.getAllEmployee(
-                page, pageSize, sortField, sortOrder);
 
-        model.addAttribute("employees", employees);
+        Page<EmployeeResponseDto> employeePage = employeeService.getAllFilterEmployee(
+                filter, page, pageSize, sortField, sortOrder);
+
+        model.addAttribute("employees", employeePage.getContent());
+        model.addAttribute("genders", Gender.values());
+        model.addAttribute("employeeTypes", EmployeeType.values());
+        model.addAttribute("allstatus", EmployeeStatus.values());
+        model.addAttribute("divisions", divisionRepository.findAll());
+        model.addAttribute("districts", districtRepository.findAll());
+        model.addAttribute("police_station", policeStationRepository.findAll());
         model.addAttribute("title", "Employee List");
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortOrder", sortOrder);
-        model.addAttribute("totalPages", employees.getTotalPages());
+        model.addAttribute("totalPages", employeePage.getTotalPages());
 
         return "employee/employeeList";
     }
