@@ -31,21 +31,23 @@
   <!-- ===== Filter Section ===== -->
   <div class="card filter-card shadow-sm border-0 mb-4">
     <div class="card-body">
-      <form method="get" action="">
+      <form method="get" th:action="@{/employee/list}" th:object="${filter}">
         <div class="row g-3">
 
+          <!--EmpId Filter-->
           <div class="col-md-3">
-            <input type="text" name="employeeId"
+            <input th:field="*{employeeId}" type="number"
                    class="form-control"
                    placeholder="Employee ID">
           </div>
+
+          <!--name Filter-->
           <div class="col-md-3">
             <div class="position-relative">
-              <input name="employeeId"
+              <input th:field="*{name}"
                      class="form-control"
-                     placeholder="Employee ID"
-                     value=" "
-                     type="number"
+                     placeholder="Employee Name"
+                     type="text"
                      oninput="toggleClearIcon(this)">
               <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
                     style="cursor:pointer"
@@ -54,29 +56,20 @@
             </div>
           </div>
 
+          <!--identityNumber Filter-->
           <div class="col-md-3">
-            <select name="employeeType" class="form-select">
-              <option value="">Employee Type</option>
-              <option>PERMANENT</option>
-              <option>CONTRACT</option>
-            </select>
+            <input th:field="*{identityNumber}" type="text"
+                   class="form-control"
+                   placeholder="Identity Number">
           </div>
 
-          <div class="col-md-3">
-            <select name="status" class="form-select">
-              <option value="">Status</option>
-              <option>ACTIVE</option>
-              <option>DEACTIVATE</option>
-            </select>
-          </div>
-
+          <!--phoneNumber Filter-->
           <div class="col-md-3">
             <div class="position-relative">
-              <input name="name"
+              <input th:field="*{phoneNumber}"
                      class="form-control"
-                     placeholder="employee name"
-                     value=" "
-                     type="number"
+                     placeholder="Phone Number"
+                     type="text"
                      oninput="toggleClearIcon(this)">
               <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-none"
                     style="cursor:pointer"
@@ -85,28 +78,75 @@
             </div>
           </div>
 
+          <!--gender Filter-->
           <div class="col-md-3">
-            <select name="Division" class="form-select">
-              <option value="">division</option>
-              <option>ACTIVE</option>
-              <option>DEACTIVATE</option>
+            <select th:field="*{gender}" class="form-select"> place
+              <option value="">--Select Gender--</option>
+              <option th:each="g : ${genders}"
+                      th:value="${g}"
+                      th:text="${g}"></option>
             </select>
           </div>
 
+          <!--divisionId Filter-->
           <div class="col-md-3">
-            <select name="District" class="form-select">
-              <option value="">district</option>
-              <option>ACTIVE</option>
-              <option>DEACTIVATE</option>
+            <select th:field="*{divisionId}" class="form-select">
+              <option value="">--Select Division--</option>
+              <option th:each="division : ${divisions}"
+                      th:text="${division.name}"
+                      th:value="${division.id}">
+              </option>
             </select>
           </div>
 
+          <!--districtId Filter-->
           <div class="col-md-3">
-            <select name="Police-station" class="form-select">
-              <option value="">police-station</option>
-              <option>ACTIVE</option>
-              <option>DEACTIVATE</option>
+            <select th:field="*{districtId}" class="form-select">
+              <option value="">--Select District--</option>
+              <option th:each="dis : ${districts}"
+                      th:text="${dis.name}"
+                      th:value="${dis.id}">
+
+              </option>
             </select>
+          </div>
+
+          <!--policeStationId Filter-->
+          <div class="col-md-3">
+            <select th:field="*{policeStationId}" class="form-select">
+              <option value="">--Select Police station--</option>
+              <option th:each="ps : ${police_station}"
+                      th:text="${ps.name}"
+                      th:value="${ps.id}">
+              </option>
+            </select>
+          </div>
+
+          <!--Emp Type Filter-->
+          <div class="col-md-3">
+            <select th:field="*{employeeType}" class="form-select">
+              <option value="">--Select Employee Type--</option>
+              <option th:each="e : ${employeeTypes}"
+                      th:value="${e}"
+                      th:text="${e}"></option>
+            </select>
+          </div>
+
+          <!--status Filter-->
+          <div class="col-md-3">
+            <select th:field="*{status}" class="form-select">
+              <option value="">--Select Status--</option>
+              <option th:each="st : ${allstatus}"
+                      th:value="${st}"
+                      th:text="${st}"></option>
+            </select>
+          </div>
+
+          <div class="col-md-2 d-grid">
+            <a th:href="@{/employee/list}"
+               class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-clockwise me-1"></i> Reset
+            </a>
           </div>
 
           <div class="col-md-2 d-grid">
@@ -138,7 +178,7 @@
 
           <tbody>
           <tr th:each="employee,stat : ${employees}">
-            <td class="text-center" th:text="${stat.count}">1</td>
+            <td class="text-center" th:text="${employee.serialNo}">1</td>
             <td>
               <span><strong>ID :</strong> <span th:text="${employee.employeeId}"></span></span><br>
               <span><strong>Name :</strong><a th:href="@{'/employee/view/' + ${employee.id}}"
@@ -173,14 +213,61 @@
   <nav aria-label="Page navigation example" class="mt-2">
     <ul class="pagination justify-content-center">
       <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-        <a class="page-link" th:href="@{/employee/list(page = ${currentPage - 1})}">Previous</a>
+        <a class="page-link" th:href="@{/employee/list(
+        page=${currentPage - 1},
+        pageSize=${pageSize},
+        sortField=${sortField},
+        sortOrder=${sortOrder},
+        employeeId=${filter.employeeId},
+        name=${filter.name},
+        gender=${filter.gender},
+        employeeType=${filter.employeeType},
+        identityNumber=${filter.identityNumber},
+        phoneNumber=${filter.phoneNumber},
+        status=${filter.status},
+        divisionId=${filter.divisionId},
+        districtId=${filter.districtId},
+        policeStationId=${filter.policeStationId}
+   )}">Previous</a>
       </li>
+
       <li class="page-item" th:each=" i : ${#numbers.sequence(0,totalPages -1)}"
           th:classappend="${i == currentPage} ? 'active' : ''">
-        <a class="page-link" th:text="${i + 1}" th:href="@{/employee/list(page = ${i})}">1</a>
+        <a class="page-link" th:text="${i + 1}" th:href="@{/employee/list(
+        page=${i},
+        pageSize=${pageSize},
+        sortField=${sortField},
+        sortOrder=${sortOrder},
+        employeeId=${filter.employeeId},
+        name=${filter.name},
+        gender=${filter.gender},
+        employeeType=${filter.employeeType},
+        identityNumber=${filter.identityNumber},
+        phoneNumber=${filter.phoneNumber},
+        status=${filter.status},
+        divisionId=${filter.divisionId},
+        districtId=${filter.districtId},
+        policeStationId=${filter.policeStationId}
+   )}">1</a>
       </li>
+
       <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-        <a class="page-link" th:href="@{/employee/list(page = ${currentPage + 1})}">Next</a>
+        <a class="page-link" th:href="@{/employee/list(
+        page=${currentPage + 1},
+        pageSize=${pageSize},
+        sortField=${sortField},
+        sortOrder=${sortOrder},
+        employeeId=${filter.employeeId},
+        name=${filter.name},
+        gender=${filter.gender},
+        employeeType=${filter.employeeType},
+        identityNumber=${filter.identityNumber},
+        phoneNumber=${filter.phoneNumber},
+        status=${filter.status},
+        divisionId=${filter.divisionId},
+        districtId=${filter.districtId},
+        policeStationId=${filter.policeStationId}
+   )}">Next</a>
       </li>
     </ul>
   </nav>
