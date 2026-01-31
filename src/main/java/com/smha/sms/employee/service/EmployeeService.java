@@ -1,12 +1,14 @@
 package com.smha.sms.employee.service;
 
 import com.smha.sms.common.util.Helper;
+import com.smha.sms.employee.model.dto.EmployeeFilter;
 import com.smha.sms.employee.model.dto.request.EmployeeFormDto;
 import com.smha.sms.employee.model.dto.response.EmployeeResponseDto;
 import com.smha.sms.employee.model.entity.Employee;
 import com.smha.sms.employee.model.enums.EmployeeStatus;
 import com.smha.sms.employee.model.mapper.EmployeeMapper;
 import com.smha.sms.employee.model.repository.EmployeeRepository;
+import com.smha.sms.employee.model.spacification.EmployeeSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +71,24 @@ public class EmployeeService {
             return employeeResponseDto;
         });
     }
+
+    // Filter
+    public Page<EmployeeResponseDto> getAllFilterEmployee(EmployeeFilter filter, int page, int pageSize, String sortField, String sortOrder
+    ) {
+
+        Sort.Direction direction = sortOrder.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(direction, sortField));
+
+        AtomicInteger serialNo = new AtomicInteger(page * pageSize + 1);
+        Page<Employee> employeePage = employeeRepository.findAll(EmployeeSpecification.filter(filter), pageRequest);
+
+        return employeePage.map(employee -> {
+            EmployeeResponseDto employeeResponseDto = EmployeeMapper.employeeEntityToResponse(employee);
+            employeeResponseDto.setSerialNo(serialNo.getAndIncrement());
+            return employeeResponseDto;
+        });
+    }
+
 
     // ================= Get By ID =================
     public EmployeeResponseDto getEmployeeById(Long id) {
