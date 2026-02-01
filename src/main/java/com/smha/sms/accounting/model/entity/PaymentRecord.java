@@ -36,7 +36,7 @@ public class PaymentRecord extends BaseEntity {
     private PaymentStatus status;
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "paymentType_id")
+    @JoinColumn (name = "payment_type_id")
     private PaymentType paymentType;
 
     @ManyToOne (fetch = FetchType.LAZY)
