@@ -36,7 +36,7 @@ public class Payment extends BaseEntity {
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "invoice_id")
-    private Invoice invoiceid;
+    private Invoice invoiceId;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
@@ -47,7 +47,7 @@ public class Payment extends BaseEntity {
     private Double amount;
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "paymentType_id")
+    @JoinColumn (name = "payment_type_id")
     private PaymentType paymentType;
 
     private String transactionId;

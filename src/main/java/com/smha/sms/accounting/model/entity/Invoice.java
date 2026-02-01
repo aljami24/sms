@@ -45,7 +45,7 @@ public class Invoice extends BaseEntity {
     private Double amount;
 
     @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "paymentType_id")
+    @JoinColumn (name = "payment_type_id")
     private PaymentType paymentType;
 
     private String transactionId;
