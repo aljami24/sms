@@ -26,7 +26,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         List<String> roleNames = user.getUserRoles();
 
-        // ২. Spring Security-র User Builder ব্যবহার করুন (ফুল প্যাকেজ নাম দিয়ে যাতে কনফ্লিক্ট না হয়)
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUserName())
                 .password(user.getPassword())

@@ -45,3 +45,25 @@ databaseChangeLog:
               - column:
                   name: updated_by
                   type: VARCHAR(100)
+
+
+        - addForeignKeyConstraint:
+            constraintName: fk_payment_record_year
+            baseTableName: payment_record
+            baseColumnNames: year_id
+            referencedTableName: year
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_payment_record_paymentType
+            baseTableName: payment_record
+            baseColumnNames: payment_type_id
+            referencedTableName: payment_type
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_payment_record_student
+            baseTableName: payment_record
+            baseColumnNames: student_id
+            referencedTableName: student
+            referencedColumnNames: id
