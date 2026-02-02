@@ -63,21 +63,37 @@ databaseChangeLog:
       author: imran
       changes:
 
+        # ================= PERMISSIONS =================
+        - loadData:
+            file: user-role/seed/permissions.csv
+            relativeToChangelogFile: true
+            tableName: permission
+            quotchar: '"'
+
+        # ================= ROLE =================
         - loadData:
             file: user-role/seed/role.csv
             relativeToChangelogFile: true
             tableName: role
             quotchar: '"'
 
+        # ================= USERS =================
         - loadData:
             file: user-role/seed/user.csv
             relativeToChangelogFile: true
             tableName: users
             quotchar: '"'
 
+        # ================= USER_ROLES =================
         - loadData:
             file: user-role/seed/user_roles.csv
             relativeToChangelogFile: true
             tableName: user_roles
             quotchar: '"'
 
+        # ================= ROLE_PERMISSIONS =================
+        - loadData:
+            file: user-role/seed/role_permission.csv
+            relativeToChangelogFile: true
+            tableName: role_permissions
+            quotchar: '"'

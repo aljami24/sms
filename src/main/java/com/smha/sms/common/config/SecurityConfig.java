@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class SecurityConfig {
@@ -27,8 +27,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/attendance/**", "/accounting/**", "/student/**", "/employee/**").hasAnyRole("ADMIN", "REGISTER_ADMIN", "ACCOUNT_ADMIN")
-                        .requestMatchers("/academic/**", "/user/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")

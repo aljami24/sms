@@ -199,7 +199,7 @@
         </div>
     </div>
 
-    <div class="card shadow mt-4" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')">
+    <div class="card shadow mt-4">
         <div class="card-body">
 
             <h6 class="fw-bold mb-3">
@@ -209,12 +209,12 @@
             <div class="d-flex flex-wrap align-items-center gap-2">
 
                 <!-- Edit -->
-                <a class="btn btn-warning btn-sm"
+                <a class="btn btn-warning btn-sm" sec:authorize="hasAuthority('STUDENT_UPDATE')"
                    th:href="@{'/student/update/'+${showStudentDetail.id}}">
                     Edit
                 </a>
                 <!-- Payment -->
-                <a class="btn btn-success btn-sm" sec:authorize="hasAnyRole('ADMIN', 'ACCOUNT_ADMIN')"
+                <a class="btn btn-success btn-sm" sec:authorize="hasAuthority('STUDENT_PAYMENT')"
                    th:href="@{'/student/payment/'+${showStudentDetail.id}}">
                     Payment
                 </a>
@@ -225,6 +225,7 @@
 
                 <!-- Delete -->
                 <button class="btn btn-danger btn-sm"
+                        sec:authorize="hasAuthority('STUDENT_DELETE')"
                         data-bs-toggle="modal"
                         th:data-bs-target="'#deleteModal_' + ${showStudentDetail.id}"
                         type="button">

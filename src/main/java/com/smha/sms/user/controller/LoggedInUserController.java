@@ -20,7 +20,7 @@ public class LoggedInUserController {
             return null;
         }
 
-        return userRepository.findByUserName(principal.getName())
+        return userRepository.findByUsername(principal.getName())
                 .orElse(null);
     }
 }
