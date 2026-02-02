@@ -23,52 +23,39 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public void create(UserAccessDto dto) {
-
         User user = new User();
-
         user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        user.setRoles(new HashSet<>(
-                roleRepository.findAllById(dto.getRoleIds())
-        ));
+        // Assign selected roles
+        user.setRoles(new HashSet<>(roleRepository.findAllById(dto.getRoleIds())));
 
-        user.setPermissions(new HashSet<>(
-                permissionRepository.findAllById(dto.getPermissionIds())
-        ));
+        // Assign selected permissions (overrides)
+        user.setPermissions(new HashSet<>(permissionRepository.findAllById(dto.getPermissionIds())));
 
-        userRepository.save(user);
+        userRepository.save(user); // user_permissions table auto update
     }
 
     public void update(UserAccessDto dto) {
-
         User user = userRepository.findById(dto.getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setUsername(dto.getUsername());
-
-        // password only if changed
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
-        user.setRoles(new HashSet<>(
-                roleRepository.findAllById(dto.getRoleIds())
-        ));
-
-        user.setPermissions(new HashSet<>(
-                permissionRepository.findAllById(dto.getPermissionIds())
-        ));
+        user.setRoles(new HashSet<>(roleRepository.findAllById(dto.getRoleIds())));
+        user.setPermissions(new HashSet<>(permissionRepository.findAllById(dto.getPermissionIds())));
 
         userRepository.save(user);
     }
 
-    public List<User> userList(){
-        List<User> all = userRepository.findAll();
-        return all;
+    public List<User> userList() {
+        return userRepository.findAll();
     }
 
-    public void delete(Long userId) {
-        userRepository.deleteById(userId);
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 }

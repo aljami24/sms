@@ -44,11 +44,11 @@ public class User extends BaseEntity{
     public Set<String> getAllPermissionCodes() {
         Set<String> allPermissions = new HashSet<>();
 
-        // Role permissions
-        roles.forEach(role ->
-                role.getPermissions()
-                        .forEach(p -> allPermissions.add(p.getCode()))
-        );
+//        // Role permissions
+//        roles.forEach(role ->
+//                role.getPermissions()
+//                        .forEach(p -> allPermissions.add(p.getCode()))
+//        );
 
         // Direct user permissions
         permissions.forEach(p -> allPermissions.add(p.getCode()));

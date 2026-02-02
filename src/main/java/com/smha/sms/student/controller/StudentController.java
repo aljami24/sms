@@ -278,7 +278,7 @@ public class StudentController {
     }
 
     //    Old Student Admission - Search by Registration
-    @PreAuthorize("hasAuthority('OLD-STUDENT_CREATE')")
+    @PreAuthorize("hasAuthority('OLD_STUDENT_CREATE')")
     @GetMapping("/old-admission")
     public String searchOldStudent(@RequestParam("registration") int registration, Model model) {
         try {

@@ -27,8 +27,6 @@
                    th:href="@{/user/list}">User</a>
                 <a class="sub-link" sec:authorize="hasAuthority('ROLE')"
                    th:href="@{/role/list}">Role</a>
-                <a class="sub-link" sec:authorize="hasAuthority('PERMISSION')"
-                   th:href="@{/permission/list}">Permission</a>
             </div>
         </div>
 
