@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,6 +46,7 @@ public class EmployeeController {
     PoliceStationRepository policeStationRepository;
 
     //Save Form View---------------------------------------------------------------------------------
+    @PreAuthorize("hasAuthority('EMPLOYEE_CREATE')")
     @GetMapping("/create")
     public String createForm(Model model) {
         EmployeeFormDto employeeFormDto = new EmployeeFormDto();
@@ -79,6 +81,7 @@ public class EmployeeController {
     }
 
     //Update Form View---------------------------------------------------------------------------------
+    @PreAuthorize("hasAuthority('EMPLOYEE_UPDATE')")
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id,
                            @RequestParam(defaultValue = "0") int page,
@@ -163,6 +166,7 @@ public class EmployeeController {
     }
 
     // Employee List---------------------------------------------------------------------------------
+    @PreAuthorize("hasAuthority('EMPLOYEE_LIST')")
     @GetMapping("/list")
     public String getAllEmployee(@ModelAttribute("filter")EmployeeFilter filter,
                                  @RequestParam(defaultValue = "0") int page,
@@ -193,6 +197,7 @@ public class EmployeeController {
     }
 
     // ================= View Employee =================
+    @PreAuthorize("hasAuthority('EMPLOYEE_VIEW')")
     @GetMapping("/view/{id}")
     public String getEmployeeById(@PathVariable Long id, Model model) {
 
@@ -206,6 +211,7 @@ public class EmployeeController {
 
 
     // =================  Delete =================
+    @PreAuthorize("hasAuthority('EMPLOYEE_DELETE')")
     @PostMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
@@ -213,6 +219,7 @@ public class EmployeeController {
     }
 
     // ================= Join Employee =================
+    @PreAuthorize("hasAuthority('EMPLOYEE_ACTIVE')")
     @PostMapping("/activate/{id}")
     public String activateEmployee(@PathVariable Long id) {
         employeeService.activateEmployee(id);
@@ -220,6 +227,7 @@ public class EmployeeController {
     }
 
     // ================= Deactivate Employee =================
+    @PreAuthorize("hasAuthority('EMPLOYEE_DEACTIVE')")
     @PostMapping("/deactivate/{id}")
     public String deactivateEmployee(@PathVariable Long id) {
         employeeService.deactivateEmployee(id);

@@ -8,6 +8,7 @@ import com.smha.sms.common.util.Helper;
 import com.smha.sms.student.model.dto.request.StudentRequestDto;
 import com.smha.sms.student.model.dto.response.StudentResponseDto;
 import com.smha.sms.student.model.entity.Student;
+import com.smha.sms.student.model.entity.StudentAcademicRecord;
 import com.smha.sms.student.model.mapper.StudentMapper;
 import com.smha.sms.student.model.repository.StudentRepository;
 import jakarta.transaction.Transactional;
@@ -112,19 +113,18 @@ public class StudentService {
             Integer rollNumber,
             Integer registrationNumber,
             Long classRoomId,
-            String section,
-            String version,
+            Long section,
+            Long version,
             Long yearId,
+            Long division,
+            Long district,
+            Long policeStation,
             int page,
             int pageSize) {
 
-        // Convert empty strings to null for proper JPQL query handling
-        String cleanSection = (section != null && section.isEmpty()) ? null : section;
-        String cleanVersion = (version != null && version.isEmpty()) ? null : version;
-
         PageRequest pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
         Page<Student> studentPage = studentRepository.filterStudents(
-                rollNumber, registrationNumber, classRoomId, cleanSection, cleanVersion, yearId, pageable
+                rollNumber, registrationNumber, classRoomId, section, version, yearId, division, district, policeStation, pageable
         );
 
         final Long filterYearId = yearId;
@@ -132,24 +132,24 @@ public class StudentService {
                 .map(student -> StudentMapper.mapToStudentResponseDto(student, filterYearId));
     }
 
-    public long getTotalFilterCount(Integer rollNumber, Integer registrationNumber, Long classRoomId, String section, String version, Long yearId) {
-        // Convert empty strings to null for proper JPQL query handling
-        String cleanSection = (section != null && section.isEmpty()) ? null : section;
-        String cleanVersion = (version != null && version.isEmpty()) ? null : version;
+    public long getTotalFilterCount(Integer rollNumber,
+                                    Integer registrationNumber,
+                                    Long classRoomId,
+                                    Long section,
+                                    Long version,
+                                    Long yearId,
+                                    Long division,
+                                    Long district,
+                                    Long policeStation) {
 
         PageRequest pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by(Sort.Direction.DESC, "id"));
         Page<Student> studentPage = studentRepository.filterStudents(
-                rollNumber, registrationNumber, classRoomId, cleanSection, cleanVersion, yearId, pageable
+                rollNumber, registrationNumber, classRoomId, section, version, yearId, division, district, policeStation, pageable
         );
         return studentPage.getTotalElements();
     }
 
-    //   Student Filter
-    public StudentResponseDto getByRoll(int rollNumber) {
-        Student student = studentRepository.findByRoll(rollNumber).orElseThrow();
-        return StudentMapper.mapToStudentResponseDto(student);
-    }
-
+    //    For Old Student Search
     public StudentResponseDto getByRegistration(int registrationNumber) {
         Student student = studentRepository.findByRegistration(registrationNumber).orElseThrow();
         return StudentMapper.mapToStudentResponseDto(student);
@@ -272,8 +272,7 @@ public class StudentService {
             student.setStudentAcademicRecords(new ArrayList<>());
         }
 
-        com.smha.sms.student.model.entity.StudentAcademicRecord academicRecord =
-                new com.smha.sms.student.model.entity.StudentAcademicRecord();
+        StudentAcademicRecord academicRecord = new StudentAcademicRecord();
         academicRecord.setStudent(student);
         academicRecord.setClassroomVersionSection(cvs);
         academicRecord.setYear(year);

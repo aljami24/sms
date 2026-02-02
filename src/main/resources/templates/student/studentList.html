@@ -24,16 +24,16 @@
         <div class="d-flex align-items-center gap-2">
 
             <!-- New Admission -->
-            <a class="btn btn-primary" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')"
+            <a class="btn btn-primary" sec:authorize="hasAuthority('STUDENT_CREATE')"
                th:href="@{/student/create}">
                 <i class="bi bi-clock-history me-1"></i> New Admission
             </a>
 
             <!-- Old Admission Button -->
             <button aria-expanded="false" class="btn btn-secondary"
+                    sec:authorize="hasAuthority('OLD_STUDENT_CREATE')"
                     data-bs-target="#OldAdmissionBox"
                     data-bs-toggle="collapse"
-                    sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')"
                     type="button">
                 <i class="bi bi-plus-circle me-1"></i> Old Admission
             </button>
@@ -44,7 +44,7 @@
                       method="get"
                       th:action="@{/student/old-admission}">
 
-                    <input class="form-control form-control-sm text-end"
+                    <input class="form-control form-control-sm"
                            name="registration"
                            placeholder="Registration No"
                            required
@@ -97,8 +97,8 @@
 
                     <div class="col-md-2">
                         <select class="form-select" name="className">
-                            <option value="">Class</option>
-                            <option th:each="classRoom : ${classRoom}"
+                            <option value="">--Select Class--</option>
+                            <option th:each="classRoom : ${classLoad}"
                                     th:selected="${className != null && className == classRoom.id}"
                                     th:text="${classRoom.name}"
                                     th:value="${classRoom.id}">
@@ -107,28 +107,68 @@
                     </div>
 
                     <div class="col-md-2">
-                        <select class="form-select" name="section">
-                            <option value="">Section</option>
-                            <option th:selected="${section == 'A'}" value="A">A</option>
-                            <option th:selected="${section == 'B'}" value="B">B</option>
+                        <select class="form-select" name="version">
+                            <option value="">--Select Version--</option>
+                            <option th:each="v : ${versionLoad}"
+                                    th:selected="${version != null && version == v.id}"
+                                    th:text="${v.name}"
+                                    th:value="${v.id}">
+                            </option>
                         </select>
                     </div>
 
                     <div class="col-md-2">
-                        <select class="form-select" name="version">
-                            <option value="">Version</option>
-                            <option th:selected="${version == 'Bangla'}" value="Bangla">Bangla</option>
-                            <option th:selected="${version == 'English'}" value="English">English</option>
+                        <select class="form-select" name="section">
+                            <option value="">--Select Section--</option>
+                            <option th:each="s : ${sectionLoad}"
+                                    th:selected="${section != null && section == s.id}"
+                                    th:text="${s.name}"
+                                    th:value="${s.id}">
+
+                            </option>
                         </select>
                     </div>
 
                     <div class="col-md-2">
                         <select class="form-select" name="yearId">
-                            <option value="">Year</option>
+                            <option value="">--Select Year--</option>
                             <option th:each="y : ${years}"
                                     th:selected="${yearId != null && yearId == y.id}"
                                     th:text="${y.name}"
                                     th:value="${y.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select class="form-select" name="division">
+                            <option value="">--Select Division--</option>
+                            <option th:each="division1 : ${divisionLoad}"
+                                    th:selected="${division != null && division == division1.id}"
+                                    th:text="${division1.name}"
+                                    th:value="${division1.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select class="form-select" name="district">
+                            <option value="">--Select District--</option>
+                            <option th:each="district1 : ${districtLoad}"
+                                    th:selected="${district != null && district == district1.id}"
+                                    th:text="${district1.name}"
+                                    th:value="${district1.id}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-2">
+                        <select class="form-select" name="policeStation">
+                            <option value="">--Select PoliceStation--</option>
+                            <option th:each="PStation : ${policeStationLoad}"
+                                    th:selected="${policeStation != null && policeStation == PStation.id}"
+                                    th:text="${PStation.name}"
+                                    th:value="${PStation.id}">
                             </option>
                         </select>
                     </div>
@@ -175,7 +215,7 @@
                         <td>
                             <span><strong>Roll :</strong> <span th:text="${student.roll}"></span></span><br>
                             <span><strong>Registration :</strong> <span th:text="${student.registration}"></span></span><br>
-                            <span><strong>Name :</strong> <a
+                            <span><strong>Name :</strong> <a sec:authorize="hasAuthority('STUDENT_VIEW')"
                                     class="text-decoration-none link-success link-underline-opacity-0 link-underline-opacity-100-hover"
                                     th:href="@{'/student/details/'+${student.id}}" title="View">
                                 <span th:text="${student.name}"></span></a>

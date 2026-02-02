@@ -186,7 +186,7 @@
     </div>
 
 
-    <div class="card shadow mt-4" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')">
+    <div class="card shadow mt-4">
         <div class="card-body">
 
             <h6 class="fw-bold mb-3">
@@ -196,26 +196,26 @@
             <div class="d-flex flex-wrap align-items-center gap-2">
 
                 <!-- Edit -->
-                <a class="btn btn-warning btn-sm"
+                <a class="btn btn-warning btn-sm" sec:authorize="hasAuthority('EMPLOYEE_UPDATE')"
                    th:href="@{'/employee/edit/' + ${employee.id}}">
                     Edit
                 </a>
 
                 <!-- Join / Activate Button -->
                 <form th:action="@{'/employee/activate/' + ${employee.id}}" method="post" th:if="${employee.status.name() == 'APPOINTED' || employee.status.name() == 'DEACTIVATE'}">
-                    <button type="submit" class="btn btn-success btn-sm">Activate</button>
+                    <button sec:authorize="hasAuthority('EMPLOYEE_ACTIVE')" type="submit" class="btn btn-success btn-sm">Activate</button>
                 </form>
 
                 <!-- Deactivate / Left Button -->
                 <form th:action="@{'/employee/deactivate/' + ${employee.id}}" method="post" th:if="${employee.status.name() == 'ACTIVATE'}">
-                    <button type="submit" class="btn btn-danger btn-sm">Deactivate</button>
+                    <button sec:authorize="hasAuthority('EMPLOYEE_DEACTIVE')" type="submit" class="btn btn-danger btn-sm">Deactivate</button>
                 </form>
 
                 <!-- Spacer -->
                 <div class="ms-auto"></div>
 
                 <!-- Delete -->
-                <button type="button"
+                <button type="button" sec:authorize="hasAuthority('EMPLOYEE_DELETE')"
                         class="btn btn-danger btn-sm"
                         data-bs-toggle="modal"
                         th:data-bs-target="'#deleteModal_' + ${employee.id}">

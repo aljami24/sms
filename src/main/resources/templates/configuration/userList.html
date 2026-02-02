@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+
+<div layout:fragment="content" class="container py-4 card page-bg shadow mx-2">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>User List</h4>
+        <a th:href="@{/user/form}" class="btn btn-primary">➕ Add User</a>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-success">
+        <tr>
+            <th style="width: 25%">Username</th>
+            <th style="width: 25%">Roles</th>
+            <th style="width: 25%">Permissions</th>
+            <th style="width: 25%">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.username}"></td>
+            <td>
+                <span th:each="r : ${user.roles}" th:text="${r.name + ' '}"></span>
+            </td>
+            <td>
+                <span th:each="p : ${user.permissions}" th:text="${p.code + ' '}"></span>
+            </td>
+            <td>
+                <a th:href="@{/user/edit/{id}(id=${user.id})}" class="btn btn-sm btn-warning">✏ Edit</a>
+                <form th:id="'deleteUserForm-' + ${user.id}"
+                      th:action="@{/user/delete/{id}(id=${user.id})}"
+                      method="post"
+                      style="display:inline;">
+
+                    <button type="button"
+                            class="btn btn-sm btn-danger"
+                            th:onclick="'confirmDelete(\'deleteUserForm-' + ${user.id} + '\')'">
+                        🗑 Delete
+                    </button>
+
+                </form>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function confirmDelete(formId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
+        }
+    </script>
+
+</div>
+
+</body>
+</html>

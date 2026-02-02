@@ -42,7 +42,15 @@ databaseChangeLog:
       relativeToChangelogFile: true
 
   - include:
-      file: user-role/table/user-role.yml
+      file: user-role/table/permission.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: user-role/table/role.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: user-role/table/user.yml
       relativeToChangelogFile: true
 
   - include:
@@ -62,7 +70,19 @@ databaseChangeLog:
       relativeToChangelogFile: true
 
   - include:
+      file: accounting/tables/transport_fee.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: accounting/tables/tuition_fee.yml
+      relativeToChangelogFile: true
+
+  - include:
       file: accounting/tables/expense_type.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: accounting/tables/payment_type.yml
       relativeToChangelogFile: true
 
   - include:
@@ -79,16 +99,4 @@ databaseChangeLog:
 
   - include:
       file: accounting/tables/payment_record.yml
-      relativeToChangelogFile: true
-
-  - include:
-      file: accounting/tables/payment_type.yml
-      relativeToChangelogFile: true
-
-  - include:
-      file: accounting/tables/transport_fee.yml
-      relativeToChangelogFile: true
-
-  - include:
-      file: accounting/tables/tuition_fee.yml
       relativeToChangelogFile: true

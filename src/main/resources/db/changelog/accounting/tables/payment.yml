@@ -23,7 +23,7 @@ databaseChangeLog:
                   type: BIGINT
               - column:
                   name: invoice_id
-                  type: VARCHAR(100)
+                  type: BIGINT
               - column:
                   name: payment_method
                   type: VARCHAR(50)
@@ -54,3 +54,38 @@ databaseChangeLog:
               - column:
                   name: updated_by
                   type: VARCHAR(100)
+
+        - addForeignKeyConstraint:
+            constraintName: fk_payment_year
+            baseTableName: payment
+            baseColumnNames: year_id
+            referencedTableName: year
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_payment_student
+            baseTableName: payment
+            baseColumnNames: student_id
+            referencedTableName: student
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_payment_cvs
+            baseTableName: payment
+            baseColumnNames: cvs_id
+            referencedTableName: classroom_version_section
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_payment_invoice
+            baseTableName: payment
+            baseColumnNames: invoice_id
+            referencedTableName: invoice
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_payment_paymentType
+            baseTableName: payment
+            baseColumnNames: payment_type_id
+            referencedTableName: payment_type
+            referencedColumnNames: id

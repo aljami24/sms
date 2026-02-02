@@ -54,3 +54,31 @@ databaseChangeLog:
               - column:
                   name: updated_by
                   type: VARCHAR(100)
+
+        - addForeignKeyConstraint:
+            constraintName: fk_invoice_year
+            baseTableName: invoice
+            baseColumnNames: year_id
+            referencedTableName: year
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_invoice_student
+            baseTableName: invoice
+            baseColumnNames: student_id
+            referencedTableName: student
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_invoice_cvs
+            baseTableName: invoice
+            baseColumnNames: cvs_id
+            referencedTableName: classroom_version_section
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            constraintName: fk_invoice_paymentType
+            baseTableName: invoice
+            baseColumnNames: payment_type_id
+            referencedTableName: payment_type
+            referencedColumnNames: id

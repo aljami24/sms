@@ -18,52 +18,62 @@
         </a>
 
         <div class="menu-item">
-            <a class="menu-toggle" data-target="students" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">
+            <a class="menu-toggle" data-target="configuration" >
+                <span><i class="bi bi-people me-2"></i> Configuration</span>
+                <i class="bi bi-chevron-right arrow"></i>
+            </a>
+            <div class="submenu" id="configuration">
+                <a class="sub-link" sec:authorize="hasAuthority('USER')"
+                   th:href="@{/user/list}">User</a>
+                <a class="sub-link" sec:authorize="hasAuthority('ROLE')"
+                   th:href="@{/role/list}">Role</a>
+                <a class="sub-link" sec:authorize="hasAuthority('PERMISSION')"
+                   th:href="@{/permission/list}">Permission</a>
+            </div>
+        </div>
+
+        <div class="menu-item">
+            <a class="menu-toggle" data-target="students">
                 <span><i class="bi bi-people me-2"></i> Students</span>
                 <i class="bi bi-chevron-right arrow"></i>
             </a>
             <div class="submenu" id="students">
-                <a class="sub-link" th:href="@{/student/list}"
-                   sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">Student List</a>
+                <a class="sub-link" sec:authorize="hasAuthority('STUDENT_LIST')"
+                   th:href="@{/student/list}">Student List</a>
             </div>
         </div>
 
         <div class="menu-item">
-            <a class="menu-toggle" data-target="employees" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">
+            <a class="menu-toggle" data-target="employees" >
                 <span><i class="bi bi-person-badge me-2"></i> Employee</span>
                 <i class="bi bi-chevron-right arrow"></i>
             </a>
             <div class="submenu" id="employees">
-                <a class="sub-link" th:href="@{/employee/list}"
-                   sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">Employee List</a>
+                <a class="sub-link" sec:authorize="hasAuthority('EMPLOYEE_LIST')"
+                   th:href="@{/employee/list}">Employee List</a>
             </div>
         </div>
 
         <div class="menu-item">
-            <a class="menu-toggle" data-target="attendance" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">
+            <a class="menu-toggle" data-target="attendance" >
                 <span><i class="bi bi-calendar-check me-2"></i> Attendance</span>
                 <i class="bi bi-chevron-right arrow"></i>
             </a>
             <div class="submenu" id="attendance">
-                <a class="sub-link" th:href="@{/attendance/attendanceStudentView}"
-                   sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">Student Attendance</a>
-                <a class="sub-link" th:href="@{/attendance/attendanceEmployeeView}"
-                   sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">Employee Attendance</a>
+                <a class="sub-link" th:href="@{/attendance/attendanceStudentView}">Student Attendance</a>
+                <a class="sub-link" th:href="@{/attendance/attendanceEmployeeView}">Employee Attendance</a>
             </div>
         </div>
 
         <div class="menu-item">
-            <a class="menu-toggle" data-target="account" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">
+            <a class="menu-toggle" data-target="account" >
                 <span><i class="bi bi-wallet2 me-2"></i> Account</span>
                 <i class="bi bi-chevron-right arrow"></i>
             </a>
             <div class="submenu" id="account">
-                <a class="sub-link" th:href="@{/account/accountIncome}"
-                   sec:authorize="hasAnyRole('ADMIN','ACCOUNT_ADMIN')">Pay Income</a>
-                <a class="sub-link" th:href="@{/account/accountExpense}"
-                   sec:authorize="hasAnyRole('ADMIN','ACCOUNT_ADMIN')">Pay Expense</a>
-                <a class="sub-link" th:href="@{/account/accountSummary}"
-                   sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">Summary</a>
+                <a class="sub-link" th:href="@{/account/accountIncome}">Pay Income</a>
+                <a class="sub-link" th:href="@{/account/accountExpense}">Pay Expense</a>
+                <a class="sub-link" th:href="@{/account/accountSummary}">Summary</a>
             </div>
         </div>
 
@@ -74,7 +84,7 @@
             </a>
             <div class="submenu" id="report">
                 <a class="sub-link" th:href="@{/report}"
-                   sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">All Report</a>
+                   >All Report</a>
             </div>
         </div>
     </div>

@@ -13,10 +13,10 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-    @Query("SELECT DISTINCT s FROM Student s " +
-            "JOIN s.studentAcademicRecords sar " +
-            "WHERE sar.roll = :roll")
-    Optional<Student> findByRoll(@Param("roll") Integer roll);
+//    @Query("SELECT DISTINCT s FROM Student s " +
+//            "JOIN s.studentAcademicRecords sar " +
+//            "WHERE sar.roll = :roll")
+//    Optional<Student> findByRoll(@Param("roll") Integer roll);
 
     Optional<Student> findByRegistration(Integer registration);
 
@@ -25,22 +25,29 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT s FROM Student s " +
             "JOIN s.studentAcademicRecords sar " +
             "JOIN sar.classroomVersionSection cvs " +
+            "LEFT JOIN s.addresses a " +
             "LEFT JOIN cvs.section sec " +
             "LEFT JOIN cvs.version ver " +
             "LEFT JOIN sar.year y " +
             "WHERE (:rollNumber IS NULL OR sar.roll = :rollNumber) " +
             "AND (:registrationNumber IS NULL OR s.registration = :registrationNumber) " +
             "AND (:classRoomId IS NULL OR cvs.classRoom.id = :classRoomId) " +
-            "AND (:section IS NULL OR sec.name = :section) " +
-            "AND (:version IS NULL OR ver.name = :version) " +
-            "AND (:yearId IS NULL OR y.id = :yearId)")
+            "AND (:section IS NULL OR sec.id = :section) " +
+            "AND (:version IS NULL OR ver.id = :version) " +
+            "AND (:yearId IS NULL OR y.id = :yearId)" +
+            "AND (:division IS NULL OR a.division.id = :division) " +
+            "AND (:district IS NULL OR a.district.id = :district) " +
+            "AND (:policeStation IS NULL OR a.policeStation.id = :policeStation)")
     Page<Student> filterStudents(
             @Param("rollNumber") Integer rollNumber,
             @Param("registrationNumber") Integer registrationNumber,
             @Param("classRoomId") Long classRoomId,
-            @Param("section") String section,
-            @Param("version") String version,
+            @Param("section") Long section,
+            @Param("version") Long version,
             @Param("yearId") Long yearId,
+            @Param("division") Long division,
+            @Param("district") Long district,
+            @Param("policeStation") Long policeStation,
             Pageable pageable
     );
 
@@ -50,7 +57,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             "AND cvs.version.id = :versionId " +
             "AND sar.year.id = :yearId")
     Integer findMaxRollByClassRoomAndVersion(@Param("classRoomId") Long classRoomId,
-                                              @Param("versionId") Long versionId,
-                                              @Param("yearId") Long yearId);
+                                             @Param("versionId") Long versionId,
+                                             @Param("yearId") Long yearId);
 
 }
