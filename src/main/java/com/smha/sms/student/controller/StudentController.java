@@ -2,6 +2,7 @@ package com.smha.sms.student.controller;
 
 import com.smha.sms.academic.model.entity.Section;
 import com.smha.sms.academic.model.entity.Version;
+import com.smha.sms.academic.model.entity.Year;
 import com.smha.sms.academic.model.repository.*;
 import com.smha.sms.common.address.dto.AddressRequestDto;
 import com.smha.sms.common.address.entity.District;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -74,6 +76,13 @@ public class StudentController {
         return "student/studentForm";
     }
 
+    //   Student Save Method
+    @PostMapping("/save")
+    public String saveStudent(StudentRequestDto studentRequestDto) {
+        studentService.saveStudent(studentRequestDto);
+        return "redirect:/student/list";
+    }
+
     //   Division Load For Address
     @GetMapping("/divisions")
     @ResponseBody
@@ -95,14 +104,14 @@ public class StudentController {
         return policeStationRepository.findByDistrictIdAndActiveTrueOrderByNameAsc(districtId);
     }
 
-    //   Versions Load by Class (Cascading Dropdown)
+    //   Versions Load by Class
     @GetMapping("/versions-by-class")
     @ResponseBody
     public List<Version> getVersionsByClass(@RequestParam("classRoomId") Long classRoomId) {
         return classroomVersionSectionRepository.findDistinctVersionsByClassRoomId(classRoomId);
     }
 
-    //   Sections Load by Class (Cascading Dropdown)
+    //   Sections Load by Class
     @GetMapping("/sections-by-class")
     @ResponseBody
     public List<Section> getSectionsByClass(@RequestParam("classRoomId") Long classRoomId,
@@ -113,13 +122,6 @@ public class StudentController {
         return classroomVersionSectionRepository.findDistinctSectionsByClassRoomId(classRoomId);
     }
 
-    //   Student Save Method
-    @PostMapping("/save")
-    public String saveStudent(StudentRequestDto studentRequestDto) {
-        studentService.saveStudent(studentRequestDto);
-        return "redirect:/student/list";
-    }
-
     //   All Student List View
     @PreAuthorize("hasAuthority('STUDENT_LIST')")
     @GetMapping("/list")
@@ -128,17 +130,17 @@ public class StudentController {
                             @RequestParam(required = false) String rollNumber,
                             @RequestParam(required = false) String registrationNumber,
                             @RequestParam(required = false) Long className,
-                            @RequestParam(required = false) String section,
-                            @RequestParam(required = false) String version,
+                            @RequestParam(required = false) Long section,
+                            @RequestParam(required = false) Long version,
+                            @RequestParam(required = false) Long division,
+                            @RequestParam(required = false) Long district,
+                            @RequestParam(required = false) Long policeStation,
                             @RequestParam(required = false) Long yearId,
                             Model model) {
 
         Page<StudentResponseDto> getStudentAll;
         long totalPages;
 
-        // Convert empty strings to null for proper filtering
-        String cleanSection = (section != null && section.isEmpty()) ? null : section;
-        String cleanVersion = (version != null && version.isEmpty()) ? null : version;
         Integer rollNum = (rollNumber != null && !rollNumber.isEmpty()) ? Integer.valueOf(rollNumber) : null;
         Integer registrationNum = (registrationNumber != null && !registrationNumber.isEmpty()) ? Integer.valueOf(registrationNumber) : null;
 
@@ -147,20 +149,20 @@ public class StudentController {
         if (selectedYearId == null) {
             String currentYear = String.valueOf(java.time.Year.now());
             selectedYearId = yearRepository.findByName(currentYear)
-                    .map(com.smha.sms.academic.model.entity.Year::getId)
+                    .map(Year::getId)
                     .orElse(null);
         }
 
         // Check if any filter is applied
-        boolean hasFilters = rollNum != null || registrationNum != null || className != null || cleanSection != null || cleanVersion != null || selectedYearId != null;
+        boolean hasFilters = rollNum != null || registrationNum != null || className != null || section != null || version != null || selectedYearId != null || division != null || district != null || policeStation != null;
 
         if (hasFilters) {
             // Apply filters
             getStudentAll = studentService.filterStudents(
-                    rollNum, registrationNum, className, cleanSection, cleanVersion, selectedYearId, page, pageSize);
+                    rollNum, registrationNum, className, section, version, selectedYearId, division, district, policeStation, page, pageSize);
 
             long totalElements = studentService.getTotalFilterCount(
-                    rollNum, registrationNum, className, cleanSection, cleanVersion, selectedYearId);
+                    rollNum, registrationNum, className, section, version, selectedYearId, division, district, policeStation);
             totalPages = (long) Math.ceil((double) totalElements / pageSize);
         } else {
             // No filters - get all students
@@ -177,8 +179,13 @@ public class StudentController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("getStudentAll", getStudentAll);
         model.addAttribute("title", "Student List");
-        model.addAttribute("classRoom", classRoomRepository.findAll());
+        model.addAttribute("classLoad", classRoomRepository.findAll());
+        model.addAttribute("versionLoad", versionRepository.findAll());
+        model.addAttribute("sectionLoad", sectionRepository.findAll());
         model.addAttribute("years", yearRepository.findAll());
+        model.addAttribute("divisionLoad", divisionRepository.findAll(Sort.by(Sort.Direction.ASC, "name")));
+        model.addAttribute("districtLoad", districtRepository.findAll(Sort.by(Sort.Direction.ASC, "name")));
+        model.addAttribute("policeStationLoad", policeStationRepository.findAll(Sort.by(Sort.Direction.ASC, "name")));
 
         // Preserve filter values
         model.addAttribute("rollNumber", rollNumber);
@@ -187,23 +194,12 @@ public class StudentController {
         model.addAttribute("section", section);
         model.addAttribute("version", version);
         model.addAttribute("yearId", selectedYearId);
+        model.addAttribute("division", division);
+        model.addAttribute("district", district);
+        model.addAttribute("policeStation", policeStation);
         return "student/studentList";
     }
 
-    //    Student Filter
-    @GetMapping("/roll")
-    public String getStudentByRollNumber(@RequestParam("rollNumber") int rollNumber, Model model) {
-        try {
-            StudentResponseDto student = studentService.getByRoll(rollNumber);
-            model.addAttribute("getStudentAll", List.of(student));
-        } catch (NoSuchElementException e) {
-            model.addAttribute("getStudentAll", List.of());
-            model.addAttribute("errorMessage", "No student found with Roll: " + rollNumber);
-        }
-
-        model.addAttribute("title", "Student List");
-        return "student/studentList"; // Thymeleaf template
-    }
 
     //    Student Details
     @PreAuthorize("hasAuthority('STUDENT_VIEW')")

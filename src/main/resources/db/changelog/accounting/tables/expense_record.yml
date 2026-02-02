@@ -47,21 +47,21 @@ databaseChangeLog:
                   type: VARCHAR(100)
 
         - addForeignKeyConstraint:
-            constraintName: fk_admission_fee_year
+            constraintName: fk_expense_record_year
             baseTableName: expense_record
             baseColumnNames: year_id
             referencedTableName: year
             referencedColumnNames: id
 
         - addForeignKeyConstraint:
-            constraintName: fk_admission_fee_expense_type
+            constraintName: fk_expense_record_expense_type
             baseTableName: expense_record
             baseColumnNames: expense_type_id
             referencedTableName: expense_type
             referencedColumnNames: id
 
         - addForeignKeyConstraint:
-            constraintName: fk_admission_fee_employee
+            constraintName: fk_expense_record_employee
             baseTableName: expense_record
             baseColumnNames: employee_id
             referencedTableName: employee

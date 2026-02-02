@@ -45,6 +45,19 @@ databaseChangeLog:
             tableName: address
             quotchar: '"'
 
+        - loadData:
+            file: student/seeds/seed-student.csv
+            relativeToChangelogFile: true
+            tableName: student
+            quotchar: '"'
+
+        - loadData:
+            file: student/seeds/seed-student_academic_record.csv
+            relativeToChangelogFile: true
+            tableName: student_academic_record
+            quotchar: '"'
+
+
   - changeSet:
       id: load-user-role-seed-data
       author: imran

@@ -32,7 +32,7 @@ public class ExpenseRecord extends BaseEntity {
     private Year year;
 
     @ManyToOne
-    @JoinColumn(name ="expenseType_id")
+    @JoinColumn(name ="expense_type_id")
     private ExpenseType expenseType;
 
     private String description;
