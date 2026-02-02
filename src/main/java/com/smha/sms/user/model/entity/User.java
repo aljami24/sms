@@ -13,14 +13,16 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends BaseEntity {
+@Getter
+@Setter
+public class User extends BaseEntity{
 
-    private String userName;
+    private String username;
     private String password;
+
+    // Roles
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -29,8 +31,34 @@ public class User extends BaseEntity {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public List<String> getUserRoles() {
-        return getRoles().stream().map(Role::getName).toList();
+    // Direct user permissions
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_permissions",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private Set<Permission> permissions = new HashSet<>();
+
+    // Combined permissions from roles + direct user permissions
+    public Set<String> getAllPermissionCodes() {
+        Set<String> allPermissions = new HashSet<>();
+
+        // Role permissions
+        roles.forEach(role ->
+                role.getPermissions()
+                        .forEach(p -> allPermissions.add(p.getCode()))
+        );
+
+        // Direct user permissions
+        permissions.forEach(p -> allPermissions.add(p.getCode()));
+
+        return allPermissions;
     }
 
+    public Set<String> getUserRoles() {
+        Set<String> roleNames = new HashSet<>();
+        roles.forEach(r -> roleNames.add(r.getName()));
+        return roleNames;
+    }
 }

@@ -24,16 +24,16 @@
         <div class="d-flex align-items-center gap-2">
 
             <!-- New Admission -->
-            <a class="btn btn-primary" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')"
+            <a class="btn btn-primary" sec:authorize="hasAuthority('STUDENT_CREATE')"
                th:href="@{/student/create}">
                 <i class="bi bi-clock-history me-1"></i> New Admission
             </a>
 
             <!-- Old Admission Button -->
             <button aria-expanded="false" class="btn btn-secondary"
+                    sec:authorize="hasAuthority('OLD_STUDENT_CREATE')"
                     data-bs-target="#OldAdmissionBox"
                     data-bs-toggle="collapse"
-                    sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN')"
                     type="button">
                 <i class="bi bi-plus-circle me-1"></i> Old Admission
             </button>
@@ -175,7 +175,7 @@
                         <td>
                             <span><strong>Roll :</strong> <span th:text="${student.roll}"></span></span><br>
                             <span><strong>Registration :</strong> <span th:text="${student.registration}"></span></span><br>
-                            <span><strong>Name :</strong> <a
+                            <span><strong>Name :</strong> <a sec:authorize="hasAuthority('STUDENT_VIEW')"
                                     class="text-decoration-none link-success link-underline-opacity-0 link-underline-opacity-100-hover"
                                     th:href="@{'/student/details/'+${student.id}}" title="View">
                                 <span th:text="${student.name}"></span></a>

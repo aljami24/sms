@@ -42,7 +42,15 @@ databaseChangeLog:
       relativeToChangelogFile: true
 
   - include:
-      file: user-role/table/user-role.yml
+      file: user-role/table/permission.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: user-role/table/role.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: user-role/table/user.yml
       relativeToChangelogFile: true
 
   - include:

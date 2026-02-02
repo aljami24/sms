@@ -1,4 +1,4 @@
-id,user_name,password
-1,admin,$2a$12$S1.z1dRAJWChutSMey1KH.pScQqXofGGIm6V3WNmrSJnK/Ph76ogS
-2,register,$2a$12$S1.z1dRAJWChutSMey1KH.pScQqXofGGIm6V3WNmrSJnK/Ph76ogS
-3,account,$2a$12$S1.z1dRAJWChutSMey1KH.pScQqXofGGIm6V3WNmrSJnK/Ph76ogS
+"username","password"
+admin,$2a$12$S1.z1dRAJWChutSMey1KH.pScQqXofGGIm6V3WNmrSJnK/Ph76ogS
+register,$2a$12$S1.z1dRAJWChutSMey1KH.pScQqXofGGIm6V3WNmrSJnK/Ph76ogS
+account,$2a$12$S1.z1dRAJWChutSMey1KH.pScQqXofGGIm6V3WNmrSJnK/Ph76ogS

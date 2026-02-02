@@ -18,19 +18,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
 
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        User user = userRepository.findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-
-        List<String> roleNames = user.getUserRoles();
-
-        // ২. Spring Security-র User Builder ব্যবহার করুন (ফুল প্যাকেজ নাম দিয়ে যাতে কনফ্লিক্ট না হয়)
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUserName())
-                .password(user.getPassword())
-                .roles(roleNames.toArray(new String[0]))
-                .build();
+        return new CustomUserDetails(user);
     }
 }
