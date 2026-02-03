@@ -22,10 +22,10 @@ public class CustomUserDetails implements UserDetails {
 
         Set<GrantedAuthority> authorities = new HashSet<>();
 
-        // ROLE
-        user.getRoles().forEach(role ->
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()))
-        );
+//        // ROLE
+//        user.getRoles().forEach(role ->
+//                authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()))
+//        );
 
         // PERMISSION
         user.getAllPermissionCodes().forEach(code ->

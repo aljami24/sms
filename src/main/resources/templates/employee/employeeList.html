@@ -35,14 +35,14 @@
         <div class="row g-3">
 
           <!--EmpId Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <input th:field="*{employeeId}" type="number"
                    class="form-control"
                    placeholder="Employee ID">
           </div>
 
           <!--name Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="position-relative">
               <input th:field="*{name}"
                      class="form-control"
@@ -57,14 +57,14 @@
           </div>
 
           <!--identityNumber Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <input th:field="*{identityNumber}" type="text"
                    class="form-control"
                    placeholder="Identity Number">
           </div>
 
           <!--phoneNumber Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="position-relative">
               <input th:field="*{phoneNumber}"
                      class="form-control"
@@ -79,7 +79,7 @@
           </div>
 
           <!--gender Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <select th:field="*{gender}" class="form-select"> place
               <option value="">--Select Gender--</option>
               <option th:each="g : ${genders}"
@@ -89,7 +89,7 @@
           </div>
 
           <!--divisionId Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <select th:field="*{divisionId}" class="form-select">
               <option value="">--Select Division--</option>
               <option th:each="division : ${divisions}"
@@ -100,7 +100,7 @@
           </div>
 
           <!--districtId Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <select th:field="*{districtId}" class="form-select">
               <option value="">--Select District--</option>
               <option th:each="dis : ${districts}"
@@ -112,7 +112,7 @@
           </div>
 
           <!--policeStationId Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <select th:field="*{policeStationId}" class="form-select">
               <option value="">--Select Police station--</option>
               <option th:each="ps : ${police_station}"
@@ -123,7 +123,7 @@
           </div>
 
           <!--Emp Type Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <select th:field="*{employeeType}" class="form-select">
               <option value="">--Select Employee Type--</option>
               <option th:each="e : ${employeeTypes}"
@@ -133,7 +133,7 @@
           </div>
 
           <!--status Filter-->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <select th:field="*{status}" class="form-select">
               <option value="">--Select Status--</option>
               <option th:each="st : ${allstatus}"
@@ -163,6 +163,11 @@
   <!-- ===== Table Section ===== -->
   <div class="card table-card shadow-sm border-0">
     <div class="card-body p-0">
+
+      <div class="d-flex justify-content-between align-items-center mt-3">
+        <strong>Total : <span th:text="${employees.totalElements}"></span></strong>
+        <strong><span th:text="'Page ' + ${currentPage + 1} + ' of ' + ${totalPages}"></span></strong>
+      </div>
 
       <div class="table-responsive">
         <table class="table table-hover mb-0">

@@ -179,7 +179,7 @@ public class EmployeeController {
         Page<EmployeeResponseDto> employeePage = employeeService.getAllFilterEmployee(
                 filter, page, pageSize, sortField, sortOrder);
 
-        model.addAttribute("employees", employeePage.getContent());
+        model.addAttribute("employees", employeePage);
         model.addAttribute("genders", Gender.values());
         model.addAttribute("employeeTypes", EmployeeType.values());
         model.addAttribute("allstatus", EmployeeStatus.values());

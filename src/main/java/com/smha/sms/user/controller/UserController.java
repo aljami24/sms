@@ -14,7 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Controller
 @PreAuthorize("hasAuthority('USER')")
 @RequestMapping("/user")
@@ -22,20 +25,33 @@ import java.util.List;
 public class UserController {
 
     private final RoleRepository roleRepository;
-    private final UserService userService;
     private final PermissionRepository permissionRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    /* ================= FORM ================= */
-
+    // CREATE FORM
     @GetMapping("/form")
     public String createForm(Model model) {
-        model.addAttribute("userDto", new UserAccessDto());
-        model.addAttribute("roles", roleRepository.findAll());
-        model.addAttribute("permissions", permissionRepository.findAll());
+        UserAccessDto dto = new UserAccessDto(); // new user, no permission
+        model.addAttribute("userDto", dto);
+
+        List<Role> roles = roleRepository.findAll();
+
+        // RoleId -> PermissionId List mapping
+        Map<Long, List<Long>> rolePermMap = new HashMap<>();
+        for (Role r : roles) {
+            rolePermMap.put(r.getId(), r.getPermissions().stream().map(Permission::getId).toList());
+        }
+
+        model.addAttribute("roles", roles);
+        model.addAttribute("permissions", permissionRepository.findAll()); // all permissions for checkbox div
+        model.addAttribute("rolePermMap", rolePermMap);
+
         return "configuration/userForm";
     }
 
+
+    // EDIT FORM
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
         User user = userRepository.findById(id).orElseThrow();
@@ -43,44 +59,51 @@ public class UserController {
         UserAccessDto dto = new UserAccessDto();
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
+        dto.setPassword(""); // blank password
         dto.setRoleIds(user.getRoles().stream().map(Role::getId).toList());
         dto.setPermissionIds(user.getPermissions().stream().map(Permission::getId).toList());
 
-        // Thymeleaf এ roles names pathano
-        List<String> roleNames = user.getRoles().stream().map(Role::getName).toList();
-        model.addAttribute("roleNames", roleNames);
+        List<Role> roles = roleRepository.findAll();
+        List<Permission> allPermissions = permissionRepository.findAll();
+
+        Map<Long, List<Long>> rolePermMap = new HashMap<>();
+        for (Role r : roles) {
+            rolePermMap.put(r.getId(), r.getPermissions().stream().map(Permission::getId).toList());
+        }
 
         model.addAttribute("userDto", dto);
-        model.addAttribute("roles", roleRepository.findAll());
-        model.addAttribute("permissions", permissionRepository.findAll());
+        model.addAttribute("roles", roles);
+        model.addAttribute("permissions", allPermissions);
+        model.addAttribute("rolePermMap", rolePermMap);
 
         return "configuration/userForm";
     }
 
-    /* ================= ACTION ================= */
-
+    // SAVE
     @PostMapping("/save")
     public String create(@ModelAttribute("userDto") UserAccessDto dto) {
         userService.create(dto);
         return "redirect:/user/list";
     }
 
+    // UPDATE
     @PostMapping("/update/{id}")
     public String update(@ModelAttribute("userDto") UserAccessDto dto) {
         userService.update(dto);
         return "redirect:/user/list";
     }
 
+    // LIST
     @GetMapping("/list")
     public String list(Model model) {
-        List<User> user = userService.userList();
-        model.addAttribute("users",user );
+        model.addAttribute("users", userService.userList());
         return "configuration/userList";
     }
 
+    // DELETE
     @PostMapping("/delete/{id}")
-    public String deleteId(@PathVariable Long id){
-         userService.delete(id);
-         return "redirect:/user/list";
+    public String delete(@PathVariable Long id){
+        userService.delete(id);
+        return "redirect:/user/list";
     }
 }
