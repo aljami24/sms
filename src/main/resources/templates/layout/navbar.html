@@ -1,21 +1,21 @@
 <!doctype html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
 </head>
 
 <body>
-<div class="sticky-top" th:fragment="navbar">
+<div th:fragment="navbar" class="sticky-top">
     <nav class="navbar navbar-expand-lg navbar-light ">
 
         <div class="container-fluid">
 
             <!-- Mobile Sidebar Toggle -->
-            <button aria-label="Toggle sidebar"
-                    class="navbar-toggler d-lg-none"
-                    data-bs-target="#mobileSidebar"
+            <button class="navbar-toggler d-lg-none"
+                    type="button"
                     data-bs-toggle="offcanvas"
-                    type="button">
+                    data-bs-target="#mobileSidebar"
+                    aria-label="Toggle sidebar">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -24,8 +24,8 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center"
-                       data-bs-toggle="dropdown"
-                       href="javascript:void(0)">
+                       href="javascript:void(0)"
+                       data-bs-toggle="dropdown">
 
                         <div class="bg-primary text-white rounded-circle d-flex
                                 align-items-center justify-content-center me-2"
@@ -33,30 +33,30 @@
                             <i class="bi bi-person-fill"></i>
                         </div>
 
-                        <div class="text-start lh-sm">
-                            <div class="fw-semibold text-dark" th:text="${user.userName}"></div>
+                        <div th:if="${user != null}">
+                            <span th:text="${user.username}">User</span><br>
                             <small class="text-muted"
-                                   th:text="${user.userRoles != null and !user.userRoles.isEmpty() ? user.userRoles[0] : 'No Role'}">
+                                   th:if="${user != null and !user.roles.isEmpty()}"
+                                   th:text="${#strings.listJoin(user.getUserRoles(), ', ')}">
                             </small>
                         </div>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                         <li class="px-3 py-2">
-                            <div class="fw-bold" sec:authentication="name"></div>
-                            <div class="small text-muted"
-                                 th:if="${#authentication.isAuthenticated()}"
-                                 th:with="currentRole=${#authentication.authorities[0].authority}">
+                            <div class="fw-bold" sec:authentication="name" ></div>
+                            <div class="small text-muted">
 
-                                <span th:text="${#strings.replace(currentRole, 'ROLE_', '')}">Role Name</span>
+                                <small class="text-muted"
+                                       th:if="${user != null and !user.roles.isEmpty()}"
+                                       th:text="${#strings.listJoin(user.getUserRoles(), ', ')}">
+                                </small>
                             </div>
                         </li>
+                        <li><hr class="dropdown-divider"></li>
                         <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <form method="post" th:action="@{/logout}">
-                                <button class="dropdown-item text-danger" type="submit">
+                            <form th:action="@{/logout}" method="post">
+                                <button type="submit" class="dropdown-item text-danger">
                                     <i class="bi bi-box-arrow-right me-2"></i> Logout
                                 </button>
                             </form>
@@ -71,14 +71,14 @@
 
     <!-- ================= MOBILE SIDEBAR (80%) ================= -->
     <div class="offcanvas offcanvas-start d-lg-none"
+         tabindex="-1"
          id="mobileSidebar"
-         style="width:80%;"
-         tabindex="-1">
+         style="width:80%;">
 
         <div class="offcanvas-header">
             <h5 class="mb-0">SMH SMS</h5>
-            <button class="btn-close" data-bs-dismiss="offcanvas"
-                    type="button"></button>
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="offcanvas"></button>
         </div>
 
         <div class="offcanvas-body p-0">
@@ -93,8 +93,8 @@
                         <i class="bi bi-chevron-right arrow"></i>
                     </a>
                     <div class="submenu" id="m-students">
-                        <a class="sub-link" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')"
-                           th:href="@{/student/list}">Student List</a>
+                        <a class="sub-link" th:href="@{/student/list}"
+                           sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">Student List</a>
                     </div>
                 </div>
 
@@ -104,8 +104,8 @@
                         <i class="bi bi-chevron-right arrow"></i>
                     </a>
                     <div class="submenu" id="m-employees">
-                        <a class="sub-link" sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')"
-                           th:href="@{/employee/list}">Employee List</a>
+                        <a class="sub-link" th:href="@{/employee/list}"
+                           sec:authorize="hasAnyRole('ADMIN', 'REGISTER_ADMIN', 'ACCOUNT_ADMIN')">Employee List</a>
                     </div>
                 </div>
 

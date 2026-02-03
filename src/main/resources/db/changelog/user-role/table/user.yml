@@ -1,0 +1,127 @@
+databaseChangeLog:
+
+  # ================= USER TABLE =================
+  - changeSet:
+      id: user-001
+      author: imran
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: username
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
+
+  # ================= USER_ROLES JOIN TABLE =================
+  - changeSet:
+      id: user-role-001
+      author: imran
+      changes:
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: user_roles
+            columnNames: user_id, role_id
+
+        - addForeignKeyConstraint:
+            baseTableName: user_roles
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_user_roles_user
+
+        - addForeignKeyConstraint:
+            baseTableName: user_roles
+            baseColumnNames: role_id
+            referencedTableName: role
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_user_roles_role
+
+
+  # ================= USER_PERMISSIONS JOIN TABLE =================
+  - changeSet:
+      id: user-permission-001
+      author: imran
+      changes:
+        - createTable:
+            tableName: user_permissions
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: permission_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: user_permissions
+            columnNames: user_id, permission_id
+
+        - addForeignKeyConstraint:
+            baseTableName: user_permissions
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_user_permissions_user
+
+        - addForeignKeyConstraint:
+            baseTableName: user_permissions
+            baseColumnNames: permission_id
+            referencedTableName: permission
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_user_permissions_permission

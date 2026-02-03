@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -58,6 +59,7 @@ public class StudentController {
 
 
     //  Student Form Show
+    @PreAuthorize("hasAuthority('STUDENT_CREATE')")
     @GetMapping("/create")
     public String createForm(Model model) {
         StudentRequestDto studentRequestDto = new StudentRequestDto();
@@ -121,6 +123,7 @@ public class StudentController {
     }
 
     //   All Student List View
+    @PreAuthorize("hasAuthority('STUDENT_LIST')")
     @GetMapping("/list")
     public String getAllStd(@RequestParam(defaultValue = "0") int page,
                             @RequestParam(defaultValue = "10") int pageSize,
@@ -199,6 +202,7 @@ public class StudentController {
 
 
     //    Student Details
+    @PreAuthorize("hasAuthority('STUDENT_VIEW')")
     @GetMapping("/details/{id}")
     public String showStdDetails(@PathVariable Long id, Model model) {
         StudentResponseDto showStudentDetail = studentService.showStudentDetails(id);
@@ -209,6 +213,7 @@ public class StudentController {
     }
 
     //    Student Payment
+    @PreAuthorize("hasAuthority('STUDENT_PAYMENT')")
     @GetMapping("/payment/{id}")
     public String showStdPayment(@PathVariable Long id, Model model) {
         StudentResponseDto showStudentDetail = studentService.showStudentDetails(id);
@@ -217,6 +222,7 @@ public class StudentController {
         return "student/studentFeePayment";
     }
 
+    @PreAuthorize("hasAuthority('STUDENT_DELETE')")
     @PostMapping("/delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.deleteById(id);
@@ -224,6 +230,7 @@ public class StudentController {
     }
 
     //    Update Form Show
+    @PreAuthorize("hasAuthority('STUDENT_UPDATE')")
     @GetMapping("/update/{id}")
     public String updateStudent(@PathVariable Long id,
                                 @RequestParam(defaultValue = "0") int page,
@@ -271,6 +278,7 @@ public class StudentController {
     }
 
     //    Old Student Admission - Search by Registration
+    @PreAuthorize("hasAuthority('OLD_STUDENT_CREATE')")
     @GetMapping("/old-admission")
     public String searchOldStudent(@RequestParam("registration") int registration, Model model) {
         try {

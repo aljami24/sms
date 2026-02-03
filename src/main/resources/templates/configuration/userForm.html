@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div layout:fragment="content" class="container py-4 card page-bg shadow mx-2">
+
+    <h3 th:text="${userDto.id == null} ? 'Create User' : 'Edit User'" class="mb-4"></h3>
+
+    <form th:object="${userDto}" method="post"
+          th:action="@{${userDto.id == null ? '/user/save' : '/user/update/' + userDto.id}}">
+
+        <!-- Username -->
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" th:field="*{username}" class="form-control" placeholder="Enter username" required>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" th:field="*{password}" class="form-control" placeholder="Enter password">
+            <div class="form-text">Leave blank to keep old password.</div>
+        </div>
+
+        <!-- Roles -->
+        <div class="mb-3">
+            <label class="form-label fw-bold">Roles</label>
+            <div class="d-flex flex-wrap gap-2">
+                <div th:each="role : ${roles}" class="form-check">
+                    <input class="form-check-input role-checkbox" type="checkbox"
+                           th:value="${role.id}" th:field="*{roleIds}" th:id="'role_' + ${role.id}"
+                           th:checked="${userDto.roleIds.contains(role.id)}">
+                    <label class="form-check-label" th:for="'role_' + ${role.id}" th:text="${role.name}"></label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Permissions -->
+        <div class="mb-3">
+            <label class="form-label fw-bold ">
+                Permissions
+                <div class="py-1">
+                    <input type="checkbox" id="selectAllPerms" class="form-check-input me-1">
+                    <label for="selectAllPerms" class="form-check-label mb-0">Select All</label>
+                </div>
+            </label>
+            <div class="d-flex flex-wrap gap-2" id="permissionsDiv">
+                <div th:each="p : ${permissions}" class="form-check perm-item" style="display:none">
+                    <input class="form-check-input perm-checkbox" type="checkbox"
+                           th:value="${p.id}" th:field="*{permissionIds}" th:id="'perm_' + ${p.id}"
+                           th:checked="${userDto.permissionIds.contains(p.id)}">
+                    <label class="form-check-label" th:for="'perm_' + ${p.id}" th:text="${p.code}"></label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a th:href="@{/user/list}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+
+    <script th:inline="javascript">
+
+        const rolePermMap = /*[[${rolePermMap}]]*/ {};
+
+        const roleCheckboxes = document.querySelectorAll(".role-checkbox");
+        const permCheckboxes = document.querySelectorAll(".perm-checkbox");
+        const permItems = document.querySelectorAll(".perm-item");
+        const selectAll = document.getElementById("selectAllPerms");
+
+        function updatePermissions() {
+            permItems.forEach(item => item.style.display = 'none');
+
+            const selectedRoleIds = Array.from(roleCheckboxes)
+                .filter(r => r.checked)
+                .map(r => r.value.toString());
+
+            const permsToShow = new Set();
+
+            selectedRoleIds.forEach(rId => {
+                if (rolePermMap && rolePermMap[rId]) {
+                    rolePermMap[rId].forEach(pid => permsToShow.add(pid.toString()));
+                }
+            });
+
+            permCheckboxes.forEach(pcb => {
+                const val = pcb.value.toString();
+                if(permsToShow.has(val)) {
+                    pcb.closest('div.perm-item').style.display = 'block';
+                } else {
+                    pcb.checked = false;
+                }
+            });
+
+            updateSelectAllState();
+        }
+
+        roleCheckboxes.forEach(cb => cb.addEventListener('change', updatePermissions));
+
+        if(selectAll) {
+            selectAll.addEventListener('change', function() {
+                const visiblePerms = Array.from(permCheckboxes).filter(pcb => pcb.closest('div.perm-item').style.display !== 'none');
+                visiblePerms.forEach(pcb => pcb.checked = this.checked);
+            });
+        }
+
+        function updateSelectAllState() {
+            if(!selectAll) return;
+            const visiblePerms = Array.from(permCheckboxes).filter(pcb => pcb.closest('div.perm-item').style.display !== 'none');
+            const allChecked = visiblePerms.length > 0 && visiblePerms.every(pcb => pcb.checked);
+            selectAll.checked = allChecked;
+        }
+
+        permCheckboxes.forEach(pcb => {
+            pcb.addEventListener('change', updateSelectAllState);
+        });
+
+        // Initial load
+        document.addEventListener("DOMContentLoaded", function() {
+            updatePermissions();
+        });
+        /*]]>*/
+    </script>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
