@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -108,7 +109,7 @@ public class StudentService {
         return studentPage.map(StudentMapper::mapToStudentResponseDto);
     }
 
-    //   Filter Students Method
+    //   Student Filter
     public Page<StudentResponseDto> filterStudents(
             Integer rollNumber,
             Integer registrationNumber,
@@ -122,31 +123,12 @@ public class StudentService {
             int page,
             int pageSize) {
 
-        PageRequest pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Student> studentPage = studentRepository.filterStudents(
-                rollNumber, registrationNumber, classRoomId, section, version, yearId, division, district, policeStation, pageable
-        );
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "id"));
 
-        final Long filterYearId = yearId;
-        return studentPage
-                .map(student -> StudentMapper.mapToStudentResponseDto(student, filterYearId));
-    }
+        Page<Student> studentPage = studentRepository.filterStudents(rollNumber, registrationNumber, classRoomId, section, version, yearId, division, district, policeStation, pageable);
 
-    public long getTotalFilterCount(Integer rollNumber,
-                                    Integer registrationNumber,
-                                    Long classRoomId,
-                                    Long section,
-                                    Long version,
-                                    Long yearId,
-                                    Long division,
-                                    Long district,
-                                    Long policeStation) {
-
-        PageRequest pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by(Sort.Direction.DESC, "id"));
-        Page<Student> studentPage = studentRepository.filterStudents(
-                rollNumber, registrationNumber, classRoomId, section, version, yearId, division, district, policeStation, pageable
-        );
-        return studentPage.getTotalElements();
+        return studentPage.map(student ->
+                StudentMapper.mapToStudentResponseDto(student, yearId));
     }
 
     //    For Old Student Search
@@ -190,9 +172,18 @@ public class StudentService {
             throw new RuntimeException("Cannot update academic information for previous years. Only the most recent year's record can be modified.");
         }
 
-        // Preserve existing document paths if not being updated
+        // Preserve existing document paths
         String existingPhotoDir = existingStudent.getPhotoDir();
         String existingNidDir = existingStudent.getNidDir();
+
+        // Check if new files are being uploaded
+        boolean hasNewPhoto = studentRequestDto.getPhoto() != null && !studentRequestDto.getPhoto().isEmpty();
+        boolean hasNewNid = studentRequestDto.getNid() != null && !studentRequestDto.getNid().isEmpty();
+
+        // Upload new files if provided
+        if (hasNewPhoto || hasNewNid) {
+            Helper.studentFilesUpload(uploadDir, studentRequestDto);
+        }
 
         // Get ClassRoom-Version-Section
         ClassroomVersionSection cvs = classroomVersionSectionRepository
@@ -222,14 +213,14 @@ public class StudentService {
             StudentMapper.addAcademicRecordToStudent(existingStudent, cvs, studentRequestDto.getYearId());
         }
 
-        // Map basic fields and addresses
+        // Map basic fields and addresses (this may overwrite photoDir and nidDir)
         StudentMapper.mapToStudentEntity(studentRequestDto, existingStudent);
 
-        // Restore document paths if they were null in the request (not being updated)
-        if (studentRequestDto.getPhotoDir() == null || studentRequestDto.getPhotoDir().isEmpty()) {
+        // Restore original paths if no new file was uploaded
+        if (!hasNewPhoto) {
             existingStudent.setPhotoDir(existingPhotoDir);
         }
-        if (studentRequestDto.getNidDir() == null || studentRequestDto.getNidDir().isEmpty()) {
+        if (!hasNewNid) {
             existingStudent.setNidDir(existingNidDir);
         }
 

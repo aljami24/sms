@@ -16,7 +16,7 @@ databaseChangeLog:
                   name: date
                   type: DATE
               - column:
-                  name: amount
+                  name: expanseAmount
                   type: DOUBLE
               - column:
                   name: month
