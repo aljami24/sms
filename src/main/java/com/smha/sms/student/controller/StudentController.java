@@ -22,8 +22,6 @@ import com.smha.sms.student.model.repository.StudentRepository;
 import com.smha.sms.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -125,26 +123,25 @@ public class StudentController {
     //   All Student List View
     @PreAuthorize("hasAuthority('STUDENT_LIST')")
     @GetMapping("/list")
-    public String getAllStd(@RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "10") int pageSize,
-                            @RequestParam(required = false) String rollNumber,
-                            @RequestParam(required = false) String registrationNumber,
-                            @RequestParam(required = false) Long className,
-                            @RequestParam(required = false) Long section,
-                            @RequestParam(required = false) Long version,
-                            @RequestParam(required = false) Long division,
-                            @RequestParam(required = false) Long district,
-                            @RequestParam(required = false) Long policeStation,
-                            @RequestParam(required = false) Long yearId,
-                            Model model) {
-
-        Page<StudentResponseDto> getStudentAll;
-        long totalPages;
+    public String getAllStudent(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(required = false) String rollNumber,
+            @RequestParam(required = false) String registrationNumber,
+            @RequestParam(required = false) Long className,
+            @RequestParam(required = false) Long section,
+            @RequestParam(required = false) Long version,
+            @RequestParam(required = false) Long division,
+            @RequestParam(required = false) Long district,
+            @RequestParam(required = false) Long policeStation,
+            @RequestParam(required = false) Long yearId,
+            Model model) {
 
         Integer rollNum = (rollNumber != null && !rollNumber.isEmpty()) ? Integer.valueOf(rollNumber) : null;
+
         Integer registrationNum = (registrationNumber != null && !registrationNumber.isEmpty()) ? Integer.valueOf(registrationNumber) : null;
 
-        // Get current year and set as default if not provided
+        // Default year
         Long selectedYearId = yearId;
         if (selectedYearId == null) {
             String currentYear = String.valueOf(java.time.Year.now());
@@ -153,31 +150,24 @@ public class StudentController {
                     .orElse(null);
         }
 
-        // Check if any filter is applied
-        boolean hasFilters = rollNum != null || registrationNum != null || className != null || section != null || version != null || selectedYearId != null || division != null || district != null || policeStation != null;
+        // Filter detection (default year ignore)
+        boolean hasFilters =
+                rollNum != null || registrationNum != null || className != null || section != null || version != null || division != null || district != null || policeStation != null || selectedYearId != null;
+
+        Page<StudentResponseDto> studentPage;
 
         if (hasFilters) {
-            // Apply filters
-            getStudentAll = studentService.filterStudents(
-                    rollNum, registrationNum, className, section, version, selectedYearId, division, district, policeStation, page, pageSize);
-
-            long totalElements = studentService.getTotalFilterCount(
-                    rollNum, registrationNum, className, section, version, selectedYearId, division, district, policeStation);
-            totalPages = (long) Math.ceil((double) totalElements / pageSize);
+            studentPage = studentService.filterStudents(rollNum, registrationNum, className, section, version, selectedYearId, division, district, policeStation, page, pageSize);
         } else {
-            // No filters - get all students
-            Pageable pageable = PageRequest.of(page, pageSize);
-            Page<Student> studentPage = studentRepository.findAll(pageable);
-            totalPages = studentPage.getTotalPages();
-
-            getStudentAll = studentService.getAllStudent(
-                    page, pageSize, "id", "DESC");
+            studentPage = studentService.getAllStudent(page, pageSize, "id", "DESC");
         }
 
+        model.addAttribute("getStudentAll", studentPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("getStudentAll", getStudentAll);
+        model.addAttribute("totalPages", studentPage.getTotalPages());
+
+        // Dropdown data
         model.addAttribute("title", "Student List");
         model.addAttribute("classLoad", classRoomRepository.findAll());
         model.addAttribute("versionLoad", versionRepository.findAll());
@@ -187,7 +177,7 @@ public class StudentController {
         model.addAttribute("districtLoad", districtRepository.findAll(Sort.by(Sort.Direction.ASC, "name")));
         model.addAttribute("policeStationLoad", policeStationRepository.findAll(Sort.by(Sort.Direction.ASC, "name")));
 
-        // Preserve filter values
+        // Preserve filters
         model.addAttribute("rollNumber", rollNumber);
         model.addAttribute("registrationNumber", registrationNumber);
         model.addAttribute("className", className);
@@ -197,6 +187,7 @@ public class StudentController {
         model.addAttribute("division", division);
         model.addAttribute("district", district);
         model.addAttribute("policeStation", policeStation);
+
         return "student/studentList";
     }
 

@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-pay-scale-table
+      author: jami
+      changes:
+        - createTable:
+            tableName: pay_scale
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+
+              - column:
+                  name: pay_scale_amount
+                  type: DOUBLE
+
+              - column:
+                  name: year_id
+                  type: BIGINT
+
+              # BaseEntity ফিল্ডগুলো
+              - column:
+                  name: created_at
+                  type: timestamp
+
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
+        - addForeignKeyConstraint:
+            baseTableName: pay_scale
+            baseColumnNames: year_id
+            referencedTableName: year
+            referencedColumnNames: id
+            constraintName: fk_pay_scale_year

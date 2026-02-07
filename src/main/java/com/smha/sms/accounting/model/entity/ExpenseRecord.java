@@ -22,23 +22,23 @@ import java.util.Objects;
 public class ExpenseRecord extends BaseEntity {
 
     private LocalDate date;
-    private Double amount;
+    private Double expanseAmount;
 
-    @Enumerated (EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Month month;
 
     @ManyToOne
-    @JoinColumn(name ="year_id")
+    @JoinColumn(name = "year_id")
     private Year year;
 
     @ManyToOne
-    @JoinColumn(name ="expense_type_id")
+    @JoinColumn(name = "expense_type_id")
     private ExpenseType expenseType;
 
     private String description;
 
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
@@ -46,7 +46,7 @@ public class ExpenseRecord extends BaseEntity {
     public String toString() {
         return "ExpenseRecord{" +
                 "date=" + date +
-                ", amount=" + amount +
+                ", amount=" + expanseAmount +
                 ", month=" + month +
                 ", year=" + year +
                 ", expenseType='" + expenseType + '\'' +
@@ -59,11 +59,11 @@ public class ExpenseRecord extends BaseEntity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ExpenseRecord that = (ExpenseRecord) o;
-        return Objects.equals(date, that.date) && Objects.equals(amount, that.amount) && month == that.month && Objects.equals(year, that.year) && Objects.equals(expenseType, that.expenseType) && Objects.equals(description, that.description) && Objects.equals(employee, that.employee);
+        return Objects.equals(date, that.date) && Objects.equals(expanseAmount, that.expanseAmount) && month == that.month && Objects.equals(year, that.year) && Objects.equals(expenseType, that.expenseType) && Objects.equals(description, that.description) && Objects.equals(employee, that.employee);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, amount, month, year, expenseType, description, employee);
+        return Objects.hash(date, expanseAmount, month, year, expenseType, description, employee);
     }
 }

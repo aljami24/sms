@@ -97,3 +97,10 @@ databaseChangeLog:
             relativeToChangelogFile: true
             tableName: role_permissions
             quotchar: '"'
+
+        # ================= USER_PERMISSIONS =================
+        - loadData:
+            file: user-role/seed/user_permission.csv
+            relativeToChangelogFile: true
+            tableName: user_permissions
+            quotchar: '"'
