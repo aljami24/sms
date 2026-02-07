@@ -13,16 +13,11 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-//    @Query("SELECT DISTINCT s FROM Student s " +
-//            "JOIN s.studentAcademicRecords sar " +
-//            "WHERE sar.roll = :roll")
-//    Optional<Student> findByRoll(@Param("roll") Integer roll);
-
     Optional<Student> findByRegistration(Integer registration);
 
     boolean existsByRegistration(Integer registration);
 
-    @Query("SELECT s FROM Student s " +
+    @Query(value = "SELECT DISTINCT s FROM Student s " +
             "JOIN s.studentAcademicRecords sar " +
             "JOIN sar.classroomVersionSection cvs " +
             "LEFT JOIN s.addresses a " +
@@ -34,10 +29,11 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             "AND (:classRoomId IS NULL OR cvs.classRoom.id = :classRoomId) " +
             "AND (:section IS NULL OR sec.id = :section) " +
             "AND (:version IS NULL OR ver.id = :version) " +
-            "AND (:yearId IS NULL OR y.id = :yearId)" +
+            "AND (:yearId IS NULL OR y.id = :yearId) " +
             "AND (:division IS NULL OR a.division.id = :division) " +
             "AND (:district IS NULL OR a.district.id = :district) " +
-            "AND (:policeStation IS NULL OR a.policeStation.id = :policeStation)")
+            "AND (:policeStation IS NULL OR a.policeStation.id = :policeStation)"
+    )
     Page<Student> filterStudents(
             @Param("rollNumber") Integer rollNumber,
             @Param("registrationNumber") Integer registrationNumber,

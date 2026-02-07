@@ -100,3 +100,11 @@ databaseChangeLog:
   - include:
       file: accounting/tables/payment_record.yml
       relativeToChangelogFile: true
+
+  - include:
+      file: systemConfiguration/table/fees.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: systemConfiguration/table/payScale.yml
+      relativeToChangelogFile: true
