@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<head>
+  <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+<div layout:fragment="content" class="page-bg card shadow mx-2">
+
+  <div class="container-fluid mt-4">
+
+    <!-- Page Header -->
+    <div class="mb-3">
+      <h5 class="fw-bold">
+        <i class="bi bi-wallet2 me-2"></i>Add Expense
+      </h5>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+
+        <form>
+
+          <div class="row g-4">
+
+            <!-- Expense Type -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">
+                Expense Type
+              </label>
+              <select class="form-select fw-semibold" required>
+                <option value="">Select Expense Type</option>
+                <option>Electricity</option>
+                <option>Water</option>
+                <option>Internet</option>
+                <option>Stationary</option>
+                <option>Maintenance</option>
+                <option>Others</option>
+              </select>
+            </div>
+
+            <!-- Month -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">
+                Month
+              </label>
+              <select class="form-select fw-semibold" required>
+                <option value="">Select Month</option>
+                <option>January</option>
+                <option>February</option>
+                <option>March</option>
+                <option>April</option>
+                <option>May</option>
+                <option>June</option>
+                <option>July</option>
+                <option>August</option>
+                <option>September</option>
+                <option>October</option>
+                <option>November</option>
+                <option>December</option>
+              </select>
+            </div>
+
+            <!-- Amount -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">
+                Amount
+              </label>
+              <input type="number"
+                     class="form-control fw-semibold"
+                     placeholder="Enter amount"
+                     required>
+            </div>
+
+            <!-- Date -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold">
+                Expense Date
+              </label>
+              <input type="date"
+                     class="form-control fw-semibold"
+                     required>
+            </div>
+
+            <!-- Description -->
+            <div class="col-md-12">
+              <label class="form-label fw-bold fs-5">
+                Description
+              </label>
+              <textarea class="form-control fw-semibold"
+                        rows="4"
+                        placeholder="Write expense description..."
+                        required>
+              </textarea>
+            </div>
+
+          </div>
+
+          <!-- Submit Button -->
+          <div class="mt-4 text-end">
+            <button type="submit"
+                    class="btn btn-success px-4 fw-bold">
+              <i class="bi bi-check-circle me-1"></i>
+              Submit Expense
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

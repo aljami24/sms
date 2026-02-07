@@ -23,23 +23,23 @@ import java.util.Objects;
 public class PaymentRecord extends BaseEntity {
 
     private LocalDate paymentDate;
-    private Double amount;
+    private Double paymentAmount;
 
     @Enumerated(EnumType.STRING)
     private Month month;
 
     @ManyToOne
-    @JoinColumn(name ="year_id")
+    @JoinColumn(name = "year_id")
     private Year year;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "payment_type_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_type_id")
     private PaymentType paymentType;
 
-    @ManyToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
 
@@ -48,7 +48,7 @@ public class PaymentRecord extends BaseEntity {
     public String toString() {
         return "PaymentRecord{" +
                 "paymentDate=" + paymentDate +
-                ", amount=" + amount +
+                ", amount=" + paymentAmount +
                 ", month=" + month +
                 ", year=" + year +
                 ", status=" + status +
@@ -61,11 +61,11 @@ public class PaymentRecord extends BaseEntity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         PaymentRecord that = (PaymentRecord) o;
-        return Objects.equals(paymentDate, that.paymentDate) && Objects.equals(amount, that.amount) && month == that.month && Objects.equals(year, that.year) && status == that.status && Objects.equals(paymentType, that.paymentType) && Objects.equals(student, that.student);
+        return Objects.equals(paymentDate, that.paymentDate) && Objects.equals(paymentAmount, that.paymentAmount) && month == that.month && Objects.equals(year, that.year) && status == that.status && Objects.equals(paymentType, that.paymentType) && Objects.equals(student, that.student);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(paymentDate, amount, month, year, status, paymentType, student);
+        return Objects.hash(paymentDate, paymentAmount, month, year, status, paymentType, student);
     }
 }
