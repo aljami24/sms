@@ -1,17 +1,8 @@
 # **School Management System for Smatik School**
 
---------------application.propeties---------------
+--------------application_credential---------------
 
-spring.application.name=sms
-spring.datasource.url=jdbc:postgresql://localhost:5432/sms
-spring.datasource.username=
-spring.datasource.password=
-spring.jpa.hibernate.ddl-auto=none
-spring.jpa.show-sql=true
-spring.main.banner-mode=off
-logging.level.org.springframework=info
-#logging.level.root=warn
-file.upload-directory=
+DB_HOST=localhost;DB_PORT=5432;DB_NAME=sms;DB_USERNAME=postgres;DB_PASSWORD=root
 #=======================
 
 # Liquibase
