@@ -20,6 +20,7 @@ body { margin: 0;
     background: #e0f2fe;
     position: relative;
     z-index: 1040;
+    border-bottom: solid 1px black;
     overflow: visible !important;
 }
 
