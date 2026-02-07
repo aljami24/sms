@@ -1,14 +1,230 @@
 <!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
-<jasperReport name="Blank_A4" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6db0e304-f06e-4b00-958d-b01e71f0a1c7">
-	<query language="sql"><![CDATA[]]></query>
+<jasperReport name="Blank_A4" language="java" columnCount="1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b9d7ded9-1c58-478e-88e2-54dde50b585b">
+	<property name="com.jaspersoft.studio.unit." value="inch"/>
+	<field name="date" class="java.lang.LocalDate"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="fatherName" class="java.lang.String"/>
+	<field name="rollNumber" class="java.lang.String"/>
+	<field name="version" class="java.lang.String"/>
+	<field name="class" class="java.lang.String"/>
+	<field name="section" class="java.lang.String"/>
+	<field name="amount" class="java.lang.String"/>
+	<field name="month" class="java.lang.String"/>
+	<field name="feeType" class="java.lang.String"/>
 	<background splitType="Stretch"/>
-	<title height="79" splitType="Stretch"/>
-	<pageHeader height="35" splitType="Stretch"/>
-	<columnHeader height="61" splitType="Stretch"/>
+	<columnHeader height="84" splitType="Stretch">
+		<element kind="textField" uuid="1f49d89b-294c-4f19-bca3-a30e5530ee44" x="143" y="20" width="256" height="40" fontName="Kalpurush" fontSize="25.0" bold="true" hTextAlign="Center">
+			<expression><![CDATA[$P{REPORT_TITLE}]]></expression>
+		</element>
+		<element kind="textField" uuid="576ea719-1e83-4bc2-bc09-10dc5a09c835" x="155" y="0" width="230" height="30" fontName="Kalpurush" fontSize="19.0" bold="true" hTextAlign="Center">
+			<expression><![CDATA["SMS School Dhaka-3561"]]></expression>
+		</element>
+		<element kind="textField" uuid="479a3a23-77da-43c1-8ab2-38b85e653093" x="422" y="0" width="45" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+			<expression><![CDATA["Date"]]></expression>
+		</element>
+		<element kind="textField" uuid="fa891be9-ce17-46e3-b955-6301948ddefa" x="467" y="0" width="103" height="25" fontName="Kalpurush" fontSize="14.0">
+			<expression><![CDATA[$F{date}]]></expression>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="001994a9-e3c5-40a7-9b92-4067f6078913"/>
+		</element>
+	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch"/>
+		<band height="676" splitType="Stretch">
+			<element kind="line" uuid="a0f02d72-dbf4-4a0e-b2ad-d337c9e238c2" x="0" y="1" width="554" height="1"/>
+			<element kind="line" uuid="d50a4d87-2a96-43dc-8c0c-89fda33609e9" x="0" y="51" width="554" height="1"/>
+			<element kind="line" uuid="f9b968e4-b43a-4007-9b6a-1ad810ca231b" x="1" y="26" width="553" height="1"/>
+			<element kind="line" uuid="bc404898-e311-4c6e-b1bb-d771d191cba3" x="0" y="75" width="555" height="1"/>
+			<element kind="line" uuid="3dfbcf6a-f0bd-4308-8a69-60daddd79f78" x="1" y="98" width="554" height="1"/>
+			<element kind="line" uuid="2e550601-dae8-4a53-b878-ede32c8f5595" x="1" y="149" width="554" height="1"/>
+			<element kind="line" uuid="a8732166-0c03-4926-8ba2-8214db4cc8d7" x="2" y="124" width="553" height="1"/>
+			<element kind="line" uuid="e61187e2-8818-46e2-a6f7-6db42a0dcf6c" x="0" y="2" width="1" height="74"/>
+			<element kind="line" uuid="5068db0a-45e5-4363-92ab-67d2d6e79f2d" x="108" y="2" width="1" height="74"/>
+			<element kind="line" uuid="45a5f12a-7e05-4895-a424-4245ddca4ef6" x="281" y="2" width="1" height="74"/>
+			<element kind="line" uuid="21a98b33-130c-48cb-a99f-9edccc031899" x="380" y="2" width="1" height="74"/>
+			<element kind="line" uuid="608b5899-8b1f-4a09-8ab2-495451a7f847" x="554" y="1" width="1" height="74"/>
+			<element kind="line" uuid="5387fd16-1927-40a1-aca2-d047dd354062" x="1" y="98" width="1" height="51"/>
+			<element kind="line" uuid="05996231-60c8-42ad-bff4-02e030a0650c" x="108" y="98" width="1" height="51"/>
+			<element kind="line" uuid="eba66e6f-b05f-49d8-8507-342e14091018" x="281" y="99" width="1" height="51"/>
+			<element kind="line" uuid="585c9cc9-7bdc-4a4a-844b-6a9b4d114cbe" x="381" y="98" width="1" height="52"/>
+			<element kind="line" uuid="97de529d-62e8-406e-a763-f25518a252bb" x="555" y="98" width="1" height="51"/>
+			<element kind="textField" uuid="7e5a79c8-c96d-4075-9125-a8f678278b67" x="0" y="0" width="108" height="26" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA["Student Name"]]></expression>
+			</element>
+			<element kind="textField" uuid="1bb7f845-f613-4c28-96bf-e8b37801a213" x="0" y="50" width="108" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Roll Number "]]></expression>
+			</element>
+			<element kind="textField" uuid="66489689-a340-46de-be62-1729d7fc7e5b" x="282" y="1" width="98" height="24" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Version"]]></expression>
+			</element>
+			<element kind="textField" uuid="4351b984-9458-48f9-8b9c-68b1256232d3" x="2" y="98" width="106" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Fee Type"]]></expression>
+			</element>
+			<element kind="textField" uuid="b7922647-195d-4ba5-80d2-49fd4a482615" x="1" y="27" width="108" height="23" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA["Father Name"]]></expression>
+			</element>
+			<element kind="textField" uuid="cd8a4f32-74f0-4e72-b880-0d81959594eb" x="282" y="27" width="98" height="23" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA["Class"]]></expression>
+			</element>
+			<element kind="textField" uuid="b3a88476-8eed-40c3-8c1f-db65a5b3bf6f" x="282" y="51" width="98" height="23" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA["Section"]]></expression>
+			</element>
+			<element kind="textField" uuid="f6411150-34a0-4673-a22c-e3ad7aa7142c" x="2" y="124" width="107" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Amount"]]></expression>
+			</element>
+			<element kind="textField" uuid="74ca2804-978d-47f6-aa1c-078a91b85f11" x="143" y="344" width="256" height="40" fontName="Kalpurush" fontSize="25.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA[$P{REPORT_TITLE}]]></expression>
+			</element>
+			<element kind="textField" uuid="a8eca1aa-6529-4629-a03c-b29ce11cb25b" x="155" y="324" width="230" height="30" fontName="Kalpurush" fontSize="19.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["SMS School Dhaka-3561"]]></expression>
+			</element>
+			<element kind="line" uuid="33394b0c-16be-401c-86ac-ff1dfb83d2f5" x="0" y="408" width="554" height="1"/>
+			<element kind="line" uuid="d2431c00-63fb-47b0-8a04-332c5e315399" x="0" y="458" width="554" height="1"/>
+			<element kind="line" uuid="89c9eb25-23f7-4cac-a580-73b99267f9a2" x="1" y="433" width="553" height="1"/>
+			<element kind="line" uuid="7cfa1a5c-2263-409d-8265-7b75536bf878" x="0" y="482" width="555" height="1"/>
+			<element kind="line" uuid="27a89ce9-976e-4f0d-a880-93b044a0d9db" x="1" y="505" width="554" height="1"/>
+			<element kind="line" uuid="8ae040b7-af23-402e-bfba-7a655f8e7339" x="1" y="556" width="554" height="1"/>
+			<element kind="line" uuid="84f6823d-c065-4838-af07-79413afc0d1c" x="2" y="531" width="553" height="1"/>
+			<element kind="line" uuid="583f0d11-42d8-4923-8f21-6b5e52342a8b" x="0" y="408" width="1" height="74"/>
+			<element kind="line" uuid="e638e41e-6bd8-4c57-9798-edcad1bd8c5f" x="108" y="409" width="1" height="74"/>
+			<element kind="line" uuid="5c6b8df0-07fe-42dc-b6a7-1f93d90f45db" x="281" y="409" width="1" height="74"/>
+			<element kind="line" uuid="38eec175-0d5e-4214-b98e-e8eec0a2069c" x="380" y="409" width="1" height="74"/>
+			<element kind="line" uuid="3c281f9b-cadc-407a-b678-f8c2d3910043" x="554" y="408" width="1" height="74"/>
+			<element kind="line" uuid="e77c515b-a8e2-4dff-81fa-d1ebf40a7439" x="1" y="505" width="1" height="51"/>
+			<element kind="line" uuid="a52fd3bc-36a5-4615-b2ab-d3f92fa9948f" x="108" y="505" width="1" height="51"/>
+			<element kind="line" uuid="31867bca-9059-4ce2-ad17-c343ae6953f2" x="281" y="506" width="1" height="51"/>
+			<element kind="line" uuid="3ebdc7fe-228a-4f67-9c8d-6db47f5ce669" x="381" y="505" width="1" height="52"/>
+			<element kind="line" uuid="0bb22282-14a9-4324-9459-1b852c8ab015" x="555" y="505" width="1" height="51"/>
+			<element kind="textField" uuid="b7e3ceae-3f7f-4386-ab0f-d47c574b8ff6" x="0" y="407" width="108" height="26" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA["Student Name"]]></expression>
+			</element>
+			<element kind="textField" uuid="b063bf81-94eb-44ca-8fe8-80aa27cdecb0" x="0" y="457" width="108" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Roll Number "]]></expression>
+			</element>
+			<element kind="textField" uuid="669761b1-2dfe-430b-96a9-491a8f444508" x="282" y="410" width="98" height="24" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Version"]]></expression>
+			</element>
+			<element kind="textField" uuid="f7218616-6455-44f9-a088-cac207565ab8" x="2" y="505" width="106" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Fee Type"]]></expression>
+			</element>
+			<element kind="textField" uuid="6fc40212-2cec-4881-8343-32ee2f9de1df" x="416" y="324" width="51" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Date"]]></expression>
+			</element>
+			<element kind="textField" uuid="bbcf26d0-dcce-4a44-8b14-5ab59cf5c4cc" x="2" y="433" width="107" height="26" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA["Father Name"]]></expression>
+			</element>
+			<element kind="textField" uuid="7c3c8907-e21b-404a-baf2-55afe4eac123" x="282" y="434" width="98" height="23" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA["Class"]]></expression>
+			</element>
+			<element kind="textField" uuid="e038567f-fc13-48e6-accd-1103697186b2" x="282" y="458" width="98" height="23" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+				<expression><![CDATA["Section"]]></expression>
+			</element>
+			<element kind="textField" uuid="2fa56e25-3dbb-478e-b7b7-22e0b872320e" x="0" y="532" width="108" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Amount"]]></expression>
+			</element>
+			<element kind="line" uuid="a7220525-1643-4cc6-9eba-5d7b5b34a072" x="405" y="211" width="113" height="1"/>
+			<element kind="textField" uuid="08fafac2-3abd-480a-bfad-9b5ec2eb4e4f" x="414" y="211" width="100" height="23" fontName="Kalpurush" fontSize="14.0" hTextAlign="Left" vTextAlign="Middle">
+				<expression><![CDATA["Received By"]]></expression>
+			</element>
+			<element kind="textField" uuid="b9431e8a-4188-4f71-94ef-2e84ff319649" x="414" y="230" width="102" height="27" fontName="Kalpurush" fontSize="14.0" hTextAlign="Left" vTextAlign="Middle">
+				<expression><![CDATA["Date :"]]></expression>
+			</element>
+			<element kind="line" uuid="2c548500-f503-457a-9ed1-c2b59fe5bb43" x="412" y="621" width="113" height="1"/>
+			<element kind="textField" uuid="1a83d43d-4ba5-4ca8-90d8-1e5a140eb6a6" x="419" y="625" width="100" height="23" fontName="Kalpurush" fontSize="14.0" hTextAlign="Left" vTextAlign="Middle">
+				<expression><![CDATA["Received By"]]></expression>
+			</element>
+			<element kind="textField" uuid="3b600222-82e0-4ad4-a175-df110a73c843" x="418" y="642" width="102" height="27" fontName="Kalpurush" fontSize="14.0" hTextAlign="Left" vTextAlign="Middle">
+				<expression><![CDATA["Date :"]]></expression>
+			</element>
+			<element kind="textField" uuid="9f566b3c-85a2-4ed0-8500-60954f03f8f7" x="282" y="124" width="99" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["In Word"]]></expression>
+			</element>
+			<element kind="textField" uuid="1ace48fe-f9a5-4486-9939-7a86b36239df" x="280" y="532" width="99" height="25" fontName="Kalpurush" fontSize="14.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["In Word"]]></expression>
+			</element>
+			<element kind="textField" uuid="3c8c5831-4fd0-48e3-82e8-aa107374f9f8" x="282" y="99" width="97" height="24" fontName="Kalpurush" fontSize="15.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Month"]]></expression>
+			</element>
+			<element kind="textField" uuid="fa453a4e-c683-44cc-9c7d-b0bd056dc64d" x="282" y="505" width="97" height="24" fontName="Kalpurush" fontSize="15.0" bold="true" hTextAlign="Center">
+				<expression><![CDATA["Month"]]></expression>
+			</element>
+			<element kind="staticText" uuid="9e6faa38-1e76-4ab7-b5f6-b2b4e62a7c2d" x="0" y="290" width="554" height="16">
+				<text><![CDATA[✂-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------]]></text>
+			</element>
+			<element kind="textField" uuid="481dda80-7942-4aa3-9218-355dae4bdfcc" x="108" y="2" width="173" height="24" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{name}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ef4ff9b6-53d9-4b83-861d-f1971a1d3ba4"/>
+			</element>
+			<element kind="textField" uuid="3a24358c-5fda-416f-a2b6-9c8862db1ee1" x="110" y="27" width="170" height="23" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{fatherName}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cbd7f1ae-3fcc-4e31-8b75-79817f9cf2fa"/>
+			</element>
+			<element kind="textField" uuid="d8ab1463-d038-432a-87be-d8939dd2175c" x="108" y="50" width="173" height="24" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{rollNumber}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4273aa6e-f6ef-48cc-a27f-c299801b242e"/>
+			</element>
+			<element kind="textField" uuid="d6c317c5-c14c-4e4e-bf83-2e2a50f64386" x="380" y="0" width="174" height="25" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{version}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4a34d3b5-360d-4f7a-82d6-dd81d4e073ec"/>
+			</element>
+			<element kind="textField" uuid="69a7d21f-1718-4780-b0bf-0481a34c4405" x="379" y="27" width="175" height="23" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{class}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9981545f-ab2b-4a29-a813-e31d04d82fb1"/>
+			</element>
+			<element kind="textField" uuid="d0fa117d-f7d8-464e-b212-41134f04bcb5" x="380" y="50" width="174" height="24" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{section}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5ee87187-4215-4e0a-8f21-58228de1708e"/>
+			</element>
+			<element kind="textField" uuid="43c726d9-607f-4b51-927c-710b8215b166" x="109" y="98" width="171" height="25" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{feeType}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d02b7145-e90d-4ccf-8488-ebfeaec05635"/>
+			</element>
+			<element kind="textField" uuid="9dd067b3-e658-4aa5-b687-bd5c6e4860d7" x="381" y="99" width="173" height="24" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{month}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b705672f-31d0-44d8-80cb-90ffeca90eb9"/>
+			</element>
+			<element kind="textField" uuid="031166a1-522d-4baa-8c0d-e98c36afd0b8" x="108" y="123" width="174" height="26" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{amount}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="05964285-e031-432e-ae47-b5afa7c37532"/>
+			</element>
+			<element kind="textField" uuid="a06a3f95-33f5-49ba-bfac-90c70163a327" x="468" y="324" width="100" height="25" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{date}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1e3d48d1-1b6c-4a9c-8f91-dfc70c368020"/>
+			</element>
+			<element kind="textField" uuid="c06efd50-5183-43ca-8395-44794c91e03a" x="110" y="409" width="170" height="24" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{name}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c71289e7-6308-4a3e-8479-84749a78016d"/>
+			</element>
+			<element kind="textField" uuid="2e90823b-8501-4986-88c7-b46898923ff5" x="109" y="434" width="171" height="23" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{fatherName}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4b17f48c-2231-42d1-83d6-1b45830f5620"/>
+			</element>
+			<element kind="textField" uuid="cfcc628a-7280-4fd3-833f-34ca0e1ad543" x="108" y="458" width="172" height="23" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{rollNumber}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="326f3eb3-44dd-4df0-910a-19a7416c6948"/>
+			</element>
+			<element kind="textField" uuid="c2ba116f-fe9f-435e-9ac7-6a2dc2912fa5" x="381" y="409" width="173" height="24" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{version}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="58a68bdb-3c34-4f64-98ba-72d6251f3838"/>
+			</element>
+			<element kind="textField" uuid="50b8cee8-57ed-4dd2-8b53-8a350dfdbc92" x="380" y="434" width="173" height="23" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{class}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="74f9c524-411e-4e16-87f8-e42d6fd6d2d3"/>
+			</element>
+			<element kind="textField" uuid="acd7ac8f-4203-4484-9f62-fdd35392f240" x="381" y="459" width="172" height="22" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{section}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6924eab9-86f7-4d01-9de3-64aa29c06a3e"/>
+			</element>
+			<element kind="textField" uuid="deac7e9b-f778-4bfd-b771-eea0620a00c4" x="109" y="506" width="171" height="23" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{feeType}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bf8eb9ad-47ee-455d-986e-3ea15e5b9a23"/>
+			</element>
+			<element kind="textField" uuid="41cc4de8-cfd3-40cd-a6d4-7e810402a8f5" x="381" y="506" width="173" height="25" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{month}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3a5a3a2f-61b1-44c7-a0c1-57617e4e3f20"/>
+			</element>
+			<element kind="textField" uuid="affd06e8-5d22-41c5-9718-f56f58ecd552" x="108" y="531" width="172" height="25" fontName="Kalpurush" fontSize="14.0">
+				<expression><![CDATA[$F{amount}]]></expression>
+				<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="849f7ef1-4423-4248-9693-dc84603facae"/>
+			</element>
+		</band>
 	</detail>
-	<columnFooter height="45" splitType="Stretch"/>
-	<pageFooter height="54" splitType="Stretch"/>
-	<summary height="42" splitType="Stretch"/>
 </jasperReport>
