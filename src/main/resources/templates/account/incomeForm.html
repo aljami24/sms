@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<head>
+  <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+<div layout:fragment="content" class="page-bg card shadow mx-2">
+
+  <div class="container-fluid mt-4">
+
+    <!-- Page Header -->
+    <div class="mb-3">
+      <h5 class="fw-bold">
+        <i class="bi bi-plus-circle-fill me-2"></i>Add Payment
+      </h5>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card shadow-sm border-0">
+      <div class="card-body">
+
+        <form>
+
+          <div class="row g-4">
+
+            <!-- Payment Type -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold ">
+                Payment Type
+              </label>
+              <select class="form-select fw-semibold">
+                <option value="">Select Payment Type</option>
+                <option>Admission Fee</option>
+                <option>Tuition Fee</option>
+                <option>Exam Fee</option>
+                <option>Others</option>
+              </select>
+            </div>
+
+            <!-- Month -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold ">
+                Month
+              </label>
+              <select class="form-select fw-semibold">
+                <option value="">Select Month</option>
+                <option>January</option>
+                <option>February</option>
+                <option>March</option>
+                <option>April</option>
+              </select>
+            </div>
+
+            <!-- Date -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold ">
+                Payment Date
+              </label>
+              <input type="date" class="form-control fw-semibold">
+            </div>
+
+            <!-- Amount -->
+            <div class="col-md-6">
+              <label class="form-label fw-bold ">
+                Amount
+              </label>
+              <input type="number"
+                     class="form-control fw-semibold"
+                     placeholder="Enter amount">
+            </div>
+
+            <!-- Description -->
+            <div class="col-md-12">
+              <label class="form-label fw-bold  fs-5">
+                Description
+              </label>
+              <textarea class="form-control fw-semibold "
+                        rows="4"
+                        placeholder="Write payment description...">
+                            </textarea>
+
+            </div>
+
+          </div>
+
+          <!-- Submit Button -->
+          <div class="mt-4 text-end">
+            <button type="submit"
+                    class="btn btn-primary px-4 fw-bold">
+              <i class="bi bi-check-circle me-1"></i>
+              Submit Payment
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+</body>
+</html>
