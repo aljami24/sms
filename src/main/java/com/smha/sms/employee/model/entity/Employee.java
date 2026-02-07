@@ -2,6 +2,7 @@ package com.smha.sms.employee.model.entity;
 
 import com.smha.sms.common.address.entity.Address;
 import com.smha.sms.common.entity.BaseEntity;
+import com.smha.sms.common.enums.AddressType;
 import com.smha.sms.common.enums.EmployeeType;
 import com.smha.sms.common.enums.Gender;
 import com.smha.sms.common.enums.IdentityType;
@@ -53,6 +54,26 @@ public class Employee extends BaseEntity {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> address = new ArrayList<>();
+
+    public String getGenderValue() {
+        return gender.name();
+    }
+
+    public String getPermanentAddress() {
+        if (address == null) return " ";
+        return address.stream()
+                .filter(address -> address.getAddressType() == AddressType.PERMANENT_ADDRESS)
+                .map(address -> address.getVillage() + "," + address.getPoliceStation().getName() + "," + address.getDistrict().getName())
+                .findFirst().orElse(" ");
+    }
+
+    public String getPresentAddress() {
+        if (address == null) return "";
+        return address.stream()
+                .filter(a -> a.getAddressType() == AddressType.PRESENT_ADDRESS)
+                .map(a -> a.getVillage() + "," + a.getPoliceStation().getName() + "," + a.getDistrict().getName())
+                .findFirst().orElse(" ");
+    }
 
     @Override
     public String toString() {
