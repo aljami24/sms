@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
 </head>
@@ -13,12 +13,12 @@
     </div>
 
     <div class="sidebar-menu">
-        <a class="menu-link" th:href="@{/}">
+        <a class="menu-link" th:href="@{/dashboard}">
             <span><i class="bi bi-speedometer2 me-2"></i> Dashboard</span>
         </a>
 
         <div class="menu-item">
-            <a class="menu-toggle" data-target="configuration" >
+            <a class="menu-toggle" data-target="configuration">
                 <span><i class="bi bi-people me-2"></i> Configuration</span>
                 <i class="bi bi-chevron-right arrow"></i>
             </a>
@@ -27,6 +27,10 @@
                    th:href="@{/user/list}">User</a>
                 <a class="sub-link" sec:authorize="hasAuthority('ROLE')"
                    th:href="@{/role/list}">Role</a>
+                <a class="sub-link" sec:authorize="hasAuthority('ROLE')"
+                   th:href="@{/configer/feelist}">Fee</a>
+                <a class="sub-link" sec:authorize="hasAuthority('ROLE')"
+                   th:href="@{/configer/payScaleList}">PayScale</a>
             </div>
         </div>
 
@@ -42,7 +46,7 @@
         </div>
 
         <div class="menu-item">
-            <a class="menu-toggle" data-target="employees" >
+            <a class="menu-toggle" data-target="employees">
                 <span><i class="bi bi-person-badge me-2"></i> Employee</span>
                 <i class="bi bi-chevron-right arrow"></i>
             </a>
@@ -53,7 +57,7 @@
         </div>
 
         <div class="menu-item">
-            <a class="menu-toggle" data-target="attendance" >
+            <a class="menu-toggle" data-target="attendance">
                 <span><i class="bi bi-calendar-check me-2"></i> Attendance</span>
                 <i class="bi bi-chevron-right arrow"></i>
             </a>
@@ -64,7 +68,7 @@
         </div>
 
         <div class="menu-item">
-            <a class="menu-toggle" data-target="account" >
+            <a class="menu-toggle" data-target="account">
                 <span><i class="bi bi-wallet2 me-2"></i> Account</span>
                 <i class="bi bi-chevron-right arrow"></i>
             </a>
@@ -82,7 +86,7 @@
             </a>
             <div class="submenu" id="report">
                 <a class="sub-link" th:href="@{/reports/all}"
-                   >All Report</a>
+                >All Report</a>
             </div>
         </div>
     </div>

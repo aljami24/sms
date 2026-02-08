@@ -7,6 +7,7 @@ import com.smha.sms.common.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-public class Fees extends BaseEntity {
+@Table(name = "fees")
+public class Fee extends BaseEntity {
 
     private Double feesAmount;
     @ManyToOne
@@ -23,30 +25,30 @@ public class Fees extends BaseEntity {
     private ClassroomVersionSection cvs;
     @ManyToOne
     @JoinColumn(name = "payment_type_id")
-    private PaymentType paymentType;
+    private PaymentType paymentTypeId;
     @ManyToOne
     @JoinColumn(name = "year_id")
-    private Year year;
+    private Year yearId;
 
     @Override
     public String toString() {
         return "Fees{" +
                 "feesAmount=" + feesAmount +
                 ", cvsId=" + cvs +
-                ", paymentType=" + paymentType +
-                ", yearId=" + year +
+                ", paymentType=" + paymentTypeId +
+                ", yearId=" + yearId +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Fees fees = (Fees) o;
-        return Objects.equals(feesAmount, fees.feesAmount) && Objects.equals(cvs, fees.cvs) && Objects.equals(paymentType, fees.paymentType) && Objects.equals(year, fees.year);
+        Fee fees = (Fee) o;
+        return Objects.equals(feesAmount, fees.feesAmount) && Objects.equals(cvs, fees.cvs) && Objects.equals(paymentTypeId, fees.paymentTypeId) && Objects.equals(yearId, fees.yearId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(feesAmount, cvs, paymentType, year);
+        return Objects.hash(feesAmount, cvs, paymentTypeId, yearId);
     }
 }

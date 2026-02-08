@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -10,7 +10,7 @@
 
 <body>
 
-<div layout:fragment="content" class="container py-4">
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
 
     <!-- ===== Page Header ===== -->
     <div class="card shadow-sm mb-4">
@@ -23,7 +23,6 @@
     </div>
 
 
-
     <!-- ===== Row 1 ===== -->
     <div class="row mb-5">
         <div class="col-12 mb-2">
@@ -32,19 +31,21 @@
         </div>
 
         <div class="col-md-6 mb-3 d-flex align-items-center">
-            <span class="badge bg-success rounded-circle me-3" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">01</span>
-            <a href="/reports/student-fee" class="text-success text-decoration-none"
-               onmouseover="this.classList.add('text-decoration-underline');"
-               onmouseout="this.classList.remove('text-decoration-underline');">
+            <span class="badge bg-success rounded-circle me-3"
+                  style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">01</span>
+            <a class="text-success text-decoration-none" href="/reports/student-fee"
+               onmouseout="this.classList.remove('text-decoration-underline');"
+               onmouseover="this.classList.add('text-decoration-underline');">
                 Fee Collection Report
             </a>
         </div>
 
         <div class="col-md-6 mb-3 d-flex align-items-center">
-            <span class="badge bg-success rounded-circle me-3" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">02</span>
-            <a href="/reports/student-attendance" class="text-success text-decoration-none"
-               onmouseover="this.classList.add('text-decoration-underline');"
-               onmouseout="this.classList.remove('text-decoration-underline');">
+            <span class="badge bg-success rounded-circle me-3"
+                  style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">02</span>
+            <a class="text-success text-decoration-none" href="/reports/student-attendance"
+               onmouseout="this.classList.remove('text-decoration-underline');"
+               onmouseover="this.classList.add('text-decoration-underline');">
                 Student Attendance Report
             </a>
         </div>
@@ -57,19 +58,21 @@
         </div>
 
         <div class="col-md-6 mb-3 d-flex align-items-center">
-            <span class="badge bg-success rounded-circle me-3" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">01</span>
-            <a th:href="@{/employee_list_pdf}" class="text-success text-decoration-none" target="_blank"
-               onmouseover="this.classList.add('text-decoration-underline');"
-               onmouseout="this.classList.remove('text-decoration-underline');">
+            <span class="badge bg-success rounded-circle me-3"
+                  style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">01</span>
+            <a class="text-success text-decoration-none" onmouseout="this.classList.remove('text-decoration-underline');" onmouseover="this.classList.add('text-decoration-underline');"
+               target="_blank"
+               th:href="@{/employee_list_pdf}">
                 Employee List
             </a>
         </div>
 
         <div class="col-md-6 mb-3 d-flex align-items-center">
-            <span class="badge bg-success rounded-circle me-3" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">02</span>
-            <a href="/reports/monthly-income" class="text-success text-decoration-none"
-               onmouseover="this.classList.add('text-decoration-underline');"
-               onmouseout="this.classList.remove('text-decoration-underline');">
+            <span class="badge bg-success rounded-circle me-3"
+                  style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">02</span>
+            <a class="text-success text-decoration-none" href="/reports/monthly-income"
+               onmouseout="this.classList.remove('text-decoration-underline');"
+               onmouseover="this.classList.add('text-decoration-underline');">
                 Employee Attendance Report
             </a>
         </div>
@@ -82,19 +85,21 @@
         </div>
 
         <div class="col-md-6 mb-3 d-flex align-items-center">
-            <span class="badge bg-success rounded-circle me-3" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">01</span>
-            <a th:href="@{/employee_list_pdf}" class="text-success text-decoration-none" target="_blank"
-               onmouseover="this.classList.add('text-decoration-underline');"
-               onmouseout="this.classList.remove('text-decoration-underline');">
+            <span class="badge bg-success rounded-circle me-3"
+                  style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">01</span>
+            <a class="text-success text-decoration-none" onmouseout="this.classList.remove('text-decoration-underline');" onmouseover="this.classList.add('text-decoration-underline');"
+               target="_blank"
+               th:href="@{/employee_list_pdf}">
                 Income & Expense Report
             </a>
         </div>
 
         <div class="col-md-6 mb-3 d-flex align-items-center">
-            <span class="badge bg-success rounded-circle me-3" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">02</span>
-            <a href="/reports/monthly-income" class="text-success text-decoration-none"
-               onmouseover="this.classList.add('text-decoration-underline');"
-               onmouseout="this.classList.remove('text-decoration-underline');">
+            <span class="badge bg-success rounded-circle me-3"
+                  style="width:30px; height:30px; display:flex; align-items:center; justify-content:center;">02</span>
+            <a class="text-success text-decoration-none" href="/reports/monthly-income"
+               onmouseout="this.classList.remove('text-decoration-underline');"
+               onmouseover="this.classList.add('text-decoration-underline');">
                 Demo
             </a>
         </div>

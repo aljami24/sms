@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout/main}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+<body>
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
+    <div class="card shadow-sm border-0">
+        <div class="p-4 bg-light border-bottom d-flex justify-content-between">
+            <h5 class="mb-0 fw-bold">Class Wise Fee Structure</h5>
+            <a class="btn btn-success btn-sm fw-bold" th:href="@{/configer/feeForm}">+ Add Fee</a>
+        </div>
+        <table class="table table-borderless table-hover mb-0">
+            <thead class="bg-primary text-white">
+            <tr>
+                <th class="ps-4">ID</th>
+                <th>Class</th>
+                <th>Version</th>
+                <th>Section</th>
+                <th>Payment Type</th>
+                <th>Fees</th>
+                <th>Year</th>
+                <th class="text-end">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fee,stat : ${feeList.content}">
+                <td class="ps-4" th:text="${stat.count + feeList.number * feeList.size}">F-102</td>
+                <td th:text="${fee.classRoomName != null ? fee.classRoomName : 'N/A'}"></td>
+                <td th:text="${fee.versionName != null ? fee.versionName : 'N/A'}"></td>
+                <td th:text="${fee.sectionName != null ? fee.sectionName : 'N/A'}">A</td>
+                <td th:text="${fee.paymentTypeId != null && fee.paymentTypeId.name != null ? fee.paymentTypeId.name : 'N/A'}">
+                    Exam Fee
+                </td>
+                <td th:text="${fee.feesAmount != null ? fee.feesAmount : 'N/A'}">500</td>
+                <td th:text="${fee.yearName != null ? fee.yearName : 'N/A'}">2026</td>
+                <td class="text-end">
+                    <!-- Edit Button -->
+                    <a class="btn btn-sm btn-warning px-3 rounded-pill me-1"
+                       th:href="@{/configer/feeEdit/{id}(id=${fee.id})}">
+                        ✏ Edit
+                    </a>
+
+                    <!-- Delete Button -->
+                    <form method="post"
+                          onsubmit="return confirm('Are you sure you want to delete this fee?');"
+                          style="display:inline;"
+                          th:action="@{/configer/feeDelete/{id}(id=${fee.id})}">
+
+                        <button class="btn btn-sm btn-danger px-3 rounded-pill" type="submit">
+                            🗑 Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation example " class="mt-2">
+        <ul class="pagination justify-content-center" th:if="${totalPages > 0}">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/configer/feelist(page=${currentPage - 1})}">Previous</a>
+            </li>
+            <li class="page-item" th:classappend="${i == currentPage} ? 'active' : ''"
+                th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                <a class="page-link"
+                   th:href="@{/configer/feelist(page=${i})}"
+                   th:text="${i + 1}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/configer/feelist(page=${currentPage + 1})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

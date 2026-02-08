@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout/main}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+<body>
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
+    <div>
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="p-4 d-flex justify-content-between align-items-center">
+                <h4 class="fw-bold mb-0" style="color: #0f5132;">Salary Grades</h4>
+                <a class="btn btn-success rounded-pill px-4 shadow-sm" th:href="@{/configer/payScaleForm}">+
+                    Create Grade</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead style="background-color: #e6fffa;">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Grade Name</th>
+                        <th>Basic Salary</th>
+                        <th>Year</th>
+                        <th class="text-end pe-4">Management</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="payScale,stat : ${payScaleList.content}">
+                        <td class="ps-4 text-muted" th:text="${stat.count + payScaleList.number * payScaleList.size}">
+                            G001
+                        </td>
+                        <td class="fw-bold" th:text="${payScale.name != null ? payScale.name : 'N/A'}">Senior Teacher
+                            (G-1)
+                        </td>
+                        <td class="text-success fw-bold"
+                            th:text="${payScale.payScaleAmount != null ? payScale.payScaleAmount : 'N/A'}">৳ 45,000.00
+                        </td>
+                        <td class="text-success fw-bold"
+                            th:text="${payScale.yearName != null ? payScale.yearName : 'N/A'}">2026
+                        </td>
+                        <td class="text-end">
+                            <!-- Edit Button -->
+                            <a class="btn btn-sm btn-warning px-3 rounded-pill me-1"
+                               th:href="@{/configer/payScaleEdit/{id}(id=${payScale.id})}">
+                                Edit
+                            </a>
+
+                            <!-- Delete Button -->
+                            <form method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this grade?');"
+                                  style="display:inline;"
+                                  th:action="@{/configer/payScaleDelete/{id}(id=${payScale.id})}">
+                                <button class="btn btn-sm btn-danger px-3 rounded-pill" type="submit">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation example " class="mt-2">
+        <ul class="pagination justify-content-center" th:if="${totalPages > 0}">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/configer/payScaleList(page=${currentPage - 1})}">Previous</a>
+            </li>
+            <li class="page-item" th:classappend="${i == currentPage} ? 'active' : ''"
+                th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                <a class="page-link"
+                   th:href="@{/configer/payScaleList(page=${i})}"
+                   th:text="${i + 1}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/configer/payScaleList(page=${currentPage + 1})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>

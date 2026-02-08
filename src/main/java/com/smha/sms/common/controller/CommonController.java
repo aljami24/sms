@@ -19,9 +19,13 @@ public class CommonController {
     @Autowired
     private EmployeeService employeeService;
 
-
     @GetMapping
-    public String home(Model model) {
+    public String home () {
+        return "home";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard (Model model) {
         Page<StudentResponseDto> allStudent = studentService.getAllStudent(0, 5, "id", "DESC");
         Page<EmployeeResponseDto> allEmployee = employeeService.getAllEmployee(0, 10, "id", "desc");
         model.addAttribute("allStudent", allStudent);

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -10,11 +10,11 @@
 
 <body>
 
-<div layout:fragment="content" class="container py-4 card page-bg shadow mx-2">
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4>User List</h4>
-        <a th:href="@{/user/form}" class="btn btn-primary">➕ Add User</a>
+        <a class="btn btn-primary" th:href="@{/user/form}">➕ Add User</a>
     </div>
 
     <table class="table table-striped table-hover">
@@ -22,8 +22,8 @@
         <tr>
             <th style="width: 25%">Username</th>
             <th style="width: 25%">Roles</th>
-            <th style="width: 25%">Permissions</th>
-            <th style="width: 25%">Action</th>
+            <th style="width: 35%">Permissions</th>
+            <th class="text-center" style="width: 15%">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -35,16 +35,16 @@
             <td>
                 <span th:each="p : ${user.permissions}" th:text="${p.code + ' '}"></span>
             </td>
-            <td>
-                <a th:href="@{/user/edit/{id}(id=${user.id})}" class="btn btn-sm btn-warning">✏ Edit</a>
-                <form th:id="'deleteUserForm-' + ${user.id}"
+            <td class="text-end">
+                <a class="btn btn-sm btn-warning" th:href="@{/user/edit/{id}(id=${user.id})}">✏ Edit</a>
+                <form method="post"
+                      style="display:inline;"
                       th:action="@{/user/delete/{id}(id=${user.id})}"
-                      method="post"
-                      style="display:inline;">
+                      th:id="'deleteUserForm-' + ${user.id}">
 
-                    <button type="button"
-                            class="btn btn-sm btn-danger"
-                            th:onclick="'confirmDelete(\'deleteUserForm-' + ${user.id} + '\')'">
+                    <button class="btn btn-sm btn-danger"
+                            th:onclick="'confirmDelete(\'deleteUserForm-' + ${user.id} + '\')'"
+                            type="button">
                         🗑 Delete
                     </button>
 

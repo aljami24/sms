@@ -1,0 +1,33 @@
+body{
+
+}
+
+.navbar {
+    background-color: rgb(20, 180, 180);
+}
+
+#hero {
+  height: 100vh; /* Full screen height */
+  width: 100%;
+  background : #20c997;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  color: white; /* Text color */
+}
+
+/* Optional overlay for better text visibility */
+#hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4); /* Dark overlay */
+  z-index: 1;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 2; /* Text above overlay */
+}

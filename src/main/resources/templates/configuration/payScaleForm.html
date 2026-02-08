@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{layout/main}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+<body>
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
+    <div class="container py-5">
+        <div class="card shadow-lg border-0 mx-auto" style="max-width: 500px; border-radius: 15px;">
+            <div class="card-header bg-teal text-white py-3 text-center"
+                 style="background-color: #20c997; border-radius: 15px 15px 0 0;">
+                <h5 class="mb-0 fw-bold" th:text="${isEdit} ? 'Edit Salary Grade' : 'Add Salary Grade'">Add Salary Grade</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="post"
+                      th:action="${isEdit} ? @{/configer/payScaleUpdate} : @{/configer/payScaleSave}"
+                      th:object="${payScaleForm}">
+                    <!-- Hidden field for edit mode -->
+                    <input type="hidden" name="id" th:if="${isEdit}" th:value="${payScaleId}">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Grade Name/Level</label>
+                        <input class="form-control border-2"
+                               placeholder="e.g. Grade 01"
+                               style="border-color: #20c99733;"
+                               th:field="*{name}"
+                               type="text"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Basic Amount (BDT)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">৳</span>
+                            <input class="form-control border-2"
+                                   placeholder="50000"
+                                   style="border-color: #20c99733;"
+                                   th:field="*{payScaleAmount}"
+                                   type="number"
+                                   step="0.01"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Year</label>
+                        <select class="form-select border-2"
+                                style="border-color: #20c99733;"
+                                th:field="*{yearId}"
+                                required>
+                            <option value="">--Select Year--</option>
+                            <option th:each="y : ${year}"
+                                    th:text="${y.name}"
+                                    th:value="${y.id}"></option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button class="btn w-100 text-white fw-bold shadow"
+                                style="background-color: #20c997;"
+                                type="submit"
+                                th:text="${isEdit} ? 'Update Grade' : 'Confirm Grade'">
+                            Confirm Grade
+                        </button>
+                        <a class="btn btn-light border w-50"
+                           th:href="@{/configer/payScaleList}">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
