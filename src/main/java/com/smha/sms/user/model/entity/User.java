@@ -56,9 +56,7 @@ public class User extends BaseEntity{
         return allPermissions;
     }
 
-    public Set<String> getUserRoles() {
-        Set<String> roleNames = new HashSet<>();
-        roles.forEach(r -> roleNames.add(r.getName()));
-        return roleNames;
+    public List<String> getUserRoles() {
+        return getRoles().stream().map(Role::getName).toList();
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@EnableMethodSecurity(prePostEnabled = true)
+//@EnableMethodSecurity(prePostEnabled = true)
 @Configuration
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class SecurityConfig {
@@ -26,11 +26,15 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers( "/","/login", "/css/**","/image/**", "/js/**").permitAll()
+                        .requestMatchers("/employee/**", "/student/**", "/reports/**").hasAnyRole("ADMIN","REGISTER","ACCOUNT")
+                        .requestMatchers("/user/**", "/role/**").hasRole("ADMIN")
+                        .requestMatchers("/income/**","/expense/**").hasAnyRole("ADMIN","ACCOUNT")
+                        .requestMatchers("/attendance/**").hasAnyRole("ADMIN","REGISTER")
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout").logoutSuccessUrl("/login"));

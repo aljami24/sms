@@ -4,6 +4,7 @@ import com.smha.sms.academic.model.entity.Section;
 import com.smha.sms.academic.model.entity.Version;
 import com.smha.sms.academic.model.entity.Year;
 import com.smha.sms.academic.model.repository.*;
+import com.smha.sms.annotation.PermissionRequired;
 import com.smha.sms.common.address.dto.AddressRequestDto;
 import com.smha.sms.common.address.entity.District;
 import com.smha.sms.common.address.entity.Division;
@@ -57,7 +58,7 @@ public class StudentController {
 
 
     //  Student Form Show
-    @PreAuthorize("hasAuthority('STUDENT_CREATE')")
+    @PermissionRequired("STUDENT_CREATE")
     @GetMapping("/create")
     public String createForm(Model model) {
         StudentRequestDto studentRequestDto = new StudentRequestDto();
@@ -121,7 +122,7 @@ public class StudentController {
     }
 
     //   All Student List View
-    @PreAuthorize("hasAuthority('STUDENT_LIST')")
+    @PermissionRequired("STUDENT_LIST")
     @GetMapping("/list")
     public String getAllStudent(
             @RequestParam(defaultValue = "0") int page,
@@ -193,7 +194,7 @@ public class StudentController {
 
 
     //    Student Details
-    @PreAuthorize("hasAuthority('STUDENT_VIEW')")
+    @PermissionRequired("STUDENT_VIEW")
     @GetMapping("/details/{id}")
     public String showStdDetails(@PathVariable Long id, Model model) {
         StudentResponseDto showStudentDetail = studentService.showStudentDetails(id);
@@ -204,7 +205,7 @@ public class StudentController {
     }
 
     //    Student Payment
-    @PreAuthorize("hasAuthority('STUDENT_PAYMENT')")
+    @PermissionRequired("STUDENT_PAYMENT")
     @GetMapping("/payment/{id}")
     public String showStdPayment(@PathVariable Long id, Model model) {
         StudentResponseDto showStudentDetail = studentService.showStudentDetails(id);
@@ -213,7 +214,7 @@ public class StudentController {
         return "student/studentFeePayment";
     }
 
-    @PreAuthorize("hasAuthority('STUDENT_DELETE')")
+    @PermissionRequired("STUDENT_DELETE")
     @PostMapping("/delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.deleteById(id);
@@ -221,7 +222,7 @@ public class StudentController {
     }
 
     //    Update Form Show
-    @PreAuthorize("hasAuthority('STUDENT_UPDATE')")
+    @PermissionRequired("STUDENT_UPDATE")
     @GetMapping("/update/{id}")
     public String updateStudent(@PathVariable Long id,
                                 @RequestParam(defaultValue = "0") int page,
@@ -269,7 +270,7 @@ public class StudentController {
     }
 
     //    Old Student Admission - Search by Registration
-    @PreAuthorize("hasAuthority('OLD_STUDENT_CREATE')")
+    @PermissionRequired("OLD_STUDENT_CREATE")
     @GetMapping("/old-admission")
     public String searchOldStudent(@RequestParam("registration") int registration, Model model) {
         try {

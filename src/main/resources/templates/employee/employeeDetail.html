@@ -215,7 +215,7 @@
                 <div class="ms-auto"></div>
 
                 <!-- Delete -->
-                <button type="button" sec:authorize="hasAuthority('EMPLOYEE_DELETE')"
+                <button type="button" sec:authorize="hasAuthority('EMPLOYEE_DELETE')" th:if="${employee.status.name() == 'APPOINTED'}"
                         class="btn btn-danger btn-sm"
                         data-bs-toggle="modal"
                         th:data-bs-target="'#deleteModal_' + ${employee.id}">
