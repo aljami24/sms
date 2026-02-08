@@ -10,7 +10,7 @@
 
 <body>
 
-<div class="container py-4 page-bg card mx-2 shadow" layout:fragment="content">
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
 
     <!-- ===== Profile Header ===== -->
     <div class="card shadow mb-5">
@@ -118,7 +118,7 @@
                             <tbody>
                             <tr th:each="record : ${showStudentDetail.studentAcademicRecords}">
                                 <td class="text-center">
-                                    <span th:if="${record.year != null}" class="fw-semibold"
+                                    <span class="fw-semibold" th:if="${record.year != null}"
                                           th:text="${record.year.name} ?: 'N/A'"></span>
                                     <span th:if="${record.year == null}">N/A</span>
                                 </td>
@@ -142,7 +142,7 @@
                                 </td>
                             </tr>
                             <tr th:if="${#lists.isEmpty(showStudentDetail.studentAcademicRecords)}">
-                                <td colspan="5" class="text-center text-muted small">No academic records found</td>
+                                <td class="text-center text-muted small" colspan="5">No academic records found</td>
                             </tr>
                             </tbody>
                         </table>
@@ -225,8 +225,8 @@
 
                 <!-- Delete -->
                 <button class="btn btn-danger btn-sm"
-                        sec:authorize="hasAuthority('STUDENT_DELETE')"
                         data-bs-toggle="modal"
+                        sec:authorize="hasAuthority('STUDENT_DELETE')"
                         th:data-bs-target="'#deleteModal_' + ${showStudentDetail.id}"
                         type="button">
                     Delete
@@ -270,6 +270,72 @@
 
                     </div>
                 </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- ===== Audit Log / History Section ===== -->
+    <div class="card shadow mt-4">
+        <div class="card-body">
+
+            <h6 class="fw-semibold text-secondary mb-4">
+                Activity History
+            </h6>
+
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                    <tr>
+
+                        <th class="text-center" style="width:15%">Performed By</th>
+                        <th class="text-center" style="width:15%">designation</th>
+                        <th class="text-center" style="width:15%">Date & Time</th>
+                        <th class="text-center" style="width:15%">Action</th>
+                        <th class="text-center" style="width:25%">Description</th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr each="log : ${auditLogs}">
+
+                        <!-- User -->
+                        <td class="text-center" text="${log.createdBy}">
+                            Admin
+                        </td>
+
+                        <!-- designation -->
+                        <td class="text-center" text="${log.description}">
+                            designation
+                        </td>
+
+
+                        <!-- Date -->
+                        <td class="text-center">
+                            <span text="${#temporals.format(log.createdAt,'dd MMM yyyy hh:mm a')}"></span>
+                        </td>
+
+                        <!-- Action Type -->
+                        <td class="text-center">
+                        <span class="badge badge-success bg-info text-dark"
+                              text="${log.action}">UPDATE</span>
+                        </td>
+
+                        <!-- Description -->
+                        <td class="text-center" text="${log.description}">
+                            Student information updated
+                        </td>
+
+                    </tr>
+
+                    <!-- Empty State -->
+                    <tr if="${#lists.isEmpty(auditLogs)}">
+                        <td class="text-center text-muted small" colspan="4">
+                            No activity history found
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
