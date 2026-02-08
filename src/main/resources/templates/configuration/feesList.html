@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container py-5">
+        <div class="card shadow-sm border-0 overflow-hidden" style="border-radius: 15px;">
+            <div class="p-4 bg-light border-bottom d-flex justify-content-between">
+                <h5 class="mb-0 fw-bold">Class Wise Fee Structure</h5>
+                <a th:href="@{/configer/feesForm}" class="btn btn-success btn-sm fw-bold">+ Add Fee</a>
+            </div>
+            <table class="table table-borderless table-hover mb-0">
+                <thead class="bg-primary text-white">
+                <tr>
+                    <th class="ps-4">ID</th>
+                    <th>Version</th>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Payment Type</th>
+                    <th>Fees</th>
+                    <th>Year</th>
+                    <th class="text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="ps-4">F-102</td>
+                    <td>English Version</td>
+                    <td>Class Eight</td>
+                    <td>A</td>
+                    <td>Exam Fee</td>
+                    <td>500</td>
+                    <td>2026</td>
+                    <td class="text-center">
+                        <!-- Edit Button -->
+                        <a href="@{/user/edit/{id}(id=${user.id})}"
+                           class="btn btn-sm btn-warning px-3 rounded-pill me-1">
+                            ✏ Edit
+                        </a>
+
+                        <!-- Delete Button -->
+                        <form id="'deleteUserForm-' + ${user.id}"
+                              action="@{/user/delete/{id}(id=${user.id})}"
+                              method="post"
+                              style="display:inline;">
+
+                            <button type="button"
+                                    class="btn btn-sm btn-danger px-3 rounded-pill">
+                                🗑 Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
