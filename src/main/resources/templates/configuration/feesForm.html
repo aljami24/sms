@@ -1,60 +1,156 @@
 <!DOCTYPE html>
 <html lang="en"
+      layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{layout/main}">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
 </head>
 <body>
-<div layout:fragment="content">
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
     <div class="container py-5">
         <div class="card shadow-lg border-0 mx-auto" style="max-width: 600px; border-radius: 20px;">
             <div class="card-body p-5">
                 <h4 class="fw-bold text-indigo mb-4 border-bottom pb-2" style="color: #6610f2;">Setup Class Fees</h4>
-                <form>
+                <form method="post"
+                      th:action="${isEdit} ? @{/configer/feeUpdate} : @{/configer/feeSave}"
+                      th:object="${feeForm}">
+                    <!-- Hidden field for edit mode -->
+                    <input type="hidden" name="id" th:if="${isEdit}" th:value="${feeId}">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Version</label>
-                            <select class="form-select border-0 bg-light shadow-sm">
-                                <option>Bangla</option>
-                                <option>English</option>
+                            <label class="form-label small fw-bold">Class</label>
+                            <select class="form-select" id="class"
+                                    onchange="loadVersionsAndSections(this)"
+                                    th:field="*{classRoomId}">
+                                <option value="">--Select Class--</option>
+                                <option th:each="c : ${studentClass}" th:text="${c.name}" th:value="${c.id}"></option>
                             </select>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Class</label>
-                            <select class="form-select border-0 bg-light shadow-sm">
-                                <option>One</option>
-                                <option>Tow</option>
+                            <label class="form-label small fw-bold">Version</label>
+                            <select class="form-select" id="version"
+                                    onchange="loadSectionsByVersion()"
+                                    th:field="*{versionId}">
+                                <option value="">--Select Version--</option>
+                                <option th:each="v : ${version}" th:text="${v.name}" th:value="${v.id}"></option>
                             </select>
                         </div>
                         <div class="col-6">
                             <label class="form-label small fw-bold">Section</label>
-                            <select class="form-select border-0 bg-light shadow-sm">
-                                <option>A</option>
-                                <option>B</option>
+                            <select class="form-select" id="section"
+                                    th:field="*{sectionId}">
+                                <option value="">--Select Section--</option>
+                                <option th:each="s : ${section}" th:text="${s.name}" th:value="${s.id}"></option>
                             </select>
                         </div>
 
                         <div class="col-6">
                             <label class="form-label small fw-bold">Payment Type</label>
-                            <select class="form-select border-0 bg-light shadow-sm">
-                                <option>Admission Fee</option>
-                                <option>Tuition Fee</option>
-                                <option>Exam Fee</option>
+                            <select class="form-select border-0 bg-light shadow-sm"
+                                    th:field="*{paymentTypeId}">
+                                <option value="">--Select Section--</option>
+                                <option th:each="payment : ${paymentType}" th:text="${payment.name}"
+                                        th:value="${payment.id}"></option>
+
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Year</label>
+                            <select class="form-select border-0 bg-light shadow-sm"
+                                    th:field="*{yearId}">
+                                <option value="">--Select Section--</option>
+                                <option th:each="y : ${year}" th:text="${y.name}"
+                                        th:value="${y.id}"></option>
+
                             </select>
                         </div>
 
                         <div class="col-6">
                             <label class="form-label small fw-bold">Fee</label>
-                            <input type="number" class="form-control border-0 bg-light shadow-sm" placeholder="0.00">
+                            <input class="form-control border-0 bg-light shadow-sm" placeholder="0.00"
+                                   th:field="*{feesAmount}"
+                                   type="text">
                         </div>
                     </div>
-                    <button class="btn btn-indigo w-100 mt-4 text-white fw-bold py-2" style="background-color: #6610f2; border-radius: 10px;">SAVE FEE CONFIG</button>
+                    <button class="btn btn-indigo w-100 mt-4 text-white fw-bold py-2"
+                            style="background-color: #6610f2; border-radius: 10px;"
+                            type="submit"
+                            th:text="${isEdit} ? 'UPDATE FEE' : 'SAVE FEE'">SAVE FEE
+                    </button>
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        /**
+         * Student Management - Class-Version-Section Cascading Dropdown Script
+         * Handles: Class -> Version -> Section
+         */
+
+        // Load versions and sections when class is changed
+        async function loadVersionsAndSections(classSelect) {
+            const classRoomId = classSelect.value;
+            const versionSelect = document.getElementById("version");
+            const sectionSelect = document.getElementById("section");
+
+            // Clear version and section dropdowns
+            versionSelect.innerHTML = '<option value="">--Select Version--</option>';
+            sectionSelect.innerHTML = '<option value="">--Select Section--</option>';
+
+            if (classRoomId) {
+                try {
+                    // Load versions
+                    const versionRes = await fetch(`/student/versions-by-class?classRoomId=${classRoomId}`);
+                    const versions = await versionRes.json();
+                    versions.forEach(v => {
+                        const option = document.createElement("option");
+                        option.value = v.id;
+                        option.text = v.name;
+                        versionSelect.add(option);
+                    });
+
+                    // Load sections
+                    const sectionRes = await fetch(`/student/sections-by-class?classRoomId=${classRoomId}`);
+                    const sections = await sectionRes.json();
+                    sections.forEach(s => {
+                        const option = document.createElement("option");
+                        option.value = s.id;
+                        option.text = s.name;
+                        sectionSelect.add(option);
+                    });
+                } catch (e) {
+                    console.error('Error loading versions/sections:', e);
+                }
+            }
+        }
+
+        // Load sections when version is changed (optional - for further filtering)
+        async function loadSectionsByVersion() {
+            const classRoomId = document.getElementById("class").value;
+            const versionId = document.getElementById("version").value;
+            const sectionSelect = document.getElementById("section");
+
+            sectionSelect.innerHTML = '<option value="">--Select Section--</option>';
+
+            if (classRoomId && versionId) {
+                try {
+                    const res = await fetch(`/student/sections-by-class?classRoomId=${classRoomId}&versionId=${versionId}`);
+                    const sections = await res.json();
+                    sections.forEach(s => {
+                        const option = document.createElement("option");
+                        option.value = s.id;
+                        option.text = s.name;
+                        sectionSelect.add(option);
+                    });
+                } catch (e) {
+                    console.error('Error loading sections:', e);
+                }
+            }
+        }
+    </script>
 </div>
 </body>
 </html>

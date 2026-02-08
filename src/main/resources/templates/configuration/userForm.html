@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/main}">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -11,23 +11,23 @@
 
 <body>
 
-<div layout:fragment="content" class="container py-4 card page-bg shadow mx-2">
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
 
-    <h3 th:text="${userDto.id == null} ? 'Create User' : 'Edit User'" class="mb-4"></h3>
+    <h3 class="mb-4" th:text="${userDto.id == null} ? 'Create User' : 'Edit User'"></h3>
 
-    <form th:object="${userDto}" method="post"
-          th:action="@{${userDto.id == null ? '/user/save' : '/user/update/' + userDto.id}}">
+    <form method="post" th:action="@{${userDto.id == null ? '/user/save' : '/user/update/' + userDto.id}}"
+          th:object="${userDto}">
 
         <!-- Username -->
         <div class="mb-3">
             <label class="form-label">Username</label>
-            <input type="text" th:field="*{username}" class="form-control" placeholder="Enter username" required>
+            <input class="form-control" placeholder="Enter username" required th:field="*{username}" type="text">
         </div>
 
         <!-- Password -->
         <div class="mb-3">
             <label class="form-label">Password</label>
-            <input type="password" th:field="*{password}" class="form-control" placeholder="Enter password">
+            <input class="form-control" placeholder="Enter password" th:field="*{password}" type="password">
             <div class="form-text">Leave blank to keep old password.</div>
         </div>
 
@@ -35,10 +35,10 @@
         <div class="mb-3">
             <label class="form-label fw-bold">Roles</label>
             <div class="d-flex flex-wrap gap-2">
-                <div th:each="role : ${roles}" class="form-check">
-                    <input class="form-check-input role-checkbox" type="checkbox"
-                           th:value="${role.id}" th:field="*{roleIds}" th:id="'role_' + ${role.id}"
-                           th:checked="${userDto.roleIds.contains(role.id)}">
+                <div class="form-check" th:each="role : ${roles}">
+                    <input class="form-check-input role-checkbox" th:checked="${userDto.roleIds.contains(role.id)}"
+                           th:field="*{roleIds}" th:id="'role_' + ${role.id}" th:value="${role.id}"
+                           type="checkbox">
                     <label class="form-check-label" th:for="'role_' + ${role.id}" th:text="${role.name}"></label>
                 </div>
             </div>
@@ -49,22 +49,22 @@
             <label class="form-label fw-bold ">
                 Permissions
                 <div class="py-1">
-                    <input type="checkbox" id="selectAllPerms" class="form-check-input me-1">
-                    <label for="selectAllPerms" class="form-check-label mb-0">Select All</label>
+                    <input class="form-check-input me-1" id="selectAllPerms" type="checkbox">
+                    <label class="form-check-label mb-0" for="selectAllPerms">Select All</label>
                 </div>
             </label>
             <div class="d-flex flex-wrap gap-2" id="permissionsDiv">
-                <div th:each="p : ${permissions}" class="form-check perm-item" style="display:none">
-                    <input class="form-check-input perm-checkbox" type="checkbox"
-                           th:value="${p.id}" th:field="*{permissionIds}" th:id="'perm_' + ${p.id}"
-                           th:checked="${userDto.permissionIds.contains(p.id)}">
+                <div class="form-check perm-item" style="display:none" th:each="p : ${permissions}">
+                    <input class="form-check-input perm-checkbox" th:checked="${userDto.permissionIds.contains(p.id)}"
+                           th:field="*{permissionIds}" th:id="'perm_' + ${p.id}" th:value="${p.id}"
+                           type="checkbox">
                     <label class="form-check-label" th:for="'perm_' + ${p.id}" th:text="${p.code}"></label>
                 </div>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a th:href="@{/user/list}" class="btn btn-secondary ms-2">Cancel</a>
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-secondary ms-2" th:href="@{/user/list}">Cancel</a>
     </form>
 
     <script th:inline="javascript">
@@ -93,7 +93,7 @@
 
             permCheckboxes.forEach(pcb => {
                 const val = pcb.value.toString();
-                if(permsToShow.has(val)) {
+                if (permsToShow.has(val)) {
                     pcb.closest('div.perm-item').style.display = 'block';
                 } else {
                     pcb.checked = false;
@@ -105,15 +105,15 @@
 
         roleCheckboxes.forEach(cb => cb.addEventListener('change', updatePermissions));
 
-        if(selectAll) {
-            selectAll.addEventListener('change', function() {
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
                 const visiblePerms = Array.from(permCheckboxes).filter(pcb => pcb.closest('div.perm-item').style.display !== 'none');
                 visiblePerms.forEach(pcb => pcb.checked = this.checked);
             });
         }
 
         function updateSelectAllState() {
-            if(!selectAll) return;
+            if (!selectAll) return;
             const visiblePerms = Array.from(permCheckboxes).filter(pcb => pcb.closest('div.perm-item').style.display !== 'none');
             const allChecked = visiblePerms.length > 0 && visiblePerms.every(pcb => pcb.checked);
             selectAll.checked = allChecked;
@@ -124,7 +124,7 @@
         });
 
         // Initial load
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             updatePermissions();
         });
         /*]]>*/
