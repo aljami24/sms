@@ -1,6 +1,7 @@
 package com.smha.sms.employee.controller;
 
 
+import com.smha.sms.annotation.PermissionRequired;
 import com.smha.sms.common.address.dto.AddressRequestDto;
 import com.smha.sms.common.address.entity.Address;
 import com.smha.sms.common.address.repository.DistrictRepository;
@@ -46,7 +47,7 @@ public class EmployeeController {
     PoliceStationRepository policeStationRepository;
 
     //Save Form View---------------------------------------------------------------------------------
-    @PreAuthorize("hasAuthority('EMPLOYEE_CREATE')")
+    @PermissionRequired("EMPLOYEE_CREATE")
     @GetMapping("/create")
     public String createForm(Model model) {
         EmployeeFormDto employeeFormDto = new EmployeeFormDto();
@@ -81,7 +82,7 @@ public class EmployeeController {
     }
 
     //Update Form View---------------------------------------------------------------------------------
-    @PreAuthorize("hasAuthority('EMPLOYEE_UPDATE')")
+    @PermissionRequired("EMPLOYEE_UPDATE")
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id,
                            @RequestParam(defaultValue = "0") int page,
@@ -166,7 +167,7 @@ public class EmployeeController {
     }
 
     // Employee List---------------------------------------------------------------------------------
-    @PreAuthorize("hasAuthority('EMPLOYEE_LIST')")
+    @PermissionRequired("EMPLOYEE_LIST")
     @GetMapping("/list")
     public String getAllEmployee(@ModelAttribute("filter")EmployeeFilter filter,
                                  @RequestParam(defaultValue = "0") int page,
@@ -197,7 +198,7 @@ public class EmployeeController {
     }
 
     // ================= View Employee =================
-    @PreAuthorize("hasAuthority('EMPLOYEE_VIEW')")
+    @PermissionRequired("EMPLOYEE_VIEW")
     @GetMapping("/view/{id}")
     public String getEmployeeById(@PathVariable Long id, Model model) {
 
@@ -211,7 +212,7 @@ public class EmployeeController {
 
 
     // =================  Delete =================
-    @PreAuthorize("hasAuthority('EMPLOYEE_DELETE')")
+    @PermissionRequired("EMPLOYEE_DELETE")
     @PostMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable Long id) {
         employeeService.deleteEmployee(id);
@@ -219,7 +220,7 @@ public class EmployeeController {
     }
 
     // ================= Join Employee =================
-    @PreAuthorize("hasAuthority('EMPLOYEE_ACTIVE')")
+    @PermissionRequired("EMPLOYEE_ACTIVE")
     @PostMapping("/activate/{id}")
     public String activateEmployee(@PathVariable Long id) {
         employeeService.activateEmployee(id);
@@ -227,7 +228,7 @@ public class EmployeeController {
     }
 
     // ================= Deactivate Employee =================
-    @PreAuthorize("hasAuthority('EMPLOYEE_DEACTIVE')")
+    @PermissionRequired("EMPLOYEE_DEACTIVE")
     @PostMapping("/deactivate/{id}")
     public String deactivateEmployee(@PathVariable Long id) {
         employeeService.deactivateEmployee(id);
