@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container py-5">
+        <div class="card shadow-lg border-0 mx-auto" style="max-width: 600px; border-radius: 20px;">
+            <div class="card-body p-5">
+                <h4 class="fw-bold text-indigo mb-4 border-bottom pb-2" style="color: #6610f2;">Setup Class Fees</h4>
+                <form>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Version</label>
+                            <select class="form-select border-0 bg-light shadow-sm">
+                                <option>Bangla</option>
+                                <option>English</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Class</label>
+                            <select class="form-select border-0 bg-light shadow-sm">
+                                <option>One</option>
+                                <option>Tow</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Section</label>
+                            <select class="form-select border-0 bg-light shadow-sm">
+                                <option>A</option>
+                                <option>B</option>
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Payment Type</label>
+                            <select class="form-select border-0 bg-light shadow-sm">
+                                <option>Admission Fee</option>
+                                <option>Tuition Fee</option>
+                                <option>Exam Fee</option>
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <label class="form-label small fw-bold">Fee</label>
+                            <input type="number" class="form-control border-0 bg-light shadow-sm" placeholder="0.00">
+                        </div>
+                    </div>
+                    <button class="btn btn-indigo w-100 mt-4 text-white fw-bold py-2" style="background-color: #6610f2; border-radius: 10px;">SAVE FEE CONFIG</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

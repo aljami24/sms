@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container py-5">
+        <div class="card border-0 shadow-sm" style="border-radius: 15px;">
+            <div class="p-4 d-flex justify-content-between align-items-center">
+                <h4 class="fw-bold mb-0" style="color: #0f5132;">Salary Grades</h4>
+                <a th:href="@{/configer/salaryPayScaleForm}" class="btn btn-success rounded-pill px-4 shadow-sm">+ Create Grade</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead style="background-color: #e6fffa;">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Grade Name</th>
+                        <th>Basic Salary</th>
+                        <th>Year</th>
+                        <th class="text-end pe-4">Management</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="ps-4 text-muted">#G001</td>
+                        <td class="fw-bold">Senior Teacher (G-1)</td>
+                        <td class="text-success fw-bold">৳ 45,000.00</td>
+                        <td class="text-success fw-bold">2026</td>
+                        <td class="text-center">
+                            <!-- Edit Button -->
+                            <a href="@{/user/edit/{id}(id=${user.id})}"
+                               class="btn btn-sm btn-warning px-3 rounded-pill me-1">
+                                ✏ Edit
+                            </a>
+
+                            <!-- Delete Button -->
+                            <form id="'deleteUserForm-' + ${user.id}"
+                                  action="@{/user/delete/{id}(id=${user.id})}"
+                                  method="post"
+                                  style="display:inline;">
+
+                                <button type="button"
+                                        class="btn btn-sm btn-danger px-3 rounded-pill">
+                                    🗑 Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

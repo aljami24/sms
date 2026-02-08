@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container py-5">
+        <div class="card shadow-lg border-0 mx-auto" style="max-width: 500px; border-radius: 15px;">
+            <div class="card-header bg-teal text-white py-3 text-center" style="background-color: #20c997; border-radius: 15px 15px 0 0;">
+                <h5 class="mb-0 fw-bold">Add Salary Grade</h5>
+            </div>
+            <div class="card-body p-4">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Grade Name/Level</label>
+                        <input type="text" class="form-control border-2" placeholder="e.g. Grade 01" style="border-color: #20c99733;">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Basic Amount (BDT)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">৳</span>
+                            <input type="number" class="form-control border-2" placeholder="50000" style="border-color: #20c99733;">
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-teal w-100 text-white fw-bold shadow" style="background-color: #20c997;">Confirm Grade</button>
+                        <button type="reset" class="btn btn-light border w-50">Clear</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
