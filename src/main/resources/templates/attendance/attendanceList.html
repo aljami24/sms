@@ -19,7 +19,7 @@
         </h5>
 
         <!-- 👉 Mark Page এ যাওয়ার বাটন -->
-        <a th:href="@{/attendance/employee}" class="btn btn-primary">
+        <a th:href="@{/attendance/employee}" class="btn" id="btn">
             <i class="bi bi-plus-circle"></i> Attendance
         </a>
     </div>
@@ -104,7 +104,7 @@
                     <td class="text-center">
                         <a th:if="${att.date == today}"
                            th:href="@{/attendance/edit/{id}(id=${att.id})}"
-                           class="btn btn-sm btn-info shadow-sm">
+                           class="btn action-edit">
                             <i class="bi bi-pencil-square"></i> Edit
                         </a>
                     </td>
