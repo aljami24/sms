@@ -12,7 +12,7 @@
 
 <div class="page-bg card mx-2 shadow" layout:fragment="content">
 
-    <h3 th:text="${role.id != null} ? 'Edit Role' : 'Create Role'"></h3>
+    <h5 class="fw-bold mb-0" th:text="${role.id != null} ? 'Edit Role' : 'Create Role'"></h5>
 
     <form method="post" th:action="@{/role/save}" th:object="${role}">
         <input th:field="*{id}" type="hidden">
@@ -40,7 +40,7 @@
         </div>
 
         <div class="mt-4">
-            <button class="btn btn-primary" type="submit">Save Changes</button>
+            <button class="btn" id="btn" type="submit">Save Changes</button>
             <a class="btn btn-secondary" th:href="@{/role/list}">Cancel</a>
         </div>
     </form>

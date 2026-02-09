@@ -10,14 +10,13 @@
 <div class="page-bg card mx-2 shadow" layout:fragment="content">
     <div>
         <div class="card border-0 shadow-sm" style="border-radius: 15px;">
-            <div class="p-4 d-flex justify-content-between align-items-center">
-                <h4 class="fw-bold mb-0" style="color: #0f5132;">Salary Grades</h4>
-                <a class="btn btn-success rounded-pill px-4 shadow-sm" th:href="@{/configer/payScaleForm}">+
-                    Create Grade</a>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">Salary Grades</h5>
+                <a class="btn" id="btn" th:href="@{/configer/payScaleForm}">Create Grade</a>
             </div>
             <div class="table-responsive">
                 <table class="table align-middle mb-0">
-                    <thead style="background-color: #e6fffa;">
+                    <thead class="table-success">
                     <tr>
                         <th class="ps-4">ID</th>
                         <th>Grade Name</th>
@@ -42,17 +41,17 @@
                         </td>
                         <td class="text-end">
                             <!-- Edit Button -->
-                            <a class="btn btn-sm btn-warning px-3 rounded-pill me-1"
+                            <a class="btn action-edit mb-2"
                                th:href="@{/configer/payScaleEdit/{id}(id=${payScale.id})}">
                                 Edit
-                            </a>
+                            </a><br>
 
                             <!-- Delete Button -->
                             <form method="post"
                                   onsubmit="return confirm('Are you sure you want to delete this grade?');"
                                   style="display:inline;"
                                   th:action="@{/configer/payScaleDelete/{id}(id=${payScale.id})}">
-                                <button class="btn btn-sm btn-danger px-3 rounded-pill" type="submit">
+                                <button class="btn action-delete" type="submit">
                                     Delete
                                 </button>
                             </form>
