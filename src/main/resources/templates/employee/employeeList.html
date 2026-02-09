@@ -19,10 +19,7 @@
     </h5>
     <div class="d-flex justify-content-end mt-3" sec:authorize="hasAuthority('EMPLOYEE_CREATE')">
       <a th:href="@{/employee/create}"
-         class="btn btn-primary d-flex align-items-center gap-2 shadow-sm">
-        <i class="bi bi-plus-circle"></i>
-        Create Employee
-      </a>
+         class="btn" id="btn">Create Employee</a>
     </div>
   </div>
 

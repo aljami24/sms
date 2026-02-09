@@ -209,7 +209,7 @@
             <div class="d-flex flex-wrap align-items-center gap-2">
 
                 <!-- Edit -->
-                <a class="btn btn-warning btn-sm" sec:authorize="hasAuthority('STUDENT_UPDATE')"
+                <a class="btn action-edit" sec:authorize="hasAuthority('STUDENT_UPDATE')"
                    th:href="@{'/student/update/'+${showStudentDetail.id}}">
                     Edit
                 </a>
@@ -224,7 +224,7 @@
                 <div class="ms-auto"></div>
 
                 <!-- Delete -->
-                <button class="btn btn-danger btn-sm"
+                <button class="btn action-delete"
                         data-bs-toggle="modal"
                         sec:authorize="hasAuthority('STUDENT_DELETE')"
                         th:data-bs-target="'#deleteModal_' + ${showStudentDetail.id}"

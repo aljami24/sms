@@ -196,7 +196,7 @@
             <div class="d-flex flex-wrap align-items-center gap-2">
 
                 <!-- Edit -->
-                <a class="btn btn-warning btn-sm" sec:authorize="hasAuthority('EMPLOYEE_UPDATE')"
+                <a class="btn action-edit" sec:authorize="hasAuthority('EMPLOYEE_UPDATE')"
                    th:href="@{'/employee/edit/' + ${employee.id}}">
                     Edit
                 </a>
@@ -221,7 +221,7 @@
                 <div class="ms-auto"></div>
 
                 <!-- Delete -->
-                <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                <button class="btn action-delete" data-bs-toggle="modal"
                         sec:authorize="hasAuthority('EMPLOYEE_DELETE')"
                         th:data-bs-target="'#deleteModal_' + ${employee.id}"
                         type="button">

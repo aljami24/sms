@@ -13,7 +13,7 @@
 
 <div class="page-bg card mx-2 shadow" layout:fragment="content">
 
-    <h3 class="mb-4" th:text="${userDto.id == null} ? 'Create User' : 'Edit User'"></h3>
+    <h5 class="fw-bold mb-3" th:text="${userDto.id == null} ? 'Create User' : 'Edit User'"></h5>
 
     <form method="post" th:action="@{${userDto.id == null ? '/user/save' : '/user/update/' + userDto.id}}"
           th:object="${userDto}">
@@ -63,7 +63,7 @@
             </div>
         </div>
 
-        <button class="btn btn-primary" type="submit">Save</button>
+        <button class="btn" id="btn" type="submit">Save</button>
         <a class="btn btn-secondary ms-2" th:href="@{/user/list}">Cancel</a>
     </form>
 
