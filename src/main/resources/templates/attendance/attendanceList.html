@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+
+<div layout:fragment="content" class="page-bg card mx-2 shadow">
+
+    <!-- ================= Header ================= -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold">
+            <i class="bi bi-people-check me-2"></i> Employee Attendance Report
+        </h5>
+
+        <!-- 👉 Mark Page এ যাওয়ার বাটন -->
+        <a th:href="@{/attendance/employee}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Attendance
+        </a>
+    </div>
+
+
+    <!-- ================= Filter ================= -->
+    <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+
+            <form method="get" th:action="@{/attendance/list}">
+                <div class="row g-3 align-items-end">
+
+                    <!-- Employee Type -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Employee Type</label>
+                        <select class="form-select" name="type">
+                            <option value="">All</option>
+                            <option th:each="t : ${employeeTypes}"
+                                    th:value="${t}"
+                                    th:text="${t}"
+                                    th:selected="${t == selectedType}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Date</label>
+                        <input type="date"
+                               class="form-control"
+                               name="date"
+                               th:value="${selectedDate}">
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+                        <button class="btn btn-success">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- ================= Table ================= -->
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+
+            <table class="table table-hover mb-0">
+
+                <thead class="table-success text-center">
+                <tr>
+                    <th>Sl</th>
+                    <th>Employee Info</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Action</th> </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="att, stat : ${attendanceList}">
+                    <td th:text="${stat.count}" class="text-center"></td>
+                    <td>
+                        <strong>ID :</strong> <span th:text="${att.employeeId.employeeId}"></span><br>
+                        <strong>Name :</strong> <span th:text="${att.employeeId.name}"></span>
+                    </td>
+                    <td class="text-center" th:text="${att.employeeId.employeeType}"></td>
+
+                    <td class="text-center">
+                        <span th:if="${att.status.name() == 'PRESENT'}" class="badge bg-success">Present</span>
+                        <span th:if="${att.status.name() == 'ABSENT'}" class="badge bg-danger">Absent</span>
+                    </td>
+
+<!--                    <td class="text-center">-->
+<!--                        <a th:href="@{/attendance/edit/{id}(id=${att.id})}" class="btn btn-sm btn-info shadow-sm">-->
+<!--                            <i class="bi bi-pencil-square"></i> Edit-->
+<!--                        </a>-->
+<!--                    </td>-->
+                    <td class="text-center">
+                        <a th:if="${att.date == today}"
+                           th:href="@{/attendance/edit/{id}(id=${att.id})}"
+                           class="btn btn-sm btn-info shadow-sm">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
