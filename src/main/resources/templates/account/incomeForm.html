@@ -6,105 +6,190 @@
 
 <head>
   <th:block th:replace="layout/header :: head"></th:block>
+  <style>
+    /* ===== STEP INDICATOR ===== */
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      background: #dee2e6;
+    }
+
+    .step-circle.active {
+      background: #0d6efd;
+      color: #fff;
+    }
+
+    .step-line {
+      flex: 1;
+      height: 3px;
+      background: #dee2e6;
+    }
+
+    .step-line.active {
+      background: #0d6efd;
+    }
+
+    .step-section { display: none; }
+    .step-section.active { display: block; }
+
+    /* ===== PAYMENT METHOD CARD ===== */
+    .method-radio {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .method-card {
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.3s;
+      border-radius: 12px;
+    }
+
+    .method-card:hover {
+      border-color: #0d6efd;
+      transform: translateY(-4px);
+    }
+
+    .method-radio:checked + .method-card {
+      border-color: #0d6efd;
+      background: #eef4ff;
+      box-shadow: 0 0 0 3px rgba(13,110,253,.15);
+    }
+  </style>
 </head>
 
 <body>
 <div layout:fragment="content" class="page-bg card shadow mx-2">
 
-  <div class="container-fluid mt-4">
-
-    <!-- Page Header -->
-    <div class="mb-3">
-      <h5 class="fw-bold">
-        <i class="bi bi-plus-circle-fill me-2"></i>Add Payment
-      </h5>
+  <div class="d-flex justify-content-center mb-4">
+    <div class="d-flex align-items-center gap-3" style="max-width: 400px; width: 100%;">
+      <div class="step-circle active" id="circle1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-circle" id="circle2">2</div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-circle" id="circle3">3</div>
     </div>
+  </div>
 
-    <!-- Form Card -->
-    <div class="card shadow-sm border-0">
-      <div class="card-body">
+  <form>
 
-        <form>
+    <!-- ===== STEP 1 ===== -->
+    <div class="step-section active" id="step1">
+      <h5 class="fw-bold mb-3">Basic Payment Info</h5>
 
-          <div class="row g-4">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Payment Date</label>
+          <input type="date" class="form-control" required>
+        </div>
 
-            <!-- Payment Type -->
-            <div class="col-md-6">
-              <label class="form-label fw-bold ">
-                Payment Type
-              </label>
-              <select class="form-select fw-semibold">
-                <option value="">Select Payment Type</option>
-                <option>Admission Fee</option>
-                <option>Tuition Fee</option>
-                <option>Exam Fee</option>
-                <option>Others</option>
-              </select>
-            </div>
+        <div class="col-md-6">
+          <label class="form-label fw-bold">Amount</label>
+          <input type="number" class="form-control" required>
+        </div>
 
-            <!-- Month -->
-            <div class="col-md-6">
-              <label class="form-label fw-bold ">
-                Month
-              </label>
-              <select class="form-select fw-semibold">
-                <option value="">Select Month</option>
-                <option>January</option>
-                <option>February</option>
-                <option>March</option>
-                <option>April</option>
-              </select>
-            </div>
+        <div class="col-md-12">
+          <label class="form-label fw-bold">Description</label>
+          <textarea class="form-control" rows="3"></textarea>
+        </div>
+      </div>
 
-            <!-- Date -->
-            <div class="col-md-6">
-              <label class="form-label fw-bold ">
-                Payment Date
-              </label>
-              <input type="date" class="form-control fw-semibold">
-            </div>
-
-            <!-- Amount -->
-            <div class="col-md-6">
-              <label class="form-label fw-bold ">
-                Amount
-              </label>
-              <input type="number"
-                     class="form-control fw-semibold"
-                     placeholder="Enter amount">
-            </div>
-
-            <!-- Description -->
-            <div class="col-md-12">
-              <label class="form-label fw-bold  fs-5">
-                Description
-              </label>
-              <textarea class="form-control fw-semibold "
-                        rows="4"
-                        placeholder="Write payment description...">
-                            </textarea>
-
-            </div>
-
-          </div>
-
-          <!-- Submit Button -->
-          <div class="mt-4 text-end">
-            <button type="submit"
-                    class="btn btn-primary px-4 fw-bold">
-              <i class="bi bi-check-circle me-1"></i>
-              Submit Payment
-            </button>
-          </div>
-
-        </form>
-
+      <div class="text-end mt-4">
+        <button type="button" class="btn btn-primary" onclick="nextStep(1)">Next</button>
       </div>
     </div>
 
-  </div>
+    <!-- ===== STEP 2 ===== -->
+    <div class="step-section" id="step2">
+      <h5 class="fw-bold mb-3">Payment Type</h5>
 
+      <select class="form-select" required>
+        <option value="">Select Payment Type</option>
+        <option>Admission Fee</option>
+        <option>Tuition Fee</option>
+        <option>Exam Fee</option>
+        <option>Others</option>
+      </select>
 
+      <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Back</button>
+        <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
+      </div>
+    </div>
+
+    <!-- ===== STEP 3 ===== -->
+    <div class="step-section" id="step3">
+      <h5 class="fw-bold mb-3">Payment Method</h5>
+
+      <div class="row g-3">
+
+        <!-- Cash -->
+        <div class="col-md-2 offset-md-3">
+          <label class="w-100">
+            <input type="radio" name="method" value="Cash" class="method-radio" required>
+            <div class="card text-center p-4 shadow-sm method-card">
+              <img src="https://cdn-icons-png.flaticon.com/128/2331/2331943.png" width="60" class="mb-2">
+              <div class="fw-bold">Cash</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Bank -->
+        <div class="col-md-2">
+          <label class="w-100">
+            <input type="radio" name="method" value="Bank" class="method-radio">
+            <div class="card text-center p-4 shadow-sm method-card">
+              <img src="https://cdn-icons-png.flaticon.com/128/2830/2830284.png" width="60" class="mb-2">
+              <div class="fw-bold">Bank</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Mobile Banking -->
+        <div class="col-md-2">
+          <label class="w-100">
+            <input type="radio" name="method" value="Mobile Banking" class="method-radio">
+            <div class="card text-center p-4 shadow-sm method-card">
+              <img src="https://cdn-icons-png.flaticon.com/128/2708/2708700.png" width="60" class="mb-2">
+              <div class="fw-bold">Mobile Banking</div>
+            </div>
+          </label>
+        </div>
+
+      </div>
+
+      <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Back</button>
+        <button type="submit" class="btn btn-success">Submit Payment</button>
+      </div>
+    </div>
+
+  </form>
+
+  <script>
+    function nextStep(step) {
+      document.getElementById('step' + step).classList.remove('active');
+      document.getElementById('step' + (step + 1)).classList.add('active');
+
+      document.getElementById('circle' + (step + 1)).classList.add('active');
+      document.getElementById('line' + step).classList.add('active');
+    }
+
+    function prevStep(step) {
+      document.getElementById('step' + step).classList.remove('active');
+      document.getElementById('step' + (step - 1)).classList.add('active');
+
+      document.getElementById('circle' + step).classList.remove('active');
+      document.getElementById('line' + (step - 1)).classList.remove('active');
+    }
+  </script>
 </div>
+
 </body>
 </html>

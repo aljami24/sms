@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorate="~{layout/main}">
+      layout:decorate="~{layout/main}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <th:block th:replace="layout/header :: head"></th:block>
@@ -10,7 +10,7 @@
 
 <body>
 
-<div class="page-bg card mx-2 shadow container py-4" layout:fragment="content">
+<div class="page-bg card mx-2 shadow" layout:fragment="content">
 
     <!-- ===== Profile Header ===== -->
     <div class="card shadow mb-5">
@@ -19,10 +19,10 @@
 
                 <!-- Avatar -->
                 <div class="col-md-3 ms-4">
-                    <img th:src="@{'/UploadFile' + ${employee.photoDir}}"
-                         alt="Employee Photo"
+                    <img alt="Employee Photo"
                          class="img-fluid rounded-circle border border-5 border-light shadow"
-                         style="width:150px;height:150px;object-fit:cover;">
+                         style="width:150px;height:150px;object-fit:cover;"
+                         th:src="@{'/UploadFile' + ${employee.photoDir}}">
                 </div>
 
                 <!-- Name -->
@@ -157,8 +157,8 @@
                         </div>
 
                         <button class="btn btn-sm btn-primary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#nidModal">
+                                data-bs-target="#nidModal"
+                                data-bs-toggle="modal">
                             View
                         </button>
                     </div>
@@ -178,8 +178,8 @@
                 </div>
 
                 <div class="modal-body text-center">
-                    <img th:src="@{'/UploadFile' + ${employee.nidDir}}"
-                         class="img-fluid rounded">
+                    <img class="img-fluid rounded"
+                         th:src="@{'/UploadFile' + ${employee.nidDir}}">
                 </div>
             </div>
         </div>
@@ -196,37 +196,43 @@
             <div class="d-flex flex-wrap align-items-center gap-2">
 
                 <!-- Edit -->
-                <a class="btn btn-warning btn-sm" sec:authorize="hasAuthority('EMPLOYEE_UPDATE')"
+                <a class="btn action-edit" sec:authorize="hasAuthority('EMPLOYEE_UPDATE')"
                    th:href="@{'/employee/edit/' + ${employee.id}}">
                     Edit
                 </a>
 
                 <!-- Join / Activate Button -->
-                <form th:action="@{'/employee/activate/' + ${employee.id}}" method="post" th:if="${employee.status.name() == 'APPOINTED' || employee.status.name() == 'DEACTIVATE'}">
-                    <button sec:authorize="hasAuthority('EMPLOYEE_ACTIVE')" type="submit" class="btn btn-success btn-sm">Activate</button>
+                <form method="post" th:action="@{'/employee/activate/' + ${employee.id}}"
+                      th:if="${employee.status.name() == 'APPOINTED' || employee.status.name() == 'DEACTIVATE'}">
+                    <button class="btn btn-success btn-sm" sec:authorize="hasAuthority('EMPLOYEE_ACTIVE')"
+                            type="submit">Activate
+                    </button>
                 </form>
 
                 <!-- Deactivate / Left Button -->
-                <form th:action="@{'/employee/deactivate/' + ${employee.id}}" method="post" th:if="${employee.status.name() == 'ACTIVATE'}">
-                    <button sec:authorize="hasAuthority('EMPLOYEE_DEACTIVE')" type="submit" class="btn btn-danger btn-sm">Deactivate</button>
+                <form method="post" th:action="@{'/employee/deactivate/' + ${employee.id}}"
+                      th:if="${employee.status.name() == 'ACTIVATE'}">
+                    <button class="btn btn-danger btn-sm" sec:authorize="hasAuthority('EMPLOYEE_DEACTIVE')"
+                            type="submit">Deactivate
+                    </button>
                 </form>
 
                 <!-- Spacer -->
                 <div class="ms-auto"></div>
 
                 <!-- Delete -->
-                <button type="button" sec:authorize="hasAuthority('EMPLOYEE_DELETE')" th:if="${employee.status.name() == 'APPOINTED'}"
-                        class="btn btn-danger btn-sm"
-                        data-bs-toggle="modal"
-                        th:data-bs-target="'#deleteModal_' + ${employee.id}">
+                <button class="btn action-delete" data-bs-toggle="modal"
+                        sec:authorize="hasAuthority('EMPLOYEE_DELETE')"
+                        th:data-bs-target="'#deleteModal_' + ${employee.id}"
+                        type="button">
                     Delete
                 </button>
             </div>
 
             <!-- Delete Modal -->
             <div class="modal fade"
-                 th:id="'deleteModal_' + ${employee.id}"
-                 tabindex="-1">
+                 tabindex="-1"
+                 th:id="'deleteModal_' + ${employee.id}">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
 
@@ -249,8 +255,8 @@
                                 Cancel
                             </button>
 
-                            <form th:action="@{/employee/delete/{id}(id=${employee.id})}"
-                                  method="post">
+                            <form method="post"
+                                  th:action="@{/employee/delete/{id}(id=${employee.id})}">
                                 <button class="btn btn-danger">
                                     Delete
                                 </button>
