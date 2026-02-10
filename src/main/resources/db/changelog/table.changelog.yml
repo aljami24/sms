@@ -16,11 +16,6 @@ databaseChangeLog:
       file: academicStructure/tables/004-classroom-version-section.yml
       relativeToChangelogFile: true
 
-  - include:
-      file: attendance/tables/attendance.yml
-      relativeToChangelogFile: true
-
-
 
 
   - include:
@@ -111,4 +106,8 @@ databaseChangeLog:
 
   - include:
       file: systemConfiguration/table/payScale.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: attendance/tables/attendance.yml
       relativeToChangelogFile: true

@@ -5,6 +5,7 @@ import com.smha.sms.common.enums.AttendanceStatus;
 import com.smha.sms.common.enums.MonthName;
 import com.smha.sms.employee.model.entity.Employee;
 import com.smha.sms.student.model.entity.Student;
+import com.smha.sms.user.model.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class Attendance extends BaseEntity {
 
     @ManyToOne
     @JoinColumn (name = "marked_by")
-    private Employee markedBy;
+    private User markedBy;
 
     @Override
     public String toString() {
