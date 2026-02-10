@@ -22,7 +22,6 @@ databaseChangeLog:
 
 
 
-
   - include:
       file: address/tables/division.yml
       relativeToChangelogFile: true
@@ -111,4 +110,8 @@ databaseChangeLog:
 
   - include:
       file: systemConfiguration/table/payScale.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: attendance/tables/attendance.yml
       relativeToChangelogFile: true
