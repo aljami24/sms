@@ -11,6 +11,8 @@ import com.smha.sms.employee.model.enums.EmployeeStatus;
 import com.smha.sms.employee.model.mapper.EmployeeMapper;
 import com.smha.sms.employee.model.repository.EmployeeRepository;
 import com.smha.sms.employee.model.spacification.EmployeeSpecification;
+import com.smha.sms.user.model.entity.User;
+import com.smha.sms.user.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ public class AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
     private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
 
 
     public List<EmployeeResponseDto> getAllActiveEmployeesForAttendance(EmployeeFilter filter) {
@@ -56,6 +59,13 @@ public class AttendanceService {
         LocalDate today = LocalDate.now();
         MonthName currentMonth = MonthName.valueOf(today.getMonth().name());
 
+        // ১. বর্তমানে লগইন করা ইউজারের ইউজারনেম বের করা
+        String currentUsername = org.springframework.security.core.context.SecurityContextHolder
+                .getContext().getAuthentication().getName();
+
+        // ২. ডাটাবেস থেকে লগইন করা User অবজেক্টটি নিয়ে আসা
+        User loggedInUser = userRepository.findByUsername(currentUsername).orElse(null);
+
         for (Long empId : allDisplayedIds) {
 
             // ১. আজকের তারিখে এই এমপ্লয়ীর হাজিরা অলরেডি আছে কি না চেক (নিরাপত্তার জন্য)
@@ -69,6 +79,7 @@ public class AttendanceService {
                     attendance.setEmployeeId(emp);
                     attendance.setStudentId(null);
                     attendance.setMonthName(currentMonth);
+                    attendance.setMarkedBy(loggedInUser);
 
                     // ২. চেক করা: সুইচ অন আছে কি না (প্যারামিটারে status_ID আছে কিনা)
                     if (allParams.containsKey("status_" + empId)) {
