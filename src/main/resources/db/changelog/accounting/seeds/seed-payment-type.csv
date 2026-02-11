@@ -1,0 +1,5 @@
+id,name,created_at,updated_at,created_by,updated_by
+1,Admission Fee,2024-05-20 10:00:00,2024-05-20 10:00:00,system,system
+2,Tuition Fee,2024-05-20 10:00:00,2024-05-20 10:00:00,system,system
+3,Exam Fee,2024-05-20 10:00:00,2024-05-20 10:00:00,system,system
+4,Transport Fee,2024-05-20 10:00:00,2024-05-20 10:00:00,system,system

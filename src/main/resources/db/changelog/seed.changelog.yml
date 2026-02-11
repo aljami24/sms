@@ -104,3 +104,9 @@ databaseChangeLog:
             relativeToChangelogFile: true
             tableName: user_permissions
             quotchar: '"'
+
+        - loadData:
+            file: accounting/seeds/seed-payment-type.csv
+            relativeToChangelogFile: true
+            tableName: payment_type
+            quotchar: '"'
