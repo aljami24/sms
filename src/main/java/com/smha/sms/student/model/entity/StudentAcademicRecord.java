@@ -1,5 +1,6 @@
 package com.smha.sms.student.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smha.sms.academic.model.entity.ClassroomVersionSection;
 import com.smha.sms.academic.model.entity.Year;
 import com.smha.sms.common.entity.BaseEntity;
@@ -17,6 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class StudentAcademicRecord extends BaseEntity {
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;

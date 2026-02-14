@@ -19,9 +19,11 @@ databaseChangeLog:
   - include:
       file: address/tables/division.yml
       relativeToChangelogFile: true
+
   - include:
       file: address/tables/district.yml
       relativeToChangelogFile: true
+
   - include:
       file: address/tables/police-station.yml
       relativeToChangelogFile: true
@@ -108,4 +110,8 @@ databaseChangeLog:
 
   - include:
       file: attendance/tables/attendance.yml
+      relativeToChangelogFile: true
+
+  - include:
+      file: commonTable/auditLog.yml
       relativeToChangelogFile: true
