@@ -2,6 +2,7 @@ package com.smha.sms.accounting.model.entity;
 
 import com.smha.sms.academic.model.entity.ClassroomVersionSection;
 import com.smha.sms.academic.model.entity.Year;
+import com.smha.sms.accounting.model.enums.FeeType;
 import com.smha.sms.accounting.model.enums.PaymentMethod;
 import com.smha.sms.accounting.model.enums.PaymentStatus;
 import com.smha.sms.common.entity.BaseEntity;
@@ -12,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.Month;
 
 
@@ -24,11 +27,11 @@ public class Invoice extends BaseEntity {
 
     @ManyToOne (fetch =  FetchType.LAZY)
     @JoinColumn (name = "student_id")
-    private Student studentId;
+    private Student student;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "cvs_id")
-    private ClassroomVersionSection cvsId;
+    private ClassroomVersionSection classroomVersionSection;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "year_id")
@@ -36,13 +39,22 @@ public class Invoice extends BaseEntity {
 
     private String invoiceNo;
 
+    private LocalDateTime invoiceDate;
+
     @Enumerated (EnumType.STRING)
     private PaymentMethod paymentMethod;
 
     @Enumerated (EnumType.STRING)
     private PaymentStatus status;
 
-    private Double amount;
+    @Enumerated (EnumType.STRING)
+    private FeeType feeType;
+
+    private BigDecimal amount;
+
+    private BigDecimal paidAmount;
+
+    private BigDecimal dueAmount;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "payment_type_id")
@@ -52,11 +64,4 @@ public class Invoice extends BaseEntity {
 
     @Enumerated (EnumType.STRING)
     private Month month;
-
-
-
-
-
-
-
 }
