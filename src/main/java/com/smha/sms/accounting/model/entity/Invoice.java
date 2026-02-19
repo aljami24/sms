@@ -16,6 +16,8 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -35,7 +37,7 @@ public class Invoice extends BaseEntity {
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "year_id")
-    private Year yearId;
+    private Year year;
 
     private String invoiceNo;
 
@@ -64,4 +66,7 @@ public class Invoice extends BaseEntity {
 
     @Enumerated (EnumType.STRING)
     private Month month;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InvoiceItem> invoiceItems = new ArrayList<>();
 }

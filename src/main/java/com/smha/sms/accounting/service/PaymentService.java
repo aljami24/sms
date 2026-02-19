@@ -19,7 +19,8 @@ public class PaymentService {
 
     public Payment collect(PaymentRequest paymentRequest, Long invoiceId) {
         Invoice invoice = invoiceService.getInvoice(invoiceId).orElse(null);
-        Payment payment = paymentProcessorFactory.getPaymentStrategy(paymentRequest.getPaymentMethod()).pay(invoice, paymentRequest);
+        Payment payment = paymentProcessorFactory.getPaymentStrategy(paymentRequest.getPaymentMethod()).
+                pay(invoice, paymentRequest);
         paymentRepository.save(payment);
         return payment;
     }
