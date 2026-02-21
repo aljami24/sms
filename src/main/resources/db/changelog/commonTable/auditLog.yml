@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-audit-log-table
+      author: aljami
+      changes:
+        - createTable:
+            tableName: audit_log
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: action_type
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: action_data
+                  type: TEXT
+                  constraints:
+                    nullable: true
+
+              - column:
+                  name: remark
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+
+              # BaseEntity fields
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(255)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(255)

@@ -192,16 +192,15 @@ public class StudentController {
         return "student/studentList";
     }
 
-
     //    Student Details
     @PermissionRequired("STUDENT_VIEW")
     @GetMapping("/details/{id}")
     public String showStdDetails(@PathVariable Long id, Model model) {
         StudentResponseDto showStudentDetail = studentService.showStudentDetails(id);
         model.addAttribute("showStudentDetail", showStudentDetail);
+        model.addAttribute("auditLogs", studentService.getStudentAuditLogs(id));
         model.addAttribute("title", "Student Details");
         return "student/studentDetails";
-
     }
 
     //    Student Payment
@@ -260,13 +259,12 @@ public class StudentController {
             model.addAttribute("identityTypes", IdentityType.values());
             model.addAttribute("addressTypes", AddressType.values());
             model.addAttribute("title", "Update Student");
-            // If there are errors, the page and pageSize are added back to the form
             model.addAttribute("currentPage", page);
             model.addAttribute("pageSize", pageSize);
             return "/student/studentForm";
         }
         studentService.updateStudent(studentRequestDto);
-        return "redirect:/student/list?page=" + page + "&pageSize=" + pageSize + "#student-" + id;
+        return "redirect:/student/list?page=" + page + "&amp;pageSize=" + pageSize + "#student-" + id;
     }
 
     //    Old Student Admission - Search by Registration
@@ -284,7 +282,7 @@ public class StudentController {
             return "student/oldAdmission";
         } catch (NoSuchElementException e) {
             model.addAttribute("errorMessage", "No student found with Registration: " + registration);
-            return "redirect:/student/list?error=" + "No student found with Registration: " + registration;
+            return "redirect:/student/list?error=No student found with Registration: " + registration;
         }
     }
 
@@ -304,6 +302,5 @@ public class StudentController {
         studentService.admitOldStudent(studentId, yearId, classRoomId, sectionId, versionId);
         return "redirect:/student/list";
     }
-
 
 }
