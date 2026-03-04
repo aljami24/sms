@@ -1,6 +1,5 @@
 package com.smha.sms.accounting.model.entity;
 
-
 import com.smha.sms.common.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -11,8 +10,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class PaymentType extends BaseEntity {
-    private String  name;
+    private String name;
 }

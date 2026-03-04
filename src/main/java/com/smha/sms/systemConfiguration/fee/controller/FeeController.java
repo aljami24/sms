@@ -4,6 +4,7 @@ import com.smha.sms.academic.model.repository.ClassRoomRepository;
 import com.smha.sms.academic.model.repository.SectionRepository;
 import com.smha.sms.academic.model.repository.VersionRepository;
 import com.smha.sms.academic.model.repository.YearRepository;
+import com.smha.sms.accounting.model.enums.FeeType;
 import com.smha.sms.accounting.model.repository.PaymentTypeRepository;
 import com.smha.sms.systemConfiguration.fee.model.dto.request.FeeRequestDto;
 import com.smha.sms.systemConfiguration.fee.model.dto.response.FeeResponseDto;
@@ -37,7 +38,7 @@ public class FeeController {
         model.addAttribute("studentClass", classRoomRepository.findAll());
         model.addAttribute("version", versionRepository.findAll());
         model.addAttribute("section", sectionRepository.findAll());
-        model.addAttribute("paymentType", paymentTypeRepository.findAll());
+        model.addAttribute("feeType", FeeType.values());
         model.addAttribute("year", yearRepository.findAll());
 
         return "configuration/feesForm";
@@ -73,7 +74,7 @@ public class FeeController {
         model.addAttribute("studentClass", classRoomRepository.findAll());
         model.addAttribute("version", versionRepository.findAll());
         model.addAttribute("section", sectionRepository.findAll());
-        model.addAttribute("paymentType", paymentTypeRepository.findAll());
+        model.addAttribute("feeType",FeeType.values());
         model.addAttribute("year", yearRepository.findAll());
         model.addAttribute("isEdit", true);
 

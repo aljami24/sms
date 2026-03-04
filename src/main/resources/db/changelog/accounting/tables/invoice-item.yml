@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-payment
+      id: create-invoice-item
       author: afzal
       changes:
         - createTable:
-            tableName: payment
+            tableName: invoice_item
             columns:
               - column:
                   name: id
@@ -21,12 +21,10 @@ databaseChangeLog:
                     nullable: false
 
               - column:
-                  name: payment_method
+                  name: fee_type
                   type: VARCHAR(50)
-
-              - column:
-                  name: status
-                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
 
               - column:
                   name: amount
@@ -35,37 +33,20 @@ databaseChangeLog:
                     nullable: false
 
               - column:
-                  name: transaction_no
-                  type: VARCHAR(100)
+                  name: per_fee_amount
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
 
               - column:
-                  name: transaction_date
-                  type: TIMESTAMP
+                  name: month
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: true
 
               - column:
                   name: remarks
                   type: VARCHAR(255)
-
-              - column:
-                  name: gateway_response
-                  type: VARCHAR(255)
-
-              - column:
-                  name: currency
-                  type: VARCHAR(10)
-
-              - column:
-                  name: active
-                  type: BOOLEAN
-                  defaultValueBoolean: true
-
-              - column:
-                  name: previous_due_amount
-                  type: DECIMAL(19,2)
-
-              - column:
-                  name: remaining_due_amount
-                  type: DECIMAL(19,2)
 
               # BaseEntity fields
               - column:
@@ -84,13 +65,10 @@ databaseChangeLog:
                   name: updated_by
                   type: VARCHAR(100)
 
-        # ==========================
-        # Foreign Key
-        # ==========================
-
         - addForeignKeyConstraint:
-            constraintName: fk_payment_invoice
-            baseTableName: payment
+            constraintName: fk_invoice_item_invoice
+            baseTableName: invoice_item
             baseColumnNames: invoice_id
             referencedTableName: invoice
             referencedColumnNames: id
+            onDelete: CASCADE

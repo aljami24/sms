@@ -11,7 +11,7 @@
     <div class="container py-5">
         <div class="card shadow-lg border-0 mx-auto" style="max-width: 600px; border-radius: 20px;">
             <div class="card-body p-5">
-                <h5 class="fw-bold mb-4"> style="color: #6610f2;">Setup Class Fees</h5>
+                <h5 class="fw-bold mb-4">Setup Class Fees</h5>
                 <form method="post"
                       th:action="${isEdit} ? @{/configer/feeUpdate} : @{/configer/feeSave}"
                       th:object="${feeForm}">
@@ -46,12 +46,12 @@
                         </div>
 
                         <div class="col-6">
-                            <label class="form-label small fw-bold">Payment Type</label>
+                            <label class="form-label small fw-bold">Fee Type</label>
                             <select class="form-select border-0 bg-light shadow-sm"
-                                    th:field="*{paymentTypeId}">
+                                    th:field="*{feeType}">
                                 <option value="">--Select Section--</option>
-                                <option th:each="payment : ${paymentType}" th:text="${payment.name}"
-                                        th:value="${payment.id}"></option>
+                                <option th:each="fee : ${feeType}" th:text="${fee}"
+                                        th:value="${fee}"></option>
 
                             </select>
                         </div>
@@ -74,8 +74,7 @@
                                    type="text">
                         </div>
                     </div>
-                    <button class="btn " id="btn"
-                            style="background-color: #6610f2; border-radius: 10px;"
+                    <button class="btn mt-3" id="btn"
                             type="submit"
                             th:text="${isEdit} ? 'UPDATE FEE' : 'SAVE FEE'">SAVE FEE
                     </button>

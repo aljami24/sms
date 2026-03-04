@@ -23,12 +23,12 @@ databaseChangeLog:
                   type: BIGINT
 
               - column:
-                  name: payment_type_id
+                  name: year_id
                   type: BIGINT
 
               - column:
-                  name: year_id
-                  type: BIGINT
+                  name: fee_type
+                  type: VARCHAR(50)
 
               # BaseEntity ফিল্ডগুলো
               - column:
@@ -53,13 +53,6 @@ databaseChangeLog:
             referencedTableName: classroom_version_section
             referencedColumnNames: id
             constraintName: fk_fees_cvs
-
-        - addForeignKeyConstraint:
-            baseTableName: fees
-            baseColumnNames: payment_type_id
-            referencedTableName: payment_type
-            referencedColumnNames: id
-            constraintName: fk_fees_payment_type
 
         - addForeignKeyConstraint:
             baseTableName: fees
