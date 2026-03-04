@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<head>
+  <th:block th:replace="layout/header :: head"></th:block>
+</head>
+<body>
+
+<div layout:fragment="content" class="page-bg card mx-2 shadow">
+
+  <h3 class="mb-4">Invoice List</h3>
+
+  <!-- 🔎 Filter Section -->
+  <form method="get" th:action="@{/invoices/list}" class="row mb-4">
+    <div class="col-md-4">
+      <input type="text"
+             name="invoiceNo"
+             class="form-control"
+             placeholder="Search by Invoice No"
+             th:value="${invoiceNo}">
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary">
+        Search
+      </button>
+    </div>
+    <div class="col-md-2">
+      <a th:href="@{/invoices/list}" class="btn btn-secondary">
+        Reset
+      </a>
+    </div>
+  </form>
+
+  <!-- 📋 Invoice Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+
+      <thead class="table-success">
+      <tr>
+        <th style="width: 15%">Student Name</th>
+        <th class="text-center" style="width: 10%">Registration</th>
+        <th  style="width: 25%">Fee Type</th>
+        <th class="text-center" style="width: 10%">Total</th>
+        <th class="text-center" style="width: 10%">Paid</th>
+        <th class="text-center" style="width: 10%">Due</th>
+        <th class="text-center" style="width: 10%">Date</th>
+        <th class="text-center" style="width: 10%">Status</th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <tr th:each="invoice : ${invoices}">
+
+        <td th:text="${invoice.student.name}"></td>
+
+        <td class="text-center" th:text="${invoice.student.registration}"></td>
+
+        <td>
+          <span th:each="item, iterStat : ${invoice.invoiceItems}">
+            <span th:text="${item.feeType.name() == 'TUITION_FEE'} ? ${item.feeType} + ' (' + ${item.month} + ')' : ${item.feeType}"></span>
+            <span th:if="${!iterStat.last}">, </span>
+          </span>
+        </td>
+
+        <td class="text-center" th:text="${invoice.totalAmount}"></td>
+
+        <td class="text-center" th:text="${invoice.paidAmount}"></td>
+
+        <td class="text-center" th:text="${invoice.dueAmount}"></td>
+        <td class="text-center" th:text="${#temporals.format(invoice.invoiceDate,'dd-MM-yyyy HH:mm')}"></td>
+
+        <td class="text-center">
+          <span class="badge bg-success"
+                th:if="${invoice.invoicePaymentStatus.name() == 'PAID'}"
+                th:text="${invoice.invoicePaymentStatus}">
+          </span>
+
+          <span class="badge bg-warning text-dark"
+                th:if="${invoice.invoicePaymentStatus.name() == 'UNPAID'}"
+                th:text="${invoice.invoicePaymentStatus}">
+          </span>
+
+          <span class="badge bg-danger"
+                th:if="${invoice.invoicePaymentStatus.name() == 'DUE'}"
+                th:text="${invoice.invoicePaymentStatus}">
+          </span>
+        </td>
+
+      </tr>
+
+      <tr th:if="${#lists.isEmpty(invoices)}">
+        <td colspan="10" class="text-center text-muted">
+          No Invoice Found
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+</body>
+</html>

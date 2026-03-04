@@ -93,6 +93,10 @@ databaseChangeLog:
       relativeToChangelogFile: true
 
   - include:
+      file: accounting/tables/invoice-item.yml
+      relativeToChangelogFile: true
+
+  - include:
       file: accounting/tables/payment.yml
       relativeToChangelogFile: true
 

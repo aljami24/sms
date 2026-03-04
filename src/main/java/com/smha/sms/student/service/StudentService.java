@@ -289,5 +289,9 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
+    public Student getStudent(Long studentId) {
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+    }
 
 }

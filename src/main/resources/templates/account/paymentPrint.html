@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+
+    <style>
+        body {
+            font-family: Arial;
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .info-table td {
+            padding: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .print-btn {
+            margin-top: 20px;
+        }
+
+        @media print {
+    body * {
+        visibility: hidden;
+    }
+
+    #printSection, #printSection * {
+        visibility: visible;
+    }
+
+    #printSection {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    .print-btn {
+        display: none;
+    }
+}
+    </style>
+</head>
+<body>
+<div layout:fragment="content" id="printSection" class="page-bg card shadow mx-2">
+
+<div class="header">
+    <h2>Payment Receipt</h2>
+</div>
+
+<table class="info-table">
+    <tr>
+        <td><strong>Student Name</strong></td>
+        <td th:text="${payment.invoice.student.name}"></td>
+    </tr>
+
+    <tr>
+        <td><strong>Invoice No</strong></td>
+        <td th:text="${payment.invoice.invoiceNo}"></td>
+    </tr>
+
+    <tr>
+        <td><strong>Transaction No</strong></td>
+        <td th:text="${payment.transactionNo}"></td>
+    </tr>
+
+    <tr>
+        <td><strong>Payment Method</strong></td>
+        <td th:text="${payment.paymentMethod}"></td>
+    </tr>
+
+    <tr>
+        <td><strong>Status</strong></td>
+        <td th:text="${payment.status}"></td>
+    </tr>
+
+    <tr>
+        <td><strong>Paid Amount</strong></td>
+        <td th:text="${#numbers.formatDecimal(payment.amount,1,2)} + ' ৳'"></td>
+    </tr>
+
+    <tr>
+        <td><strong>Previous Due</strong></td>
+        <td th:text="${#numbers.formatDecimal(payment.previousDueAmount,1,2)} + ' ৳'"></td>
+    </tr>
+
+    <tr>
+        <td><strong>Remaining Due</strong></td>
+        <td th:text="${#numbers.formatDecimal(payment.remainingDueAmount,1,2)} + ' ৳'"></td>
+    </tr>
+
+    <tr>
+        <td><strong>Transaction Date</strong></td>
+        <td th:text="${#temporals.format(payment.transactionDate,'dd-MM-yyyy HH:mm')}"></td>
+    </tr>
+</table>
+
+<h4 style="margin-top:30px;">Invoice Items:</h4>
+
+    <table class="info-table">
+        <tr>
+            <th>Fee Type</th>
+            <th>Month</th>
+            <th>Amount</th>
+            <th>Transaction Date</th>
+        </tr>
+
+        <tr th:each="item : ${payment.invoice.invoiceItems}">
+
+            <!-- Fee Type -->
+            <td th:text="${item.feeType}"></td>
+
+            <!-- Month (Only if TUITION_FEE) -->
+            <td>
+            <span th:if="${item.feeType.name() == 'TUITION_FEE'}"
+                  th:text="${item.month}">
+            </span>
+            </td>
+
+            <!-- Amount -->
+            <td th:text="${#numbers.formatDecimal(item.itemTotal,1,2)} + ' ৳'"></td>
+
+            <!-- Transaction Date -->
+            <td th:text="${#temporals.format(payment.transactionDate,'dd-MM-yyyy HH:mm')}"></td>
+
+        </tr>
+    </table>
+
+    <div class="container mt-4">
+
+        <div class="row align-items-center">
+
+            <!-- Left Side -->
+            <div class="col-4 text-start">
+                <a th:href="@{/payments/list}" class="btn btn-secondary">
+                    ← Back
+                </a>
+            </div>
+
+            <!-- Center -->
+            <div class="col-4 text-center">
+                <button onclick="window.print()" class="btn btn-success print-btn">
+                    Print
+                </button>
+            </div>
+
+            <!-- Empty Right Side (Balance) -->
+            <div class="col-4"></div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

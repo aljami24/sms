@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+</head>
+
+<body>
+<div layout:fragment="content" class="page-bg card shadow mx-2">
+
+    <h3 class="mb-4">Payment List</h3>
+
+    <!-- 🔎 Filter by Transaction No -->
+    <form method="get" th:action="@{/payments/list}" class="row mb-4">
+
+        <div class="col-md-4">
+            <input type="text"
+                   name="transactionNo"
+                   class="form-control"
+                   placeholder="Search by Transaction No"
+                   th:value="${transactionNo}">
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">
+                Search
+            </button>
+        </div>
+
+        <div class="col-md-2">
+            <a th:href="@{/payments/list}" class="btn btn-secondary">
+                Reset
+            </a>
+        </div>
+
+    </form>
+    <!-- 📋 Payment Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped align-middle">
+
+            <thead class="table-success">
+            <tr>
+                <th style="width: 15%">Student Name</th>
+                <th style="width: 30%">Fee Type(s)</th>
+                <th class="text-center" style="width: 5%">Payment Method</th>
+                <th class="text-center" style="width: 5%">Status</th>
+                <th class="text-center" style="width: 10%">Amount</th>
+                <th class="text-center" style="width: 10%">Previous Due</th>
+                <th class="text-center" style="width: 10%">Remaining Due</th>
+                <th class="text-center" style="width: 5%">Transaction Date</th>
+                <th class="text-center" style="width: 10%">Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="payment : ${payments}">
+                <td th:text="${payment.invoice.student.name}"></td>
+
+                <!-- Fee Types with month if tuition -->
+                <td>
+                    <span th:each="item, iterStat : ${payment.invoice.invoiceItems}">
+                        <span th:text="${item.feeType.name() == 'TUITION_FEE'} ? ${item.feeType} + ' (' + ${item.month} + ')' : ${item.feeType}"></span>
+                        <span th:if="${!iterStat.last}">, </span>
+                    </span>
+                </td>
+
+                <td class="text-center" th:text="${payment.paymentMethod}"></td>
+
+                <td class="text-center">
+                    <span class="badge bg-success" th:text="${payment.status}"></span>
+                </td>
+
+                <td class="text-center" th:text="${#numbers.formatDecimal(payment.amount,1,2)} + ' ৳'"></td>
+                <td class="text-center" th:text="${#numbers.formatDecimal(payment.previousDueAmount,1,2)} + ' ৳'"></td>
+                <td class="text-center" th:text="${#numbers.formatDecimal(payment.remainingDueAmount,1,2)} + ' ৳'"></td>
+                <td class="text-center" th:text="${#temporals.format(payment.transactionDate,'dd-MM-yyyy HH:mm')}"></td>
+                <td class="text-center">
+                    <a th:href="@{/payments/print/{id}(id=${payment.id})}"
+                       class="btn btn-sm btn-primary">
+                        Print
+                    </a>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(payments)}">
+                <td colspan="11" class="text-center text-muted">No Payments Found</td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+
+</div>
+</body>
+</html>

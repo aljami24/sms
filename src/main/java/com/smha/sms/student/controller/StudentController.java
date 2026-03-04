@@ -24,7 +24,6 @@ import com.smha.sms.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -201,16 +200,6 @@ public class StudentController {
         model.addAttribute("auditLogs", studentService.getStudentAuditLogs(id));
         model.addAttribute("title", "Student Details");
         return "student/studentDetails";
-    }
-
-    //    Student Payment
-    @PermissionRequired("STUDENT_PAYMENT")
-    @GetMapping("/payment/{id}")
-    public String showStdPayment(@PathVariable Long id, Model model) {
-        StudentResponseDto showStudentDetail = studentService.showStudentDetails(id);
-        model.addAttribute("showStudentDetail", showStudentDetail);
-        model.addAttribute("title", "Student Payment");
-        return "student/studentFeePayment";
     }
 
     @PermissionRequired("STUDENT_DELETE")

@@ -12,55 +12,68 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
+                    nullable: false
+
               - column:
                   name: student_id
                   type: BIGINT
+
               - column:
                   name: cvs_id
                   type: BIGINT
+
               - column:
                   name: year_id
                   type: BIGINT
+
               - column:
                   name: invoice_no
                   type: VARCHAR(100)
+
               - column:
-                  name: payment_method
+                  name: invoice_date
+                  type: TIMESTAMP
+
+              - column:
+                  name: fee_type
                   type: VARCHAR(50)
+
               - column:
-                  name: status
+                  name: invoice_payment_status
                   type: VARCHAR(50)
+
               - column:
-                  name: amount
-                  type: DOUBLE
+                  name: total_amount
+                  type: DECIMAL(19,2)
+
               - column:
-                  name: payment_type_id
-                  type: BIGINT
+                  name: paid_amount
+                  type: DECIMAL(19,2)
+
               - column:
-                  name: transaction_id
-                  type: VARCHAR(100)
-              - column:
-                  name: month
-                  type: VARCHAR(20)
+                  name: due_amount
+                  type: DECIMAL(19,2)
+
+              # BaseEntity fields
               - column:
                   name: created_at
-                  type: DATETIME
+                  type: TIMESTAMP
+
               - column:
                   name: updated_at
-                  type: DATETIME
+                  type: TIMESTAMP
+
               - column:
                   name: created_by
                   type: VARCHAR(100)
+
               - column:
                   name: updated_by
                   type: VARCHAR(100)
 
-        - addForeignKeyConstraint:
-            constraintName: fk_invoice_year
-            baseTableName: invoice
-            baseColumnNames: year_id
-            referencedTableName: year
-            referencedColumnNames: id
+        # ========================
+        # Foreign Keys
+        # ========================
 
         - addForeignKeyConstraint:
             constraintName: fk_invoice_student
@@ -77,8 +90,8 @@ databaseChangeLog:
             referencedColumnNames: id
 
         - addForeignKeyConstraint:
-            constraintName: fk_invoice_paymentType
+            constraintName: fk_invoice_year
             baseTableName: invoice
-            baseColumnNames: payment_type_id
-            referencedTableName: payment_type
+            baseColumnNames: year_id
+            referencedTableName: year
             referencedColumnNames: id

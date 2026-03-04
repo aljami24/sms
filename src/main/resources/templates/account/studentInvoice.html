@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<head>
+    <th:block th:replace="layout/header :: head"></th:block>
+
+    <style>
+        .card { border-radius: 12px; }
+        .fee-checkbox, .month-checkbox { cursor: pointer; }
+        .badge-paid { background: #198754; color: #fff; font-size: 0.75rem; }
+        .sticky-bottom { position: sticky; bottom: 0; z-index: 10; }
+    </style>
+</head>
+
+<body>
+<div layout:fragment="content" class="page-bg card mx-2 shadow">
+
+    <!-- ================= STUDENT INFO ================= -->
+    <div class="card mb-4 shadow-sm border-primary">
+        <div class="card-header text-center ">
+             <h5 class="fw-bold">Invoice Generation</h5>
+        </div>
+        <div class="card-body">
+            <div class="row align-items-center">
+
+                <div class="col-md-6">
+                    <strong>Student:</strong>
+                    <span th:text="${showStudentDetail.name}"></span><br>
+                    <strong>Registration:</strong>
+                    <span th:text="${showStudentDetail.registration}"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <form th:action="@{'/invoices/create/' + ${showStudentDetail.id}}"
+                          method="get"
+                          class="d-flex gap-2">
+
+                        <select name="yearId" class="form-select" required>
+                            <option value="">-- Select Year --</option>
+                            <option th:each="y : ${years}"
+                                    th:value="${y.id}"
+                                    th:text="${y.name}"
+                                    th:selected="${y.id == selectedYearId}">
+                            </option>
+                        </select>
+
+                        <button type="submit" class="btn btn-success">
+                            Load
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= INVOICE FORM ================= -->
+    <div th:if="${availableFees != null}">
+
+        <form th:action="@{/invoices/save}"
+              th:object="${invoiceRequest}"
+              method="post">
+
+            <input type="hidden" th:field="*{studentId}"/>
+            <input type="hidden" th:field="*{yearId}"/>
+            <input type="hidden" th:field="*{classroomVersionSectionId}"/>
+
+            <div class="row">
+
+                <div th:each="item, stat : *{items}" class="col-12 mb-3">
+
+                    <div class="card shadow-sm border-info">
+
+                        <!-- ===== Fee Header ===== -->
+                        <div class="card-header d-flex justify-content-between align-items-center">
+
+                            <div>
+
+                                <!-- NORMAL FEE -->
+                                <th:block th:if="${item.feeType.name() != 'TUITION_FEE'}">
+
+                                    <th:block th:if="${alreadyPaidFeeTypes != null
+                                                     and alreadyPaidFeeTypes.contains(item.feeType)}">
+
+                                        <span class="badge badge-paid">
+                                            Already Paid
+                                        </span>
+
+                                        <input type="hidden"
+                                               th:field="*{items[__${stat.index}__].selected}"
+                                               value="false"/>
+
+                                    </th:block>
+
+                                    <th:block th:unless="${alreadyPaidFeeTypes != null
+                                                          and alreadyPaidFeeTypes.contains(item.feeType)}">
+
+                                        <input type="checkbox"
+                                               th:field="*{items[__${stat.index}__].selected}"
+                                               class="form-check-input fee-checkbox"
+                                               th:attr="data-amount=${item.perFeeAmount}"
+                                               onchange="calculateTotal()"/>
+
+                                    </th:block>
+                                </th:block>
+
+
+                                <!-- TUITION FEE -->
+                                <th:block th:if="${item.feeType.name() == 'TUITION_FEE'}">
+                                    <input type="hidden"
+                                           th:field="*{items[__${stat.index}__].selected}"
+                                           value="true"/>
+                                </th:block>
+
+                                <strong class="ms-2"
+                                        th:text="${item.feeType}">
+                                </strong>
+
+                            </div>
+
+                            <span class="fw-bold text-primary"
+                                  th:text="${item.perFeeAmount} + ' BDT'">
+                            </span>
+
+                        </div>
+
+
+                        <!-- ===== Tuition Month Selection ===== -->
+                        <div th:if="${item.feeType.name() == 'TUITION_FEE'}"
+                             class="card-body bg-light">
+
+                            <h6 class="text-success border-bottom pb-2">
+                                Select Months
+                            </h6>
+
+                            <div class="row">
+
+                                <div th:each="m : ${months}"
+                                     class="col-md-2 col-sm-4 mb-2">
+
+                                    <div class="form-check">
+
+                                        <!-- Already Paid Month -->
+                                        <th:block th:if="${alreadyPaidMonths != null
+                                                         and alreadyPaidMonths.contains(m)}">
+
+                                            <input type="checkbox" checked disabled/>
+
+                                            <label class="form-check-label text-success"
+                                                   th:text="${m} + ' (Paid)'">
+                                            </label>
+
+                                        </th:block>
+
+                                        <!-- Selectable Month -->
+                                        <th:block th:unless="${alreadyPaidMonths != null
+                                                              and alreadyPaidMonths.contains(m)}">
+
+                                            <input type="checkbox"
+                                                   th:field="*{items[__${stat.index}__].months}"
+                                                   th:value="${m}"
+                                                   class="form-check-input month-checkbox"
+                                                   th:attr="data-amount=${item.perFeeAmount}"
+                                                   onchange="calculateTotal()"/>
+
+                                            <label class="form-check-label"
+                                                   th:text="${m}">
+                                            </label>
+
+                                        </th:block>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <!-- Hidden Fields -->
+                        <input type="hidden"
+                               th:field="*{items[__${stat.index}__].feeType}"/>
+
+                        <input type="hidden"
+                               th:field="*{items[__${stat.index}__].perFeeAmount}"/>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- ===== TOTAL SECTION ===== -->
+            <div class="card shadow mt-4 sticky-bottom border-success">
+                <div class="card-body d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                onclick="history.back()">
+                            Back
+                        </button>
+                    </div>
+
+                    <h5 class="mb-0">
+                        Invoice Total:
+                        <span id="totalDisplay" class="text-success fw-bold">
+                            0.00
+                        </span>
+                        BDT
+                    </h5>
+
+                    <button type="submit"
+                            formaction="/invoices/review"
+                            class="btn btn-primary">
+                        Next
+                    </button>
+
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= UNPAID INVOICE MODAL ================= -->
+    <div th:if="${unpaidInvoice != null}">
+
+        <div class="modal fade show"
+             style="display:block;background:rgba(0,0,0,0.6);">
+
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow-lg">
+
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">
+                            Unpaid Invoice Found
+                        </h5>
+                    </div>
+
+                    <div class="modal-body text-center">
+                        <p>
+                            Invoice No:
+                            <strong th:text="${unpaidInvoice.invoiceNo}"></strong>
+                        </p>
+
+                        <p class="text-danger">
+                            This invoice is still unpaid.
+                        </p>
+
+                        <p>
+                            Do you want to delete it or proceed to payment?
+                        </p>
+                    </div>
+
+                    <div class="modal-footer d-flex justify-content-between">
+
+                        <!-- DELETE -->
+                        <form th:action="@{'/invoices/delete/' + ${unpaidInvoice.id}}"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="studentId"
+                                   th:value="${showStudentDetail.id}"/>
+
+                            <button type="submit"
+                                    class="btn btn-outline-danger">
+                                Delete Invoice
+                            </button>
+
+                        </form>
+
+                        <!-- PAYMENT -->
+                        <a th:href="@{'/invoices/view/' + ${unpaidInvoice.id}}"
+                           class="btn btn-success">
+                            Proceed To Payment
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= JS TOTAL CALC ================= -->
+    <script>
+        function calculateTotal() {
+
+            let total = 0;
+
+            document.querySelectorAll('.fee-checkbox:checked')
+                .forEach(cb => {
+                    total += parseFloat(cb.dataset.amount) || 0;
+                });
+
+            document.querySelectorAll('.month-checkbox:checked')
+                .forEach(cb => {
+                    total += parseFloat(cb.dataset.amount) || 0;
+                });
+
+            document.getElementById('totalDisplay')
+                .innerText = total.toFixed(2);
+        }
+    </script>
+
+</div>
+</body>
+</html>

@@ -215,8 +215,8 @@
                 </a>
                 <!-- Payment -->
                 <a class="btn btn-success btn-sm" sec:authorize="hasAuthority('STUDENT_PAYMENT')"
-                   th:href="@{'/student/payment/'+${showStudentDetail.id}}">
-                    Payment
+                   th:href="@{'/invoices/create/'+${showStudentDetail.id}}">
+                    Fees
                 </a>
 
 
