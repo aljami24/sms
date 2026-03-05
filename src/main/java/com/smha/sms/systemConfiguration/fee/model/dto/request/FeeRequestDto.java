@@ -1,5 +1,6 @@
 package com.smha.sms.systemConfiguration.fee.model.dto.request;
 
+import com.smha.sms.accounting.model.enums.FeeType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,6 @@ public class FeeRequestDto {
     private Long classRoomId;
     private Long versionId;
     private Long sectionId;
-    private Long paymentTypeId;
+    private FeeType feeType;
     private Long yearId;
 }

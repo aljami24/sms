@@ -2,8 +2,8 @@ package com.smha.sms.accounting.model.entity;
 
 import com.smha.sms.academic.model.entity.ClassroomVersionSection;
 import com.smha.sms.academic.model.entity.Year;
-import com.smha.sms.accounting.model.enums.PaymentMethod;
-import com.smha.sms.accounting.model.enums.PaymentStatus;
+import com.smha.sms.accounting.model.enums.FeeType;
+import com.smha.sms.accounting.model.enums.InvoicePaymentStatus;
 import com.smha.sms.common.entity.BaseEntity;
 import com.smha.sms.student.model.entity.Student;
 import jakarta.persistence.*;
@@ -12,7 +12,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Month;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -24,39 +27,33 @@ public class Invoice extends BaseEntity {
 
     @ManyToOne (fetch =  FetchType.LAZY)
     @JoinColumn (name = "student_id")
-    private Student studentId;
+    private Student student;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "cvs_id")
-    private ClassroomVersionSection cvsId;
+    private ClassroomVersionSection classroomVersionSection;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "year_id")
-    private Year yearId;
+    private Year year;
 
     private String invoiceNo;
 
-    @Enumerated (EnumType.STRING)
-    private PaymentMethod paymentMethod;
+    private LocalDateTime invoiceDate;
 
     @Enumerated (EnumType.STRING)
-    private PaymentStatus status;
+    private FeeType feeType;
 
-    private Double amount;
+    @Enumerated(EnumType.STRING)
+    private InvoicePaymentStatus invoicePaymentStatus;
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "payment_type_id")
-    private PaymentType paymentType;
+    private BigDecimal totalAmount;
 
-    private String transactionId;
+    private BigDecimal paidAmount;
 
-    @Enumerated (EnumType.STRING)
-    private Month month;
+    private BigDecimal dueAmount;
 
-
-
-
-
-
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InvoiceItem> invoiceItems = new ArrayList<>();
 
 }

@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 /**
  * Helper Class
@@ -84,6 +85,16 @@ public class Helper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    public static String generateInvoiceNumber() {
+        return "INV-" +  UUID.randomUUID();
+    }
+
+    public static String generateTransactionNumber() {
+        return "TNS-" +  UUID.randomUUID();
     }
 
 }

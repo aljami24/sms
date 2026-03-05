@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+
+<body>
+<div layout:fragment="content" class="page-bg card mx-2 shadow">
+
+  <div class="card shadow border-primary">
+    <div class="card-header text-center">
+      <h5 class="fw-bold">Invoice Review</h5>
+    </div>
+
+    <div class="card-body">
+
+      <h5 class="mb-3 text-success">
+        Please confirm before saving
+      </h5>
+
+      <table class="table table-bordered">
+
+        <thead class="table-light">
+        <tr>
+          <th>Fee Type</th>
+          <th>Months</th>
+          <th>Amount</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:each="item : ${invoiceRequest.items}">
+
+          <td th:text="${item.feeType}"></td>
+
+          <td>
+                        <span th:if="${item.months != null}"
+                              th:text="${item.months}">
+                        </span>
+          </td>
+
+          <td th:text="${item.perFeeAmount} + ' BDT'"></td>
+
+        </tr>
+
+        </tbody>
+      </table>
+
+      <form th:action="@{/invoices/save}"
+            th:object="${invoiceRequest}"
+            method="post">
+
+        <input type="hidden" th:field="*{studentId}"/>
+        <input type="hidden" th:field="*{yearId}"/>
+        <input type="hidden" th:field="*{classroomVersionSectionId}"/>
+
+        <div th:each="item, stat : *{items}">
+          <input type="hidden"
+                 th:field="*{items[__${stat.index}__].feeType}"/>
+
+          <input type="hidden"
+                 th:field="*{items[__${stat.index}__].perFeeAmount}"/>
+
+          <input type="hidden"
+                 th:field="*{items[__${stat.index}__].selected}"/>
+
+          <input type="hidden"
+                 th:field="*{items[__${stat.index}__].months}"/>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+
+          <a th:href="@{'/invoices/create/' + ${invoiceRequest.studentId}
+                                 + '?yearId=' + ${invoiceRequest.yearId}}"
+             class="btn btn-secondary">
+            Back
+          </a>
+
+          <button type="submit"
+                  class="btn btn-success">
+            Save Invoice
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

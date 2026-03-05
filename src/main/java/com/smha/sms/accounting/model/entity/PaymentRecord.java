@@ -1,6 +1,7 @@
 package com.smha.sms.accounting.model.entity;
 
 import com.smha.sms.academic.model.entity.Year;
+import com.smha.sms.accounting.model.enums.FeeType;
 import com.smha.sms.accounting.model.enums.PaymentStatus;
 import com.smha.sms.common.entity.BaseEntity;
 import com.smha.sms.student.model.entity.Student;

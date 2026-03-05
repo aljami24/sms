@@ -7,11 +7,10 @@ import com.smha.sms.accounting.model.enums.PaymentStatus;
 import com.smha.sms.common.entity.BaseEntity;
 import com.smha.sms.student.model.entity.Student;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.Month;
 
 
@@ -20,23 +19,12 @@ import java.time.Month;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Payment extends BaseEntity {
-
-    @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "student_id")
-    private Student studentId;
-
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "cvs_id")
-    private ClassroomVersionSection cvsId;
-
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "year_id")
-    private Year yearId;
 
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "invoice_id")
-    private Invoice invoiceId;
+    private Invoice invoice;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
@@ -44,14 +32,21 @@ public class Payment extends BaseEntity {
     @Enumerated (EnumType.STRING)
     private PaymentStatus status;
 
-    private Double amount;
+    private BigDecimal amount;
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn (name = "payment_type_id")
-    private PaymentType paymentType;
+    private String transactionNo;
 
-    private String transactionId;
+    private LocalDateTime transactionDate;
 
-    @Enumerated (EnumType.STRING)
-    private Month month;
+    private String remarks;
+
+    private String gatewayResponse;
+
+    private String currency;
+
+    private Boolean active = true; // soft delete safety
+
+    private BigDecimal previousDueAmount;
+
+    private BigDecimal remainingDueAmount;
 }

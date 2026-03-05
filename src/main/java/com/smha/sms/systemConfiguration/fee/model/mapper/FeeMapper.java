@@ -24,22 +24,22 @@ public class FeeMapper {
         FeeResponseDto dto = new FeeResponseDto();
         dto.setId(fee.getId());
         dto.setFeesAmount(fee.getFeesAmount());
-        dto.setPaymentTypeId(fee.getPaymentTypeId());
+        dto.setFeeType(fee.getFeeType());
         dto.setYearId(fee.getYearId());
-        dto.setCvs(fee.getCvs());
+        dto.setClassroomVersionSection(fee.getClassroomVersionSection());
 
-        if (fee.getCvs() != null) {
-            if (fee.getCvs().getClassRoom() != null) {
-                dto.setClassRoomId(fee.getCvs().getClassRoom().getId());
-                dto.setClassRoomName(fee.getCvs().getClassRoom().getName());
+        if (fee.getClassroomVersionSection() != null) {
+            if (fee.getClassroomVersionSection().getClassRoom() != null) {
+                dto.setClassRoomId(fee.getClassroomVersionSection().getClassRoom().getId());
+                dto.setClassRoomName(fee.getClassroomVersionSection().getClassRoom().getName());
             }
-            if (fee.getCvs().getVersion() != null) {
-                dto.setVersionId(fee.getCvs().getVersion().getId());
-                dto.setVersionName(fee.getCvs().getVersion().getName());
+            if (fee.getClassroomVersionSection().getVersion() != null) {
+                dto.setVersionId(fee.getClassroomVersionSection().getVersion().getId());
+                dto.setVersionName(fee.getClassroomVersionSection().getVersion().getName());
             }
-            if (fee.getCvs().getSection() != null) {
-                dto.setSectionId(fee.getCvs().getSection().getId());
-                dto.setSectionName(fee.getCvs().getSection().getName());
+            if (fee.getClassroomVersionSection().getSection() != null) {
+                dto.setSectionId(fee.getClassroomVersionSection().getSection().getId());
+                dto.setSectionName(fee.getClassroomVersionSection().getSection().getName());
             }
         }
 
@@ -52,13 +52,13 @@ public class FeeMapper {
     public FeeRequestDto mapToFeeRequestDto(Fee fee) {
         FeeRequestDto dto = new FeeRequestDto();
         dto.setFeesAmount(fee.getFeesAmount());
-        dto.setPaymentTypeId(fee.getPaymentTypeId() != null ? fee.getPaymentTypeId().getId() : null);
+        dto.setFeeType(fee.getFeeType());
         dto.setYearId(fee.getYearId() != null ? fee.getYearId().getId() : null);
 
-        if (fee.getCvs() != null) {
-            dto.setClassRoomId(fee.getCvs().getClassRoom() != null ? fee.getCvs().getClassRoom().getId() : null);
-            dto.setVersionId(fee.getCvs().getVersion() != null ? fee.getCvs().getVersion().getId() : null);
-            dto.setSectionId(fee.getCvs().getSection() != null ? fee.getCvs().getSection().getId() : null);
+        if (fee.getClassroomVersionSection() != null) {
+            dto.setClassRoomId(fee.getClassroomVersionSection().getClassRoom() != null ? fee.getClassroomVersionSection().getClassRoom().getId() : null);
+            dto.setVersionId(fee.getClassroomVersionSection().getVersion() != null ? fee.getClassroomVersionSection().getVersion().getId() : null);
+            dto.setSectionId(fee.getClassroomVersionSection().getSection() != null ? fee.getClassroomVersionSection().getSection().getId() : null);
         }
 
         return dto;
@@ -67,12 +67,10 @@ public class FeeMapper {
     public void mapDtoToEntity(Fee fee, FeeRequestDto dto) {
         fee.setFeesAmount(dto.getFeesAmount());
 
+        fee.setFeeType(dto.getFeeType());
+
         if (dto.getYearId() != null) {
             yearRepository.findById(dto.getYearId()).ifPresent(fee::setYearId);
-        }
-
-        if (dto.getPaymentTypeId() != null) {
-            paymentTypeRepository.findById(dto.getPaymentTypeId()).ifPresent(fee::setPaymentTypeId);
         }
 
         if (dto.getClassRoomId() != null && dto.getVersionId() != null) {
@@ -82,7 +80,7 @@ public class FeeMapper {
                             dto.getVersionId(),
                             dto.getSectionId()
                     );
-            cvsOptional.ifPresent(fee::setCvs);
+            cvsOptional.ifPresent(fee::setClassroomVersionSection);
         }
     }
 }

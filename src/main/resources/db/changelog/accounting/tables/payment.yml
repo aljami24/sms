@@ -12,80 +12,85 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-              - column:
-                  name: student_id
-                  type: BIGINT
-              - column:
-                  name: cvs_id
-                  type: BIGINT
-              - column:
-                  name: year_id
-                  type: BIGINT
+                    nullable: false
+
               - column:
                   name: invoice_id
                   type: BIGINT
+                  constraints:
+                    nullable: false
+
               - column:
                   name: payment_method
                   type: VARCHAR(50)
+
               - column:
                   name: status
                   type: VARCHAR(50)
+
               - column:
                   name: amount
-                  type: DOUBLE
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+
               - column:
-                  name: payment_type_id
-                  type: BIGINT
-              - column:
-                  name: transaction_id
+                  name: transaction_no
                   type: VARCHAR(100)
+
               - column:
-                  name: month
-                  type: VARCHAR(20)
+                  name: transaction_date
+                  type: TIMESTAMP
+
+              - column:
+                  name: remarks
+                  type: VARCHAR(255)
+
+              - column:
+                  name: gateway_response
+                  type: VARCHAR(255)
+
+              - column:
+                  name: currency
+                  type: VARCHAR(10)
+
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+
+              - column:
+                  name: previous_due_amount
+                  type: DECIMAL(19,2)
+
+              - column:
+                  name: remaining_due_amount
+                  type: DECIMAL(19,2)
+
+              # BaseEntity fields
               - column:
                   name: created_at
-                  type: DATETIME
+                  type: TIMESTAMP
+
               - column:
                   name: updated_at
-                  type: DATETIME
+                  type: TIMESTAMP
+
               - column:
                   name: created_by
                   type: VARCHAR(100)
+
               - column:
                   name: updated_by
                   type: VARCHAR(100)
 
-        - addForeignKeyConstraint:
-            constraintName: fk_payment_year
-            baseTableName: payment
-            baseColumnNames: year_id
-            referencedTableName: year
-            referencedColumnNames: id
-
-        - addForeignKeyConstraint:
-            constraintName: fk_payment_student
-            baseTableName: payment
-            baseColumnNames: student_id
-            referencedTableName: student
-            referencedColumnNames: id
-
-        - addForeignKeyConstraint:
-            constraintName: fk_payment_cvs
-            baseTableName: payment
-            baseColumnNames: cvs_id
-            referencedTableName: classroom_version_section
-            referencedColumnNames: id
+        # ==========================
+        # Foreign Key
+        # ==========================
 
         - addForeignKeyConstraint:
             constraintName: fk_payment_invoice
             baseTableName: payment
             baseColumnNames: invoice_id
             referencedTableName: invoice
-            referencedColumnNames: id
-
-        - addForeignKeyConstraint:
-            constraintName: fk_payment_paymentType
-            baseTableName: payment
-            baseColumnNames: payment_type_id
-            referencedTableName: payment_type
             referencedColumnNames: id

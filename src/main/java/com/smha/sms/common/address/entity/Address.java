@@ -1,5 +1,6 @@
 package com.smha.sms.common.address.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smha.sms.common.entity.BaseEntity;
 import com.smha.sms.common.enums.AddressType;
 import com.smha.sms.student.model.entity.Student;
@@ -43,10 +44,12 @@ public class Address extends BaseEntity {
     @JoinColumn(name = "police_station_id", nullable = true)
     private PoliceStation policeStation;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employ_id")
     private Employee employee;

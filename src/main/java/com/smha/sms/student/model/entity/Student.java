@@ -1,5 +1,6 @@
 package com.smha.sms.student.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.smha.sms.common.address.entity.Address;
 import com.smha.sms.common.entity.BaseEntity;
 import com.smha.sms.common.enums.Gender;
@@ -40,8 +41,10 @@ public class Student extends BaseEntity {
     private String identityNumber;
     private String photoDir;
     private String nidDir;
+    @JsonIgnore
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
+    @JsonIgnore
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentAcademicRecord> studentAcademicRecords;
 

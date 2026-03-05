@@ -1,0 +1,74 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-invoice-item
+      author: afzal
+      changes:
+        - createTable:
+            tableName: invoice_item
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: invoice_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: fee_type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: amount
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: per_fee_amount
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: month
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: true
+
+              - column:
+                  name: remarks
+                  type: VARCHAR(255)
+
+              # BaseEntity fields
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
+        - addForeignKeyConstraint:
+            constraintName: fk_invoice_item_invoice
+            baseTableName: invoice_item
+            baseColumnNames: invoice_id
+            referencedTableName: invoice
+            referencedColumnNames: id
+            onDelete: CASCADE

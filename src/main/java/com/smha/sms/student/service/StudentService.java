@@ -4,6 +4,7 @@ import com.smha.sms.academic.model.entity.ClassroomVersionSection;
 import com.smha.sms.academic.model.entity.Year;
 import com.smha.sms.academic.model.repository.ClassroomVersionSectionRepository;
 import com.smha.sms.academic.model.repository.YearRepository;
+import com.smha.sms.annotation.Audit;
 import com.smha.sms.common.util.Helper;
 import com.smha.sms.student.model.dto.request.StudentRequestDto;
 import com.smha.sms.student.model.dto.response.StudentResponseDto;
@@ -40,13 +41,15 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final ClassroomVersionSectionRepository classroomVersionSectionRepository;
     private final YearRepository yearRepository;
+    private final com.smha.sms.common.repository.AuditLogRepository auditLogRepository;
 
     @Value("${file.upload-directory}")
     private String uploadDir;
 
     //   Student Save Method
     @Transactional
-    public void saveStudent(StudentRequestDto studentRequestDto) {
+    @Audit(permission = "Student_Create")
+    public Student saveStudent(StudentRequestDto studentRequestDto) {
 
         // Map DTO → Entity
         Student student = new Student();
@@ -98,7 +101,7 @@ public class StudentService {
 
         // Upload files
         Helper.studentFilesUpload(uploadDir, studentRequestDto);
-        studentRepository.save(student);
+        return studentRepository.save(student);
     }
 
     //   All Student Show Method
@@ -143,15 +146,24 @@ public class StudentService {
         return StudentMapper.mapToStudentResponseDto(student);
     }
 
+    //   Get Audit Logs for Student
+    public java.util.List<com.smha.sms.common.entity.AuditLog> getStudentAuditLogs(Long studentId) {
+        return auditLogRepository.findByStudentId(studentId);
+    }
+
     //   Student Delete
-    public void deleteById(Long id) {
-        studentRepository.deleteById(id);
+    @Audit(permission = "Student_Delete")
+    public Student deleteById(Long id) {
+        Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
         Helper.deleteStudentAllFiles(uploadDir, id);
+        studentRepository.deleteById(id);
+        return student;
     }
 
     //   Student Update
     @Transactional
-    public void updateStudent(StudentRequestDto studentRequestDto) {
+    @Audit(permission = "Student_Update")
+    public Student updateStudent(StudentRequestDto studentRequestDto) {
         Student existingStudent = studentRepository.findById(studentRequestDto.getId())
                 .orElseThrow(() -> new RuntimeException("Student not found"));
 
@@ -225,11 +237,13 @@ public class StudentService {
         }
 
         studentRepository.save(existingStudent);
+        return existingStudent;
     }
 
     //   Old Student Admission - Create New Academic Record
     @Transactional
-    public void admitOldStudent(Long studentId, Long yearId, Long classRoomId,
+    @Audit(permission = "Old_Student_Create")
+    public Student admitOldStudent(Long studentId, Long yearId, Long classRoomId,
                                 Long sectionId, Long versionId) {
         // Find the student
         Student student = studentRepository.findById(studentId)
@@ -272,8 +286,12 @@ public class StudentService {
         student.getStudentAcademicRecords().add(academicRecord);
 
         // Save the student with new academic record
-        studentRepository.save(student);
+        return studentRepository.save(student);
     }
 
+    public Student getStudent(Long studentId) {
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+    }
 
 }

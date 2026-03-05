@@ -20,7 +20,7 @@
                 <th>Class</th>
                 <th>Version</th>
                 <th>Section</th>
-                <th>Payment Type</th>
+                <th>Fee Type</th>
                 <th>Fees</th>
                 <th>Year</th>
                 <th class="text-end">Action</th>
@@ -32,7 +32,7 @@
                 <td th:text="${fee.classRoomName != null ? fee.classRoomName : 'N/A'}"></td>
                 <td th:text="${fee.versionName != null ? fee.versionName : 'N/A'}"></td>
                 <td th:text="${fee.sectionName != null ? fee.sectionName : 'N/A'}">A</td>
-                <td th:text="${fee.paymentTypeId != null && fee.paymentTypeId.name != null ? fee.paymentTypeId.name : 'N/A'}">
+                <td th:text="${fee.feeType != null && fee.feeType != null ? fee.feeType : 'N/A'}">
                     Exam Fee
                 </td>
                 <td th:text="${fee.feesAmount != null ? fee.feesAmount : 'N/A'}">500</td>
