@@ -4,6 +4,7 @@ import com.smha.sms.academic.model.entity.Year;
 import com.smha.sms.accounting.model.dto.request.InvoiceGenerateRequest;
 import com.smha.sms.accounting.model.dto.request.InvoiceItemRequest;
 import com.smha.sms.accounting.model.entity.Invoice;
+import com.smha.sms.accounting.model.enums.FeeType;
 import com.smha.sms.accounting.model.enums.InvoicePaymentStatus;
 import com.smha.sms.accounting.model.repository.InvoiceRepository;
 import com.smha.sms.accounting.service.InvoiceService;
@@ -87,6 +88,7 @@ public class InvoiceController {
             // =====================================================
             // CHECK UNPAID INVOICE (NO REDIRECT → SEND TO MODAL)
             // =====================================================
+
             Optional<Invoice> unpaid =
                     invoiceService.findUnpaidInvoice(studentId, yearId, cvsId);
 
@@ -107,6 +109,11 @@ public class InvoiceController {
                     paidData.get("paidMonths"));
 
             // =====================================================
+            // PREVIOUS YEAR DUE CHECK
+            // =====================================================
+            Map<Year, List<Fee>> missingFees = invoiceService.findMissingFees(studentId, yearId);
+
+            // =====================================================
             // BUILD REQUEST ITEMS
             // =====================================================
             for (Fee fee : availableFees) {
@@ -124,6 +131,7 @@ public class InvoiceController {
             model.addAttribute("availableFees", availableFees);
             model.addAttribute("months", Arrays.asList(Month.values()));
             model.addAttribute("selectedYearId", yearId);
+            model.addAttribute("missingFees", missingFees);
         }
 
         model.addAttribute("invoiceRequest", invoiceRequest);

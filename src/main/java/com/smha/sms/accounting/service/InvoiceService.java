@@ -1,5 +1,6 @@
 package com.smha.sms.accounting.service;
 
+import com.smha.sms.academic.model.entity.Year;
 import com.smha.sms.academic.model.repository.ClassroomVersionSectionRepository;
 import com.smha.sms.academic.model.repository.YearRepository;
 import com.smha.sms.accounting.model.dto.request.InvoiceGenerateRequest;
@@ -12,6 +13,7 @@ import com.smha.sms.accounting.model.repository.InvoiceRepository;
 import com.smha.sms.common.util.Helper;
 import com.smha.sms.student.model.entity.Student;
 import com.smha.sms.student.model.entity.StudentAcademicRecord;
+import com.smha.sms.student.model.repository.StudentAcademicRecordRepository;
 import com.smha.sms.student.model.repository.StudentRepository;
 import com.smha.sms.systemConfiguration.fee.model.entity.Fee;
 import com.smha.sms.systemConfiguration.fee.model.repository.FeeRepository;
@@ -33,6 +35,7 @@ public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
     private final ClassroomVersionSectionRepository classroomVersionSectionRepository;
+    private final StudentAcademicRecordRepository studentAcademicRecordRepository;
     private final YearRepository yearRepository;
     private final StudentRepository studentRepository;
     private final FeeRepository feeRepository;
@@ -61,6 +64,42 @@ public class InvoiceService {
         map.put("record", record);
         map.put("fees", fees);
         return map;
+    }
+
+    // PREVIOUS YEAR DUE CHECK
+
+    public Map<Year, List<Fee>> findMissingFees(Long studentId, Long currentYearId) {
+
+        List<StudentAcademicRecord> records = studentAcademicRecordRepository.findByStudentId(studentId);
+
+        Map<Year, List<Fee>> missingMap = new LinkedHashMap<>();
+
+        for (StudentAcademicRecord record : records) {
+
+            Year year = record.getYear();
+
+            // skip current year
+            if (year.getId().equals(currentYearId)) continue;
+
+            Long cvsId = record.getClassroomVersionSection().getId();
+
+            // ঐ year + cvs এর সব fees
+            List<Fee> yearFees = feeRepository.findAllByClassroomVersionSectionIdAndYearIdId(cvsId, year.getId());
+
+            // student already invoiced feeTypes
+            List<FeeType> invoicedFeeTypes = invoiceRepository.findInvoicedFeeTypes(studentId);
+
+            // filter missing fees
+            List<Fee> missing = yearFees.stream()
+                    .filter(f -> !invoicedFeeTypes.contains(f.getFeeType()))
+                    .toList();
+
+            if (!missing.isEmpty()) {
+                missingMap.put(year, missing);
+            }
+        }
+
+        return missingMap;
     }
 
     // Save Invoice

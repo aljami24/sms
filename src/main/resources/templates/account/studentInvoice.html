@@ -58,6 +58,24 @@
     </div>
 
 
+    <!-- ================= PREVIOUS YEAR DUE NOTIFICATION ================= -->
+    <div th:if="${missingFees != null and !missingFees.isEmpty()}"
+         class="alert alert-warning">
+
+        <h6 class="fw-bold">Previous Year Due Fees</h6>
+
+        <ul>
+            <li th:each="entry : ${missingFees}">
+                <strong th:text="${entry.key.name}"></strong> :
+
+                <span th:each="f, stat : ${entry.value}">
+                    <span th:text="${f.feeType.name()}"></span>
+                    <span th:if="${!stat.last}">, </span>
+                </span>
+            </li>
+        </ul>
+
+    </div>
     <!-- ================= INVOICE FORM ================= -->
     <div th:if="${availableFees != null}">
 

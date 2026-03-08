@@ -27,4 +27,12 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     );
 
     List<Invoice> findByInvoiceNoContainingIgnoreCase(String invoiceNo);
+
+    @Query("""
+SELECT DISTINCT ii.feeType
+FROM InvoiceItem ii
+JOIN ii.invoice i
+WHERE i.student.id = :studentId
+""")
+    List<FeeType> findInvoicedFeeTypes(Long studentId);
 }
