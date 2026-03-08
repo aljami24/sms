@@ -88,6 +88,7 @@ public class InvoiceController {
             // =====================================================
             // CHECK UNPAID INVOICE (NO REDIRECT → SEND TO MODAL)
             // =====================================================
+
             Optional<Invoice> unpaid =
                     invoiceService.findUnpaidInvoice(studentId, yearId, cvsId);
 
